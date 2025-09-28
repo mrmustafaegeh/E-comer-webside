@@ -1,7 +1,7 @@
 "use client";
 
 import ProductCard from "./ProductCard";
-import { products } from "./productData";
+import { products } from "../lib/productData";
 import { useCart } from "@/context/cartContext";
 import { motion } from "framer-motion";
 

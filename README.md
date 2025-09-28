@@ -1,7 +1,7 @@
-<<<<<<< HEAD
 # E-comer-webside
+
 ⚡ Modern e-commerce store built with Next.js - fast, responsive, and feature-complete
-=======
+
 🛍️ QuickCart - Modern E-commerce Platform
 A sophisticated, full-featured e-commerce web application built with Next.js 15, React 19, and Tailwind CSS. QuickCart delivers a premium shopping experience with beautiful animations, intuitive UX, and robust functionality.
 
@@ -84,4 +84,4 @@ Prerequisites
 Node.js 18.17 or later
 
 npm, yarn, or pnpm
->>>>>>> d3fd00b (Initial commit)
+d3fd00b (Initial commit)

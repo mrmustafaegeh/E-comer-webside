@@ -7,10 +7,6 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
   images: {
     remotePatterns: [
       {

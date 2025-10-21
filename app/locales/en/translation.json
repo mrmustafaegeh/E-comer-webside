@@ -1,0 +1,246 @@
+{
+  "common": {
+    "siteTitle": "QuickCart",
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact",
+    "cart": "Cart",
+    "shopNow": "Shop Now",
+    "addToCart": "Add to Cart",
+    "adding": "Adding...",
+    "new": "NEW",
+    "sale": "SALE",
+    "viewAll": "View All",
+    "welcome": "Welcome",
+    "description": "High quality product for your needs",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "emptyCart": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "clearCart": "Clear Cart",
+    "items": "items",
+    "item": "item",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "signIn": "Sign In",
+    "toggleMenu": "Toggle menu"
+  },
+  "hero": {
+    "alt1": "Modern electronics store with displays",
+    "cta1": "Explore Our Showroom",
+    "desc1": "Discover the latest in technology",
+    "alt2": "Electronics shop with various gadgets",
+    "cta2": "New Arrivals Just In",
+    "desc2": "Fresh tech waiting for you",
+    "alt3": "Store section with smartphones on display",
+    "cta3": "Premium Smartphones 25% OFF",
+    "desc3": "Limited time offer",
+    "prev": "Previous Slide",
+    "next": "Next Slide",
+    "goToSlide": "Go to slide"
+  },
+  "stats": {
+    "customers": "Happy Customers",
+    "products": "Products",
+    "support": "24/7 Support",
+    "rating": "Top Rating"
+  },
+  "badges": {
+    "secure": "🔒 Secure Payments",
+    "shipping": "🚚 Free Shipping",
+    "quality": "💯 Quality Guarantee"
+  },
+  "newsletter": {
+    "title": "Join Our Community",
+    "desc": "Sign up for our newsletter and get 10% off your first order plus exclusive deals!",
+    "success": "Thank you for subscribing! Check your email for the discount code.",
+    "placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "submitting": "Subscribing..."
+  },
+  "about": {
+    "title": "Welcome to QuickCart",
+    "tagline": "Best products, unbeatable service. Your trusted partner for quality electronics.",
+    "fastDelivery": "Fast Delivery",
+    "fastDeliveryDesc": "Quick doorstep drops within 24 hours",
+    "topQuality": "Top Quality",
+    "topQualityDesc": "100% original tech with warranty",
+    "support24": "24/7 Support",
+    "support24Desc": "We're here always to help you",
+    "missionTitle": "Our Mission",
+    "missionText": "To connect people with the best technology, effortlessly and affordably.",
+    "getInTouch": "Get In Touch"
+  },
+  "form": {
+    "title": "Join Our Community",
+    "subtitle": "Create your account in seconds",
+    "labels": {
+      "name": "Full Name",
+      "phone": "Phone Number",
+      "age": "Age",
+      "isEmployee": "I am currently employed",
+      "salary": "Monthly Salary Range"
+    },
+    "placeholders": {
+      "name": "Enter your full name",
+      "phone": "Enter your phone number",
+      "age": "Enter your age",
+      "salary": "Select your salary range"
+    },
+    "buttons": {
+      "submit": "Create Account",
+      "processing": "Processing..."
+    },
+    "terms": {
+      "text": "By creating an account, you agree to our",
+      "link": "Terms of Service"
+    },
+    "errors": {
+      "name": "Name is required",
+      "phone": "Phone number must be between 8-10 digits",
+      "age": "Age must be between 18 and 55",
+      "salary": "Please select a salary range"
+    },
+    "errorTitle": "Please fix the following {{count}} error(s):"
+  },
+  "featured": {
+    "title": "Featured Products"
+  },
+  "cart": {
+    "title": "Your Shopping Cart",
+    "emptyTitle": "Your cart is empty",
+    "emptyMessage": "Looks like you haven't added anything to your cart yet",
+    "continueShopping": "Continue Shopping",
+    "item": "item",
+    "items": "items",
+    "each": "each",
+    "size": "Size",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "remove": "Remove",
+    "fromCart": "from cart",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "clearCart": "Clear Cart",
+    "checkout": "Proceed to Checkout"
+  },
+  "footer": {
+    "brandDescription": "Your one-stop shop for quality electronics and exceptional service. We bring the latest technology to your doorstep with fast delivery and 24/7 support.",
+    "stayUpdated": "Stay Updated",
+    "thankYouSubscribing": "Thank you for subscribing!",
+    "enterEmail": "Enter your email",
+    "subscribe": "Subscribe",
+    "shop": "Shop",
+    "support": "Support",
+    "company": "Company",
+    "allProducts": "All Products",
+    "newArrivals": "New Arrivals",
+    "featured": "Featured",
+    "discounts": "Discounts",
+    "bestSellers": "Best Sellers",
+    "contactUs": "Contact Us",
+    "faqs": "FAQs",
+    "shippingInfo": "Shipping Info",
+    "returns": "Returns",
+    "warranty": "Warranty",
+    "careers": "Careers",
+    "blog": "Blog",
+    "press": "Press",
+    "sustainability": "Sustainability",
+    "contactInfo": "Contact Info",
+    "customerSupport": "24/7 Customer Support",
+    "allRightsReserved": "All rights reserved.",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "cookiePolicy": "Cookie Policy",
+    "accessibility": "Accessibility",
+    "allSystemsOperational": "All systems operational"
+  },
+  "products": {
+    "appleAirpodsPro2": {
+      "name": "Apple AirPods Pro 2nd gen",
+      "description": "Apple AirPods Pro (2nd Gen) with MagSafe Case (USB-C) provide excellent sound, active noise cancellation, and a comfortable fit."
+    },
+    "boseQuietComfort45": {
+      "name": "Bose QuietComfort 45",
+      "description": "The Bose QuietComfort 45 headphones are engineered for exceptional sound quality and unparalleled noise cancellation."
+    },
+    "samsungGalaxyS23": {
+      "name": "Samsung Galaxy S23",
+      "description": "The Samsung Galaxy S23 offers an all-encompassing mobile experience with its advanced AMOLED display."
+    },
+    "garminVenu2": {
+      "name": "Garmin Venu 2",
+      "description": "The Garmin Venu 2 smartwatch blends advanced fitness tracking with sophisticated design."
+    },
+    "playstation5": {
+      "name": "PlayStation 5",
+      "description": "The PlayStation 5 takes gaming to the next level with ultra-HD graphics."
+    },
+    "canonEOSR5": {
+      "name": "Canon EOS R5",
+      "description": "The Canon EOS R5 is a game-changing mirrorless camera with a 45MP full-frame sensor."
+    },
+    "macbookPro16": {
+      "name": "MacBook Pro 16",
+      "description": "The MacBook Pro 16, powered by Apple's M2 Pro chip, offers outstanding performance."
+    },
+    "sonyWF1000XM5": {
+      "name": "Sony WF-1000XM5",
+      "description": "Sony WF-1000XM5 true wireless earbuds deliver immersive sound with Hi-Res Audio."
+    },
+    "samsungProjector4k": {
+      "name": "Samsung Projector 4k",
+      "description": "The Samsung 4K Projector offers an immersive cinematic experience."
+    },
+    "asusROGZephyrusG16": {
+      "name": "ASUS ROG Zephyrus G16",
+      "description": "The ASUS ROG Zephyrus G16 gaming laptop is powered by the Intel Core i9 processor."
+    },
+    "googlePixel7": {
+      "name": "Google Pixel 7",
+      "description": "Advanced Camera, Tensor Chip"
+    },
+    "djiMini3Pro": {
+      "name": "DJI Mini 3 Pro",
+      "description": "Compact Drone, 4K Video"
+    },
+    "fitbitCharge5": {
+      "name": "Fitbit Charge 5",
+      "description": "Health Metrics, Built-in GPS"
+    },
+    "appleWatchSeries8": {
+      "name": "Apple Watch Series 8",
+      "description": "Advanced Health Tracking"
+    },
+    "nintendoSwitchOLED": {
+      "name": "Nintendo Switch OLED",
+      "description": "7-inch OLED Screen, Portable Gaming"
+    },
+    "jblFlip6": {
+      "name": "JBL Flip 6",
+      "description": "Portable Bluetooth Speaker"
+    },
+    "logitechMXMaster3": {
+      "name": "Logitech MX Master 3",
+      "description": "Advanced Wireless Mouse"
+    },
+    "kindlePaperwhite": {
+      "name": "Kindle Paperwhite",
+      "description": "Waterproof, High-resolution Display"
+    },
+    "razerBlackWidowV4": {
+      "name": "Razer BlackWidow V4",
+      "description": "Mechanical Gaming Keyboard"
+    },
+    "samsungGalaxyTabS8": {
+      "name": "Samsung Galaxy Tab S8",
+      "description": "11-inch Display, S Pen Included"
+    }
+  }
+}

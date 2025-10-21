@@ -1,11 +1,10 @@
-import FormPage from "../../components/features/FormPage.jsx";
+import FormPageClient from "./FormPageClient";
 
 export const metadata = {
   title: "Join Us - QuickCart",
-  description:
-    "Create your account and join our community of satisfied customers.",
+  description: "Sign up for QuickCart to start shopping",
 };
 
-export default function FormPageRoute() {
-  return <FormPage />;
+export default function FormRoute() {
+  return <FormPageClient />;
 }

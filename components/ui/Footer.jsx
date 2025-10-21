@@ -3,10 +3,23 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+  // Fixed safe translation function
+  const safeTranslate = (key, fallback) => {
+    try {
+      const translation = t(key);
+      // If translation returns the key itself, it means the key doesn't exist
+      return translation === key ? fallback : translation;
+    } catch (error) {
+      return fallback;
+    }
+  };
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -51,7 +64,7 @@ const Footer = () => {
                 <span className="text-white font-bold text-lg">QC</span>
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                QuickCart
+                {safeTranslate("common.siteTitle", "QuickCart")}
               </span>
             </motion.div>
             <motion.p
@@ -60,9 +73,10 @@ const Footer = () => {
               transition={{ delay: 0.1 }}
               className="text-gray-400 mb-6 leading-relaxed max-w-md"
             >
-              Your one-stop shop for quality electronics and exceptional
-              service. We bring the latest technology to your doorstep with fast
-              delivery and 24/7 support.
+              {safeTranslate(
+                "footer.brandDescription",
+                "Your one-stop shop for quality electronics and exceptional service. We bring the latest technology to your doorstep with fast delivery and 24/7 support."
+              )}
             </motion.p>
 
             {/* Newsletter Subscription */}
@@ -72,7 +86,9 @@ const Footer = () => {
               transition={{ delay: 0.2 }}
               className="bg-gray-800/50 rounded-xl p-6 backdrop-blur-sm border border-gray-700/50"
             >
-              <h4 className="text-white font-semibold mb-3">Stay Updated</h4>
+              <h4 className="text-white font-semibold mb-3">
+                {safeTranslate("footer.stayUpdated", "Stay Updated")}
+              </h4>
               {isSubscribed ? (
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -90,7 +106,10 @@ const Footer = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Thank you for subscribing!
+                  {safeTranslate(
+                    "footer.thankYouSubscribing",
+                    "Thank you for subscribing!"
+                  )}
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubscribe} className="flex gap-2">
@@ -98,7 +117,10 @@ const Footer = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    placeholder={safeTranslate(
+                      "footer.enterEmail",
+                      "Enter your email"
+                    )}
                     className="flex-1 px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -108,7 +130,7 @@ const Footer = () => {
                     type="submit"
                     className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
                   >
-                    Subscribe
+                    {safeTranslate("footer.subscribe", "Subscribe")}
                   </motion.button>
                 </form>
               )}
@@ -116,24 +138,34 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          {["Shop", "Support", "Company"].map((section, sectionIndex) => (
+          {[
+            { key: "shop", title: safeTranslate("footer.shop", "Shop") },
+            {
+              key: "support",
+              title: safeTranslate("footer.support", "Support"),
+            },
+            {
+              key: "company",
+              title: safeTranslate("footer.company", "Company"),
+            },
+          ].map((section, sectionIndex) => (
             <motion.div
-              key={section}
+              key={section.key}
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 + sectionIndex * 0.1 }}
             >
               <h3 className="text-white text-lg font-semibold mb-4">
-                {section}
+                {section.title}
               </h3>
               <ul className="space-y-3">
-                {section === "Shop" &&
+                {section.key === "shop" &&
                   [
-                    "All Products",
-                    "New Arrivals",
-                    "Featured",
-                    "Discounts",
-                    "Best Sellers",
+                    "allProducts",
+                    "newArrivals",
+                    "featured",
+                    "discounts",
+                    "bestSellers",
                   ].map((item) => (
                     <li key={item}>
                       <Link
@@ -142,17 +174,20 @@ const Footer = () => {
                           .replace(" ", "-")}`}
                         className="text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 block"
                       >
-                        {item}
+                        {safeTranslate(
+                          `footer.${item}`,
+                          item.replace(/([A-Z])/g, " $1").trim()
+                        )}
                       </Link>
                     </li>
                   ))}
-                {section === "Support" &&
+                {section.key === "support" &&
                   [
-                    "Contact Us",
-                    "FAQs",
-                    "Shipping Info",
-                    "Returns",
-                    "Warranty",
+                    "contactUs",
+                    "faqs",
+                    "shippingInfo",
+                    "returns",
+                    "warranty",
                   ].map((item) => (
                     <li key={item}>
                       <Link
@@ -161,29 +196,31 @@ const Footer = () => {
                           .replace(" ", "-")}`}
                         className="text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 block"
                       >
-                        {item}
+                        {safeTranslate(
+                          `footer.${item}`,
+                          item.replace(/([A-Z])/g, " $1").trim()
+                        )}
                       </Link>
                     </li>
                   ))}
-                {section === "Company" &&
-                  [
-                    "About Us",
-                    "Careers",
-                    "Blog",
-                    "Press",
-                    "Sustainability",
-                  ].map((item) => (
-                    <li key={item}>
-                      <Link
-                        href={`/company/${item
-                          .toLowerCase()
-                          .replace(" ", "-")}`}
-                        className="text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 block"
-                      >
-                        {item}
-                      </Link>
-                    </li>
-                  ))}
+                {section.key === "company" &&
+                  ["about", "careers", "blog", "press", "sustainability"].map(
+                    (item) => (
+                      <li key={item}>
+                        <Link
+                          href={`/company/${item
+                            .toLowerCase()
+                            .replace(" ", "-")}`}
+                          className="text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 block"
+                        >
+                          {safeTranslate(
+                            `footer.${item}`,
+                            item.replace(/([A-Z])/g, " $1").trim()
+                          )}
+                        </Link>
+                      </li>
+                    )
+                  )}
               </ul>
             </motion.div>
           ))}
@@ -237,11 +274,18 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="text-center md:text-right">
-              <div className="text-white font-semibold mb-2">Contact Info</div>
+              <div className="text-white font-semibold mb-2">
+                {safeTranslate("footer.contactInfo", "Contact Info")}
+              </div>
               <div className="text-gray-400 text-sm space-y-1">
                 <div>support@quickcart.com</div>
                 <div>+1 (555) 123-4567</div>
-                <div>24/7 Customer Support</div>
+                <div>
+                  {safeTranslate(
+                    "footer.customerSupport",
+                    "24/7 Customer Support"
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -256,22 +300,29 @@ const Footer = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-400">
-              © {currentYear} QuickCart. All rights reserved.
+              © {currentYear} {safeTranslate("common.siteTitle", "QuickCart")}.{" "}
+              {safeTranslate(
+                "footer.allRightsReserved",
+                "All rights reserved."
+              )}
             </div>
 
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               {[
-                "Terms of Service",
-                "Privacy Policy",
-                "Cookie Policy",
-                "Accessibility",
+                "termsOfService",
+                "privacyPolicy",
+                "cookiePolicy",
+                "accessibility",
               ].map((item, index) => (
                 <motion.div key={item} whileHover={{ scale: 1.05 }}>
                   <Link
                     href={`/legal/${item.toLowerCase().replace(" ", "-")}`}
                     className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
                   >
-                    {item}
+                    {safeTranslate(
+                      `footer.${item}`,
+                      item.replace(/([A-Z])/g, " $1").trim()
+                    )}
                   </Link>
                 </motion.div>
               ))}
@@ -283,7 +334,12 @@ const Footer = () => {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="w-2 h-2 bg-green-400 rounded-full"
               />
-              <span>All systems operational</span>
+              <span>
+                {safeTranslate(
+                  "footer.allSystemsOperational",
+                  "All systems operational"
+                )}
+              </span>
             </div>
           </div>
         </motion.div>

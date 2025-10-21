@@ -1,0 +1,246 @@
+{
+  "common": {
+    "siteTitle": "QuickCart",
+    "home": "Ana Sayfa",
+    "products": "Ürünler",
+    "about": "Hakkımızda",
+    "contact": "İletişim",
+    "cart": "Sepet",
+    "shopNow": "Hemen Alışveriş Yap",
+    "addToCart": "Sepete Ekle",
+    "adding": "Ekleniyor...",
+    "new": "YENİ",
+    "sale": "İNDİRİM",
+    "viewAll": "Tümünü Gör",
+    "welcome": "Hoş Geldiniz",
+    "description": "İhtiyaçlarınız için yüksek kaliteli ürün",
+    "total": "Toplam",
+    "checkout": "Ödemeye Geç",
+    "emptyCart": "Sepetiniz boş",
+    "continueShopping": "Alışverişe Devam Et",
+    "clearCart": "Sepeti Temizle",
+    "items": "ürün",
+    "item": "ürün",
+    "subtotal": "Ara Toplam",
+    "shipping": "Kargo",
+    "free": "Ücretsiz",
+    "signIn": "Giriş Yap",
+    "toggleMenu": "Menüyü aç/kapat"
+  },
+  "hero": {
+    "alt1": "Modern elektronik mağazası",
+    "cta1": "Mağazamızı Keşfedin",
+    "desc1": "En son teknolojiyi keşfedin",
+    "alt2": "Çeşitli cihazların olduğu elektronik mağazası",
+    "cta2": "Yeni Gelen Ürünler",
+    "desc2": "Sizi bekleyen yeni teknolojiler",
+    "alt3": "Akıllı telefonların sergilendiği mağaza bölümü",
+    "cta3": "Premium Akıllı Telefonlar %25 İNDİRİM",
+    "desc3": "Sınırlı süre teklifi",
+    "prev": "Önceki Slayt",
+    "next": "Sonraki Slayt",
+    "goToSlide": "Slayta git"
+  },
+  "stats": {
+    "customers": "Mutlu Müşteriler",
+    "products": "Ürünler",
+    "support": "7/24 Destek",
+    "rating": "En Yüksek Puan"
+  },
+  "badges": {
+    "secure": "🔒 Güvenli Ödeme",
+    "shipping": "🚚 Ücretsiz Kargo",
+    "quality": "💯 Kalite Garantisi"
+  },
+  "newsletter": {
+    "title": "Topluluğumuza Katılın",
+    "desc": "Bültenimize kaydolun ve ilk siparişinizde %10 indirim artı özel fırsatlar kazanın!",
+    "success": "Abone olduğunuz için teşekkürler! İndirim kodunuz için e-postanızı kontrol edin.",
+    "placeholder": "E-posta adresiniz",
+    "subscribe": "Abone Ol",
+    "submitting": "Abone olunuyor..."
+  },
+  "about": {
+    "title": "QuickCart'a Hoş Geldiniz",
+    "tagline": "En iyi ürünler, rakipsiz hizmet. Kaliteli elektronik ürünlerde güvenilir partneriniz.",
+    "fastDelivery": "Hızlı Teslimat",
+    "fastDeliveryDesc": "24 saat içinde hızlı kapıda teslimat",
+    "topQuality": "Üstün Kalite",
+    "topQualityDesc": "%100 orijinal garanti teknolojisi",
+    "support24": "7/24 Destek",
+    "support24Desc": "Size yardım etmek için her zaman buradayız",
+    "missionTitle": "Misyonumuz",
+    "missionText": "İnsanları en iyi teknolojiyle kolayca ve uygun fiyata buluşturmak.",
+    "getInTouch": "İletişime Geçin"
+  },
+  "form": {
+    "title": "Topluluğumuza Katılın",
+    "subtitle": "Saniyeler içinde hesabınızı oluşturun",
+    "labels": {
+      "name": "Tam Adınız",
+      "phone": "Telefon Numarası",
+      "age": "Yaş",
+      "isEmployee": "Şu anda çalışıyorum",
+      "salary": "Aylık Maaş Aralığı"
+    },
+    "placeholders": {
+      "name": "Tam adınızı girin",
+      "phone": "Telefon numaranızı girin",
+      "age": "Yaşınızı girin",
+      "salary": "Maaş aralığınızı seçin"
+    },
+    "buttons": {
+      "submit": "Hesap Oluştur",
+      "processing": "İşleniyor..."
+    },
+    "terms": {
+      "text": "Hesap oluşturarak",
+      "link": "Hizmet Şartları'mızı kabul etmiş olursunuz"
+    },
+    "errors": {
+      "name": "İsim gereklidir",
+      "phone": "Telefon numarası 8-10 haneli olmalıdır",
+      "age": "Yaş 18 ile 55 arasında olmalıdır",
+      "salary": "Lütfen maaş aralığını seçin"
+    },
+    "errorTitle": "Lütfen şu {{count}} hatayı düzeltin:"
+  },
+  "featured": {
+    "title": "Öne Çıkan Ürünler"
+  },
+  "cart": {
+    "title": "Alışveriş Sepetiniz",
+    "emptyTitle": "Sepetiniz boş",
+    "emptyMessage": "Görünüşe göre sepete henüz bir şey eklemediniz",
+    "continueShopping": "Alışverişe Devam Et",
+    "item": "ürün",
+    "items": "ürün",
+    "each": "adet",
+    "size": "Beden",
+    "decreaseQuantity": "Miktarı azalt",
+    "increaseQuantity": "Miktarı artır",
+    "remove": "Kaldır",
+    "fromCart": "sepetten",
+    "orderSummary": "Sipariş Özeti",
+    "subtotal": "Ara Toplam",
+    "shipping": "Kargo",
+    "free": "Ücretsiz",
+    "total": "Toplam",
+    "clearCart": "Sepeti Temizle",
+    "checkout": "Ödemeye Geç"
+  },
+  "footer": {
+    "brandDescription": "Kaliteli elektronik ürünler ve olağanüstü hizmet için tek adresiniz. En son teknolojiyi hızlı teslimat ve 7/24 destekle kapınıza getiriyoruz.",
+    "stayUpdated": "Güncel Kalın",
+    "thankYouSubscribing": "Abone olduğunuz için teşekkürler!",
+    "enterEmail": "E-posta adresinizi girin",
+    "subscribe": "Abone Ol",
+    "shop": "Alışveriş",
+    "support": "Destek",
+    "company": "Şirket",
+    "allProducts": "Tüm Ürünler",
+    "newArrivals": "Yeni Gelenler",
+    "featured": "Öne Çıkanlar",
+    "discounts": "İndirimler",
+    "bestSellers": "Çok Satanlar",
+    "contactUs": "Bize Ulaşın",
+    "faqs": "SSS",
+    "shippingInfo": "Kargo Bilgisi",
+    "returns": "İade",
+    "warranty": "Garanti",
+    "careers": "Kariyer",
+    "blog": "Blog",
+    "press": "Basın",
+    "sustainability": "Sürdürülebilirlik",
+    "contactInfo": "İletişim Bilgileri",
+    "customerSupport": "7/24 Müşteri Desteği",
+    "allRightsReserved": "Tüm hakları saklıdır.",
+    "termsOfService": "Hizmet Şartları",
+    "privacyPolicy": "Gizlilik Politikası",
+    "cookiePolicy": "Çerez Politikası",
+    "accessibility": "Erişilebilirlik",
+    "allSystemsOperational": "Tüm sistemler çalışıyor"
+  },
+  "products": {
+    "appleAirpodsPro2": {
+      "name": "Apple AirPods Pro 2. nesil",
+      "description": "Apple AirPods Pro (2. Nesil) MagSafe Kılıf (USB-C) ile mükemmel ses, aktif gürültü önleme ve rahat bir kullanım sunar."
+    },
+    "boseQuietComfort45": {
+      "name": "Bose QuietComfort 45",
+      "description": "Bose QuietComfort 45 kulaklıkları, olağanüstü ses kalitesi ve benzersiz gürültü önleme için tasarlanmıştır."
+    },
+    "samsungGalaxyS23": {
+      "name": "Samsung Galaxy S23",
+      "description": "Samsung Galaxy S23, gelişmiş AMOLED ekranıyla kapsamlı bir mobil deneyim sunar."
+    },
+    "garminVenu2": {
+      "name": "Garmin Venu 2",
+      "description": "Garmin Venu 2 akıllı saat, gelişmiş fitness takibi ve şık tasarımı bir araya getirir."
+    },
+    "playstation5": {
+      "name": "PlayStation 5",
+      "description": "PlayStation 5, ultra HD grafiklerle oyun deneyimini bir sonraki seviyeye taşır."
+    },
+    "canonEOSR5": {
+      "name": "Canon EOS R5",
+      "description": "Canon EOS R5, 45MP full-frame sensörüyle oyun değiştiren bir aynasız fotoğraf makinesidir."
+    },
+    "macbookPro16": {
+      "name": "MacBook Pro 16",
+      "description": "Apple'ın M2 Pro çipiyle güçlenen MacBook Pro 16, olağanüstü performans sunar."
+    },
+    "sonyWF1000XM5": {
+      "name": "Sony WF-1000XM5",
+      "description": "Sony WF-1000XM5 gerçek kablosuz kulaklıklar, Hi-Res Audio ile sürükleyici ses deneyimi sunar."
+    },
+    "samsungProjector4k": {
+      "name": "Samsung 4K Projektör",
+      "description": "Samsung 4K Projektör, sürükleyici bir sinema deneyimi sunar."
+    },
+    "asusROGZephyrusG16": {
+      "name": "ASUS ROG Zephyrus G16",
+      "description": "ASUS ROG Zephyrus G16 gaming laptop, Intel Core i9 işlemciyle güçlendirilmiştir."
+    },
+    "googlePixel7": {
+      "name": "Google Pixel 7",
+      "description": "Gelişmiş Kamera, Tensor Çipi"
+    },
+    "djiMini3Pro": {
+      "name": "DJI Mini 3 Pro",
+      "description": "Kompakt Drone, 4K Video"
+    },
+    "fitbitCharge5": {
+      "name": "Fitbit Charge 5",
+      "description": "Sağlık Metrikleri, Yerleşik GPS"
+    },
+    "appleWatchSeries8": {
+      "name": "Apple Watch Series 8",
+      "description": "Gelişmiş Sağlık Takibi"
+    },
+    "nintendoSwitchOLED": {
+      "name": "Nintendo Switch OLED",
+      "description": "7 inç OLED Ekran, Taşınabilir Oyun"
+    },
+    "jblFlip6": {
+      "name": "JBL Flip 6",
+      "description": "Taşınabilir Bluetooth Hoparlör"
+    },
+    "logitechMXMaster3": {
+      "name": "Logitech MX Master 3",
+      "description": "Gelişmiş Kablosuz Fare"
+    },
+    "kindlePaperwhite": {
+      "name": "Kindle Paperwhite",
+      "description": "Su Geçirmez, Yüksek Çözünürlüklü Ekran"
+    },
+    "razerBlackWidowV4": {
+      "name": "Razer BlackWidow V4",
+      "description": "Mekanik Gaming Klavye"
+    },
+    "samsungGalaxyTabS8": {
+      "name": "Samsung Galaxy Tab S8",
+      "description": "11 inç Ekran, S Kalem Dahil"
+    }
+  }
+}

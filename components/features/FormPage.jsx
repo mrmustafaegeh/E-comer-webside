@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Model from "../ui/Model.jsx";
 import {
   User,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 
 export default function FormPage() {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     name: "",
     phoneNumber: "",
@@ -28,16 +30,16 @@ export default function FormPage() {
 
     const validationErrors = [];
 
-    if (!form.name.trim()) validationErrors.push("Name is required");
+    if (!form.name.trim()) validationErrors.push(t("form.errors.name"));
     if (
       !form.phoneNumber ||
       form.phoneNumber.length < 8 ||
       form.phoneNumber.length > 10
     )
-      validationErrors.push("Phone number must be between 8-10 digits");
+      validationErrors.push(t("form.errors.phone"));
     if (!form.age || form.age < 18 || form.age > 55)
-      validationErrors.push("Age must be between 18 and 55");
-    if (!form.salary) validationErrors.push("Please select a salary range");
+      validationErrors.push(t("form.errors.age"));
+    if (!form.salary) validationErrors.push(t("form.errors.salary"));
 
     if (validationErrors.length) {
       setErrors(validationErrors);
@@ -64,11 +66,9 @@ export default function FormPage() {
             </div>
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-            Join Our Community
+            {t("form.title")}
           </h1>
-          <p className="text-gray-600 text-lg">
-            Create your account in seconds
-          </p>
+          <p className="text-gray-600 text-lg">{t("form.subtitle")}</p>
         </div>
 
         {/* Form Card */}
@@ -82,8 +82,7 @@ export default function FormPage() {
                     <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
                       <h3 className="text-sm font-semibold text-red-800 mb-1">
-                        Please fix the following {errors.length} error
-                        {errors.length > 1 ? "s" : ""}:
+                        {t("form.errorTitle", { count: errors.length })}
                       </h3>
                       <ul className="text-sm text-red-700 space-y-1">
                         {errors.map((error, index) => (
@@ -107,7 +106,7 @@ export default function FormPage() {
                   className="flex items-center text-sm font-medium text-gray-700 mb-2"
                 >
                   <User className="w-4 h-4 mr-2 text-gray-500" />
-                  Full Name
+                  {t("form.labels.name")}
                 </label>
                 <input
                   id="name"
@@ -115,7 +114,7 @@ export default function FormPage() {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none bg-white/50"
-                  placeholder="Enter your full name"
+                  placeholder={t("form.placeholders.name")}
                 />
               </div>
 
@@ -126,7 +125,7 @@ export default function FormPage() {
                   className="flex items-center text-sm font-medium text-gray-700 mb-2"
                 >
                   <Phone className="w-4 h-4 mr-2 text-gray-500" />
-                  Phone Number
+                  {t("form.labels.phone")}
                 </label>
                 <input
                   id="phone"
@@ -139,7 +138,7 @@ export default function FormPage() {
                     })
                   }
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none bg-white/50"
-                  placeholder="Enter your phone number"
+                  placeholder={t("form.placeholders.phone")}
                   maxLength="10"
                 />
               </div>
@@ -151,7 +150,7 @@ export default function FormPage() {
                   className="flex items-center text-sm font-medium text-gray-700 mb-2"
                 >
                   <Calendar className="w-4 h-4 mr-2 text-gray-500" />
-                  Age
+                  {t("form.labels.age")}
                 </label>
                 <input
                   id="age"
@@ -159,7 +158,7 @@ export default function FormPage() {
                   value={form.age}
                   onChange={(e) => setForm({ ...form, age: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none bg-white/50"
-                  placeholder="Enter your age"
+                  placeholder={t("form.placeholders.age")}
                   min="18"
                   max="55"
                 />
@@ -180,7 +179,7 @@ export default function FormPage() {
                   htmlFor="isEmployee"
                   className="ml-3 block text-sm font-medium text-gray-700"
                 >
-                  I am currently employed
+                  {t("form.labels.isEmployee")}
                 </label>
               </div>
 
@@ -191,7 +190,7 @@ export default function FormPage() {
                   className="flex items-center text-sm font-medium text-gray-700 mb-2"
                 >
                   <DollarSign className="w-4 h-4 mr-2 text-gray-500" />
-                  Monthly Salary Range
+                  {t("form.labels.salary")}
                 </label>
                 <select
                   id="salary"
@@ -199,7 +198,7 @@ export default function FormPage() {
                   onChange={(e) => setForm({ ...form, salary: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none bg-white/50 appearance-none"
                 >
-                  <option value="">Select your salary range</option>
+                  <option value="">{t("form.placeholders.salary")}</option>
                   <option value="0-500">$0 - $500</option>
                   <option value="500-1500">$500 - $1,500</option>
                   <option value="1500-3000">$1,500 - $3,000</option>
@@ -221,12 +220,12 @@ export default function FormPage() {
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Processing...
+                    {t("form.buttons.processing")}
                   </div>
                 ) : (
                   <div className="flex items-center justify-center">
                     <CheckCircle className="w-5 h-5 mr-2" />
-                    Create Account
+                    {t("form.buttons.submit")}
                   </div>
                 )}
               </button>
@@ -235,12 +234,12 @@ export default function FormPage() {
             {/* Form Tips */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-500">
-                By creating an account, you agree to our{" "}
+                {t("form.terms.text")}{" "}
                 <a
                   href="#"
                   className="text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  Terms of Service
+                  {t("form.terms.link")}
                 </a>
               </p>
             </div>

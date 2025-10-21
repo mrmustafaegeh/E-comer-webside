@@ -4,8 +4,10 @@ import { useCart } from "../../context/cartContext";
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const CartPage = () => {
+  const { t } = useTranslation();
   const {
     cartItems,
     removeFromCart,
@@ -87,10 +89,10 @@ const CartPage = () => {
           </svg>
         </motion.div>
         <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-3">
-          Your cart is empty
+          {t("cart.emptyTitle")}
         </h2>
         <p className="text-gray-500 mb-8 max-w-md mx-auto">
-          Looks like you haven't added anything to your cart yet
+          {t("cart.emptyMessage")}
         </p>
         <motion.a
           href="/products"
@@ -98,7 +100,7 @@ const CartPage = () => {
           whileTap={{ scale: 0.95 }}
           className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-300 font-medium shadow-lg hover:shadow-xl"
         >
-          Continue Shopping
+          {t("cart.continueShopping")}
         </motion.a>
       </motion.div>
     );
@@ -116,7 +118,7 @@ const CartPage = () => {
           animate={{ x: 0, opacity: 1 }}
           className="text-2xl md:text-3xl font-bold text-gray-800 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
         >
-          Your Shopping Cart
+          {t("cart.title")}
         </motion.h1>
         <motion.span
           initial={{ x: 20, opacity: 0 }}
@@ -125,7 +127,7 @@ const CartPage = () => {
           className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg"
         >
           {validatedCartItems.length}{" "}
-          {validatedCartItems.length === 1 ? "item" : "items"}
+          {validatedCartItems.length === 1 ? t("cart.item") : t("cart.items")}
         </motion.span>
       </div>
 
@@ -164,11 +166,11 @@ const CartPage = () => {
                     {item.name}
                   </h3>
                   <p className="text-gray-600 text-sm">
-                    {formatPrice(item.price)} each
+                    {formatPrice(item.price)} {t("cart.each")}
                   </p>
                   {item.size && (
                     <p className="text-gray-500 text-sm mt-1 bg-gray-100 px-2 py-1 rounded-md inline-block">
-                      Size: {item.size}
+                      {t("cart.size")}: {item.size}
                     </p>
                   )}
                   <div className="flex items-center mt-3">
@@ -179,7 +181,7 @@ const CartPage = () => {
                         className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                         onClick={() => decreaseQuantity(item.id)}
                         disabled={item.qty <= 1}
-                        aria-label="Decrease quantity"
+                        aria-label={t("cart.decreaseQuantity")}
                       >
                         <svg
                           className="w-4 h-4"
@@ -203,7 +205,7 @@ const CartPage = () => {
                         whileTap={{ scale: 0.9 }}
                         className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-all"
                         onClick={() => increaseQuantity(item.id)}
-                        aria-label="Increase quantity"
+                        aria-label={t("cart.increaseQuantity")}
                       >
                         <svg
                           className="w-4 h-4"
@@ -233,7 +235,9 @@ const CartPage = () => {
                   whileTap={{ scale: 0.9 }}
                   className="p-2 text-gray-400 hover:text-red-500 transition-all duration-200 hover:bg-red-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-200"
                   onClick={() => handleRemove(item.id)}
-                  aria-label={`Remove ${item.name} from cart`}
+                  aria-label={`${t("cart.remove")} ${item.name} ${t(
+                    "cart.fromCart"
+                  )}`}
                   disabled={isRemoving === item.id}
                 >
                   <svg
@@ -263,20 +267,24 @@ const CartPage = () => {
         transition={{ delay: 0.4 }}
         className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg p-6 mb-8 border border-blue-100"
       >
-        <h2 className="text-xl font-bold text-gray-800 mb-6">Order Summary</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-6">
+          {t("cart.orderSummary")}
+        </h2>
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Subtotal</span>
+            <span className="text-gray-600">{t("cart.subtotal")}</span>
             <span className="text-gray-900 font-semibold">
               {formatPrice(total)}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Shipping</span>
-            <span className="text-green-600 font-semibold">Free</span>
+            <span className="text-gray-600">{t("cart.shipping")}</span>
+            <span className="text-green-600 font-semibold">
+              {t("cart.free")}
+            </span>
           </div>
           <div className="border-t border-gray-200 pt-4 mt-4 flex justify-between items-center">
-            <span className="text-lg font-bold">Total</span>
+            <span className="text-lg font-bold">{t("cart.total")}</span>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
               {formatPrice(total)}
             </span>
@@ -296,7 +304,7 @@ const CartPage = () => {
           whileTap={{ scale: 0.95 }}
           className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center justify-center font-medium shadow-lg hover:shadow-xl"
           onClick={clearCart}
-          aria-label="Clear shopping cart"
+          aria-label={t("cart.clearCart")}
         >
           <svg
             className="w-5 h-5 mr-2"
@@ -311,13 +319,13 @@ const CartPage = () => {
               d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
             />
           </svg>
-          Clear Cart
+          {t("cart.clearCart")}
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-200 flex items-center justify-center font-medium shadow-lg hover:shadow-xl"
-          aria-label="Proceed to checkout"
+          aria-label={t("cart.checkout")}
         >
           <svg
             className="w-5 h-5 mr-2"
@@ -332,7 +340,7 @@ const CartPage = () => {
               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
             />
           </svg>
-          Proceed to Checkout
+          {t("cart.checkout")}
         </motion.button>
       </motion.div>
     </motion.div>

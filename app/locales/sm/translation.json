@@ -1,0 +1,246 @@
+{
+  "common": {
+    "siteTitle": "QuickCart",
+    "home": "Bogga Hore",
+    "products": "Alaabta",
+    "about": "Nagu Saabsan",
+    "contact": "Nala Soo Xiriir",
+    "cart": "Gaadhi",
+    "shopNow": "Hada Ganacso",
+    "addToCart": "Ku Dar Gaadhiga",
+    "adding": "Lagaa darayaa...",
+    "new": "CUSUB",
+    "sale": "QIIMO DHEER",
+    "viewAll": "Dhammaan Arag",
+    "welcome": "Soo dhawoow",
+    "description": "Alaab tayo sare leh baahidaada",
+    "total": "Wadarta",
+    "checkout": "Sii Bixinta",
+    "emptyCart": "Gaadhigaagu waa madhan",
+    "continueShopping": "Sii Ganacsiga",
+    "clearCart": "Nadiifinta Gaadhiga",
+    "items": "alaab",
+    "item": "alaab",
+    "subtotal": "Wadarta dhexe",
+    "shipping": "Rarida",
+    "free": "Bilaash",
+    "signIn": "Geli",
+    "toggleMenu": "Beddel menu-ga"
+  },
+  "hero": {
+    "alt1": "Dukaan elektaroonik oo casri ah oo leh bandhigyada",
+    "cta1": "Baadh Bakhaarka",
+    "desc1": "Hel teknoolajiyada ugu dambeysa",
+    "alt2": "Dukaan elektaroonik oo leh qalab kala duwan",
+    "cta2": "Cusub Ayaa Imid",
+    "desc2": "Teknooloji cusub kaa sugaya",
+    "alt3": "Qaybta dukaanka ee lagu bandhigayo taleefonada",
+    "cta3": "Taleefonada Tayo Sare 25% Hooseeya",
+    "desc3": "Ballo waqti gaar ah",
+    "prev": "Slaaydka Hore",
+    "next": "Slaaydka Xiga",
+    "goToSlide": "Tag slaaydka"
+  },
+  "stats": {
+    "customers": "Macamiil Faraxsan",
+    "products": "Alaabta",
+    "support": "Taageero 24/7",
+    "rating": "Qiimayn Sarreeya"
+  },
+  "badges": {
+    "secure": "🔒 Lacag Bixin Aamin",
+    "shipping": "🚚 Rarid Bilaash",
+    "quality": "💯 Damiin Tayo"
+  },
+  "newsletter": {
+    "title": "Ku Biir Bulshadeena",
+    "desc": "Isdiiwaangali wargeyska oo hel 10% jaban dalabkaaga koowaad iyo dalabyo gaar ah!",
+    "success": "Mahadsanid isdiiwaangalinta! Hubi iimaylkaaga koodka jaban.",
+    "placeholder": "Cinwaankaaga iimaylka",
+    "subscribe": "Isdiiwaangeli",
+    "submitting": "Lagu wadaa isdiiwaangelinta..."
+  },
+  "about": {
+    "title": "Ku Soo Dhawoow QuickCart",
+    "tagline": "Alaabta ugu fiican, adeeg aan la mid ahayn. Shuraako aamin ah alaabta elektarooniga tayo sare leh.",
+    "fastDelivery": "Gaarsiin Degdeg",
+    "fastDeliveryDesc": "Gaarsiin degdeg ah albaabka guriga 24 saac gudahooda",
+    "topQuality": "Tayo Sare",
+    "topQualityDesc": "Teknooloji asal ah 100% oo leh damiin",
+    "support24": "Taageero 24/7",
+    "support24Desc": "Waan halkan nahay si aan kaa caawino",
+    "missionTitle": "Hadafkeena",
+    "missionText": "In la xiriirro dadka teknoolojiyada ugu fiican, si fudud oo qiimo jaban.",
+    "getInTouch": "Nala Soo Xiriir"
+  },
+  "form": {
+    "title": "Ku Biir Bulshadeena",
+    "subtitle": "Abuur akoonkaaga ilbiriqsi gudahooda",
+    "labels": {
+      "name": "Magaca Oo Dhammaystiran",
+      "phone": "Lambarka Taleefanka",
+      "age": "Da'da",
+      "isEmployee": "Waxaan hadda shaqeynayaa",
+      "salary": "Kala Duwanaanshaha Mushahara Bille"
+    },
+    "placeholders": {
+      "name": "Geli magacaaga oo dhan",
+      "phone": "Geli lambarkaaga taleefanka",
+      "age": "Geli da'daada",
+      "salary": "Dooro kala duwanaanshaha mushahara"
+    },
+    "buttons": {
+      "submit": "Abuur Akoon",
+      "processing": "Lagu wadaa..."
+    },
+    "terms": {
+      "text": "Marka aad abuurto akoon, waxaad ogolaataa",
+      "link": "Shuruudaha Adeegga"
+    },
+    "errors": {
+      "name": "Magacu waa loo baahan yahay",
+      "phone": "Lambarka taleefanku waa inuu ahaadaa 8-10 lambar",
+      "age": "Da'ddu waa inay dhex tahay 18 ilaa 55",
+      "salary": "Fadlan dooro kala duwanaanshaha mushahara"
+    },
+    "errorTitle": "Fadlan sax {{count}} khalad:"
+  },
+  "featured": {
+    "title": "Alaabta Lagu Soocay"
+  },
+  "cart": {
+    "title": "Gaadhigaaga Ganacsiga",
+    "emptyTitle": "Gaadhigaagu waa madhan",
+    "emptyMessage": "Waxa ay u egtahay inaadan wax ku darin gaadhigaaga ilaa hadda",
+    "continueShopping": "Sii Ganacsiga",
+    "item": "alaab",
+    "items": "alaab",
+    "each": "mid kasta",
+    "size": "Cabbirka",
+    "decreaseQuantity": "Yaraynta tirada",
+    "increaseQuantity": "Kordhinta tirada",
+    "remove": "Ka saar",
+    "fromCart": "gaadhiga ka",
+    "orderSummary": "Soo koobida Dalabka",
+    "subtotal": "Wadarta dhexe",
+    "shipping": "Rarida",
+    "free": "Bilaash",
+    "total": "Wadarta",
+    "clearCart": "Nadiifinta Gaadhiga",
+    "checkout": "Sii Bixinta"
+  },
+  "footer": {
+    "brandDescription": "Bakhaarkaaga guud ee alaabta elektarooniga tayo sare leh iyo adeegga gaarka ah. Waxaan keenaynaa teknoolojiyada ugu dambeysa iyadoo la gaarsiiyo degdeg ah oo la taageero 24/7.",
+    "stayUpdated": "Sii Wargelin",
+    "thankYouSubscribing": "Mahadsanid isdiiwaangalinta!",
+    "enterEmail": "Geli iimaylkaaga",
+    "subscribe": "Isdiiwaangeli",
+    "shop": "Ganacsi",
+    "support": "Taageero",
+    "company": "Shirkad",
+    "allProducts": "Dhammaan Alaabta",
+    "newArrivals": "Kuwa Cusub",
+    "featured": "Lagu Soocay",
+    "discounts": "Qiimo Dheer",
+    "bestSellers": "Kuwa Ugu Iibka Badan",
+    "contactUs": "Nala Soo Xiriir",
+    "faqs": "Su'aalaha Badana La Is Weydiiyo",
+    "shippingInfo": "Macluumaadka Rarida",
+    "returns": "Soo Celinta",
+    "warranty": "Damiin",
+    "careers": "Shaqooyin",
+    "blog": "Blog",
+    "press": "Warbaahinta",
+    "sustainability": "Waarta",
+    "contactInfo": "Macluumaadka Xiriirka",
+    "customerSupport": "Taageerada Macaamiisha 24/7",
+    "allRightsReserved": "Dhammaan xuquuqda way dhamaan yihiin.",
+    "termsOfService": "Shuruudaha Adeegga",
+    "privacyPolicy": "Qaanuunka Arrimaha Khaaska",
+    "cookiePolicy": "Qaanuunka Cookiega",
+    "accessibility": "La Helidda",
+    "allSystemsOperational": "Dhammaan nidaamyadu waxay shaqeeyaan"
+  },
+  "products": {
+    "appleAirpodsPro2": {
+      "name": "Apple AirPods Pro 2aad gen",
+      "description": "Apple AirPods Pro (2aad Gen) oo leh MagSafe Case (USB-C) waxay bixiyaan cod fiican, baajinta shiddada firfircooni, iyo isku xirnaan raaxo leh."
+    },
+    "boseQuietComfort45": {
+      "name": "Bose QuietComfort 45",
+      "description": "Headphone-yada Bose QuietComfort 45 waxaa loo engegeeyay tayada codka ee gaar ah iyo baajinta shiddada aan la mid ahayn."
+    },
+    "samsungGalaxyS23": {
+      "name": "Samsung Galaxy S23",
+      "description": "Samsung Galaxy S23 waxay bixisaa khibrad mobile oo dhan oo leh muqaalkeeda horumarsan ee AMOLED."
+    },
+    "garminVenu2": {
+      "name": "Garmin Venu 2",
+      "description": "Saacadaha smart-ka Garmin Venu 2 waxay isku darsaan raadraac fiitnada horumarsan iyo naqshadeyn xirfad leh."
+    },
+    "playstation5": {
+      "name": "PlayStation 5",
+      "description": "PlayStation 5 waxay ciyaaraha u qaadaa heerka xiga iyadoo leh sawirro ultra-HD."
+    },
+    "canonEOSR5": {
+      "name": "Canon EOS R5",
+      "description": "Canon EOS R5 waa kaamera aan muraayad lahayn oo beddesa ciyaaraha oo leh sensor full-frame ah oo 45MP."
+    },
+    "macbookPro16": {
+      "name": "MacBook Pro 16",
+      "description": "MacBook Pro 16, oo ay kartiiso chip-ka Apple M2 Pro, waxay bixisaa waxqabad ka duwan."
+    },
+    "sonyWF1000XM5": {
+      "name": "Sony WF-1000XM5",
+      "description": "Dhagayaanada wireless-ka dhabta ah ee Sony WF-1000XM5 waxay keenaan cod dheeldheel leh Hi-Res Audio."
+    },
+    "samsungProjector4k": {
+      "name": "Projector-ka Samsung 4k",
+      "description": "Projector-ka Samsung 4K waxay bixisaa khibrad sinemo oo dheeldheel."
+    },
+    "asusROGZephyrusG16": {
+      "name": "ASUS ROG Zephyrus G16",
+      "description": "Lambarka ciyaaraha ee ASUS ROG Zephyrus G16 waa la kartiisay processor-ka Intel Core i9."
+    },
+    "googlePixel7": {
+      "name": "Google Pixel 7",
+      "description": "Kaamera Horumarsan, Chip-ka Tensor"
+    },
+    "djiMini3Pro": {
+      "name": "DJI Mini 3 Pro",
+      "description": "Droon Yar, Fiidiyow 4K"
+    },
+    "fitbitCharge5": {
+      "name": "Fitbit Charge 5",
+      "description": "Cabbirrada Caafimaadka, GPS-ka gudaha"
+    },
+    "appleWatchSeries8": {
+      "name": "Apple Watch Series 8",
+      "description": "Raadraac Caafimaad Horumarsan"
+    },
+    "nintendoSwitchOLED": {
+      "name": "Nintendo Switch OLED",
+      "description": "Shaashad OLED 7 inji, Ciyaar La Qaadi Karo"
+    },
+    "jblFlip6": {
+      "name": "JBL Flip 6",
+      "description": "Dhegaysi Bluetooth Oo La Qaadi Karo"
+    },
+    "logitechMXMaster3": {
+      "name": "Logitech MX Master 3",
+      "description": "Jiir Wireless Oo Horumarsan"
+    },
+    "kindlePaperwhite": {
+      "name": "Kindle Paperwhite",
+      "description": "Biyo Dheere, Muqaal Tayo Sare"
+    },
+    "razerBlackWidowV4": {
+      "name": "Razer BlackWidow V4",
+      "description": "Kiboodh Ciyaarado Mechanical"
+    },
+    "samsungGalaxyTabS8": {
+      "name": "Samsung Galaxy Tab S8",
+      "description": "Muqaal 11 inji, Qalinka S Waa La Siiyaa"
+    }
+  }
+}

@@ -7,6 +7,9 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../features/LanguageSwitcher";
+
 // Lazy load heavy animations
 const MotionNav = m.nav;
 const MotionDiv = m.div;
@@ -14,6 +17,7 @@ const MotionSpan = m.span;
 const MotionButton = m.button;
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
   const { cartItems } = useCart();
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,6 +27,17 @@ const Header = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Fixed safe translation function
+  const safeTranslate = (key, fallback) => {
+    try {
+      const translation = t(key);
+      // If translation returns the key itself, it means the key doesn't exist
+      return translation === key ? fallback : translation;
+    } catch (error) {
+      return fallback;
+    }
+  };
 
   const handleScroll = useCallback(() => {
     setIsScrolled(window.scrollY > 10);
@@ -55,11 +70,15 @@ const Header = () => {
 
   const navItems = useMemo(
     () => [
-      { href: "/", label: "Home" },
-      { href: "/products", label: "Products" },
-      { href: "/about", label: "AboutUs" },
+      { href: "/", label: safeTranslate("common.home", "Home") },
+      {
+        href: "/products",
+        label: safeTranslate("common.products", "Products"),
+      },
+      { href: "/about", label: safeTranslate("common.about", "About Us") },
+      { href: "/contact", label: safeTranslate("common.contact", "Contact") },
     ],
-    []
+    [t, i18n] // Remove i18n from dependencies since we're not using it directly
   );
 
   const isActive = useCallback(
@@ -100,7 +119,7 @@ const Header = () => {
             <div className="flex items-center">
               <div className="h-10 w-10 md:h-12 md:w-12 bg-gray-200 rounded-xl animate-pulse" />
               <span className="ml-3 text-xl md:text-2xl font-bold text-transparent bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text">
-                QuickCart
+                {safeTranslate("common.siteTitle", "QuickCart")}
               </span>
             </div>
           </div>
@@ -126,18 +145,11 @@ const Header = () => {
             {/* Logo */}
             <MotionDiv whileHover={{ scale: 1.05 }} className="flex-shrink-0">
               <Link href="/" className="flex items-center group">
-                <div className="relative h-10 w-10 md:h-12 md:w-12">
-                  <Image
-                    src="/images/logo.svg"
-                    alt="QuickCart"
-                    width={48}
-                    height={48}
-                    priority
-                    className="object-contain"
-                  />
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                  <span className="text-white font-bold text-lg">QC</span>
                 </div>
                 <span className="ml-3 text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                  QuickCart
+                  {safeTranslate("common.siteTitle", "QuickCart")}
                 </span>
               </Link>
             </MotionDiv>
@@ -145,7 +157,7 @@ const Header = () => {
             {/* Desktop Navigation */}
             <div className="hidden md:flex flex-1 justify-between items-center">
               <ul className="flex space-x-1 ml-10">
-                {navItems.map((item, index) => (
+                {navItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
@@ -159,18 +171,21 @@ const Header = () => {
                 ))}
               </ul>
 
-              {/* Desktop Cart & Sign In */}
+              {/* Desktop Cart, Language Switcher & Sign In */}
               <div className="flex items-center space-x-4">
+                <LanguageSwitcher />
+
                 <Link
                   href="/form"
                   className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 font-semibold text-sm"
                 >
-                  Sign In
+                  {safeTranslate("common.signIn", "Sign In")}
                 </Link>
 
                 <Link
                   href="/cart"
                   className="relative p-3 bg-gradient-to-r from-gray-50 to-white rounded-xl hover:from-blue-50 hover:to-blue-100 transition-all duration-300 group"
+                  aria-label={safeTranslate("cart.title", "Shopping Cart")}
                 >
                   <svg
                     className="w-6 h-6 text-gray-700 group-hover:text-blue-600 transition-colors"
@@ -200,10 +215,14 @@ const Header = () => {
 
             {/* Mobile Header Right Section */}
             <div className="flex items-center space-x-3 md:hidden">
+              {/* Mobile Language Switcher */}
+              <LanguageSwitcher />
+
               {/* Mobile Cart Icon */}
               <Link
                 href="/cart"
                 className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label={safeTranslate("cart.title", "Shopping Cart")}
               >
                 <svg
                   className="w-6 h-6 text-gray-700"
@@ -219,7 +238,7 @@ const Header = () => {
                   />
                 </svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white  rounded-full h-5 w-5 flex items-center justify-center text-xs">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
@@ -231,7 +250,7 @@ const Header = () => {
                 whileTap={{ scale: 0.9 }}
                 className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
                 onClick={toggleMobileMenu}
-                aria-label="Toggle menu"
+                aria-label={safeTranslate("common.toggleMenu", "Toggle menu")}
               >
                 <svg
                   className="w-6 h-6"
@@ -286,11 +305,11 @@ const Header = () => {
                   {/* Mobile Sign In Button */}
                   <li className="border-t border-gray-200 pt-2 mt-2">
                     <Link
-                      href="/auth"
+                      href="/form"
                       className="block px-4 py-3 text-center border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-all font-medium"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Sign In
+                      {safeTranslate("common.signIn", "Sign In")}
                     </Link>
                   </li>
                 </ul>

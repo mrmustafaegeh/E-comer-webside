@@ -1,14 +1,37 @@
 "use client";
-
 import { StarIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const ProductCard = ({ product, addToCart }) => {
+  const { t, i18n } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Ensure price is a number
+  // Safe translation function for products
+  const safeTranslate = (key, fallback) => {
+    return i18n.exists(key) ? t(key) : fallback;
+  };
+
+  // Get product translation key from product name
+  const getProductKey = (productName) => {
+    return productName
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[^a-z0-9]/g, "");
+  };
+
+  const productKey = getProductKey(product.name);
+  const translatedName = safeTranslate(
+    `products.${productKey}.name`,
+    product.name
+  );
+  const translatedDescription = safeTranslate(
+    `products.${productKey}.description`,
+    product.description || t("common.description")
+  );
+
   const getPrice = (price) => {
     if (typeof price === "number") return price;
     if (typeof price === "string") {
@@ -30,11 +53,10 @@ const ProductCard = ({ product, addToCart }) => {
     }
 
     setIsAdding(true);
-
     try {
       const cartProduct = {
         id: product.id,
-        name: product.name,
+        name: product.name, // Keep original name for cart operations
         price: productOfferPrice || productPrice,
         imgSrc: product.imgSrc || "/images/placeholder-product.jpg",
         qty: 1,
@@ -42,9 +64,7 @@ const ProductCard = ({ product, addToCart }) => {
         ...(product.color && { color: product.color }),
       };
 
-      console.log("Adding to cart:", cartProduct);
       addToCart(cartProduct);
-
       await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -94,7 +114,7 @@ const ProductCard = ({ product, addToCart }) => {
       <div className="relative h-48 sm:h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
         <img
           src={imageError ? "/images/placeholder-product.jpg" : safeImgSrc}
-          alt={product.name}
+          alt={translatedName}
           className="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110"
           onError={() => setImageError(true)}
           loading="lazy"
@@ -108,7 +128,7 @@ const ProductCard = ({ product, addToCart }) => {
               animate={{ scale: 1 }}
               className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
             >
-              NEW
+              {t("common.new")}
             </motion.span>
           )}
           {productOfferPrice && productOfferPrice < productPrice && (
@@ -118,7 +138,7 @@ const ProductCard = ({ product, addToCart }) => {
               transition={{ delay: 0.1 }}
               className="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full"
             >
-              SALE
+              {t("common.sale")}
             </motion.span>
           )}
         </div>
@@ -129,7 +149,7 @@ const ProductCard = ({ product, addToCart }) => {
         {/* Rating and Name */}
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-lg font-bold text-gray-800 line-clamp-2 flex-1 mr-2 leading-tight">
-            {product.name}
+            {translatedName}
           </h3>
           <div className="flex items-center space-x-1 bg-gray-50 px-2 py-1 rounded-lg">
             {renderRatingStars(rating)}
@@ -141,7 +161,7 @@ const ProductCard = ({ product, addToCart }) => {
 
         {/* Description */}
         <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed flex-grow">
-          {product.description || "High quality product for your needs"}
+          {translatedDescription}
         </p>
 
         {/* Price and Add to Cart */}
@@ -183,10 +203,10 @@ const ProductCard = ({ product, addToCart }) => {
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
                 />
-                Adding...
+                {t("common.adding")}
               </div>
             ) : (
-              "Add to Cart"
+              t("common.addToCart")
             )}
           </motion.button>
         </div>

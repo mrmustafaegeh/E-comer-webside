@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -10,8 +9,16 @@ import { useCart } from "../../context/cartContext.jsx";
 import FeaturedProducts from "./FeaturedProducts.jsx";
 import NewsletterSignup from "./NewLetterSignup.jsx";
 import { FadeInUp, Floating } from "../../hooks/useAnimation.jsx";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t, i18n } = useTranslation();
+
+  // Safe translation function
+  const safeTranslate = (key, fallback) => {
+    return i18n.exists(key) ? t(key) : fallback;
+  };
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const slideRef = useRef(null);
@@ -23,24 +30,31 @@ const Home = () => {
   const slides = [
     {
       src: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      alt: "Modern electronics store with displays",
-      cta: "Explore Our Showroom",
-      description: "Discover the latest in technology",
+      alt: safeTranslate("hero.alt1", "Modern electronics store with displays"),
+      cta: safeTranslate("hero.cta1", "Explore Our Showroom"),
+      description: safeTranslate(
+        "hero.desc1",
+        "Discover the latest in technology"
+      ),
     },
     {
       src: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      alt: "Electronics shop with various gadgets",
-      cta: "New Arrivals Just In",
-      description: "Fresh tech waiting for you",
+      alt: safeTranslate("hero.alt2", "Electronics shop with various gadgets"),
+      cta: safeTranslate("hero.cta2", "New Arrivals Just In"),
+      description: safeTranslate("hero.desc2", "Fresh tech waiting for you"),
     },
     {
       src: "https://images.unsplash.com/photo-1591488320449-011701bb6704?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      alt: "Store section with smartphones on display",
-      cta: "Premium Smartphones 25% OFF",
-      description: "Limited time offer",
+      alt: safeTranslate(
+        "hero.alt3",
+        "Store section with smartphones on display"
+      ),
+      cta: safeTranslate("hero.cta3", "Premium Smartphones 25% OFF"),
+      description: safeTranslate("hero.desc3", "Limited time offer"),
     },
   ];
 
+  // Carousel functions
   const scrollToIndex = useCallback((index) => {
     if (slideRef.current) {
       const slideWidth = slideRef.current.clientWidth;
@@ -64,6 +78,7 @@ const Home = () => {
     scrollToIndex(prevIndex);
   }, [currentIndex, scrollToIndex, slides.length]);
 
+  // Auto-play functionality
   useEffect(() => {
     if (!isPaused) {
       intervalRef.current = setInterval(handleNext, 5000);
@@ -73,9 +88,11 @@ const Home = () => {
     };
   }, [handleNext, isPaused]);
 
+  // Pause/resume functions
   const handlePause = () => setIsPaused(true);
   const handleResume = () => setIsPaused(false);
 
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowLeft") handlePrev();
@@ -143,7 +160,7 @@ const Home = () => {
                               href="/products"
                               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all duration-300 font-semibold text-lg shadow-2xl hover:shadow-3xl"
                             >
-                              Shop Now
+                              {safeTranslate("common.shopNow", "Shop Now")}
                               <ChevronRight className="ml-2 w-5 h-5" />
                             </Link>
                           </motion.div>
@@ -160,7 +177,7 @@ const Home = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePrev}
-              aria-label="Previous slide"
+              aria-label={safeTranslate("hero.prev", "Previous slide")}
               className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all duration-300"
             >
               <ChevronLeft size={28} className="text-white" />
@@ -170,7 +187,7 @@ const Home = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNext}
-              aria-label="Next slide"
+              aria-label={safeTranslate("hero.next", "Next slide")}
               className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all duration-300"
             >
               <ChevronRight size={28} className="text-white" />
@@ -183,7 +200,10 @@ const Home = () => {
                   key={index}
                   whileHover={{ scale: 1.2 }}
                   onClick={() => scrollToIndex(index)}
-                  aria-label={`Go to slide ${index + 1}`}
+                  aria-label={`${safeTranslate(
+                    "hero.goToSlide",
+                    "Go to slide"
+                  )} ${index + 1}`}
                   className={`h-3 rounded-full transition-all duration-300 ${
                     currentIndex === index
                       ? "bg-white w-8"
@@ -215,10 +235,22 @@ const Home = () => {
         <section className="my-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { number: "10K+", label: "Happy Customers", color: "blue" },
-              { number: "500+", label: "Products", color: "green" },
-              { number: "24/7", label: "Support", color: "purple" },
-              { number: "5⭐", label: "Rating", color: "orange" },
+              {
+                number: "10K+",
+                label: safeTranslate("stats.customers", "Happy Customers"),
+              },
+              {
+                number: "500+",
+                label: safeTranslate("stats.products", "Products"),
+              },
+              {
+                number: "24/7",
+                label: safeTranslate("stats.support", "24/7 Support"),
+              },
+              {
+                number: "5⭐",
+                label: safeTranslate("stats.rating", "Top Rating"),
+              },
             ].map((stat, index) => (
               <Floating key={index} intensity={0.03} duration={3 + index * 0.5}>
                 <motion.div
@@ -245,9 +277,9 @@ const Home = () => {
           <section className="text-center py-8">
             <div className="flex flex-wrap justify-center gap-8 opacity-60">
               {[
-                "🔒 Secure Payments",
-                "🚚 Free Shipping",
-                "💯 Quality Guarantee",
+                safeTranslate("badges.secure", "🔒 Secure Payments"),
+                safeTranslate("badges.shipping", "🚚 Free Shipping"),
+                safeTranslate("badges.quality", "💯 Quality Guarantee"),
               ].map((badge, index) => (
                 <motion.div
                   key={index}

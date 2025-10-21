@@ -12,11 +12,16 @@ import { FadeInUp, Floating } from "../../hooks/useAnimation.jsx";
 import { useTranslation } from "react-i18next";
 
 const Home = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  // Safe translation function
+  // Fixed safe translation function
   const safeTranslate = (key, fallback) => {
-    return i18n.exists(key) ? t(key) : fallback;
+    try {
+      const translation = t(key);
+      return translation === key ? fallback : translation;
+    } catch (error) {
+      return fallback;
+    }
   };
 
   const [currentIndex, setCurrentIndex] = useState(0);

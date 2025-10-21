@@ -17,7 +17,7 @@ const MotionSpan = m.span;
 const MotionButton = m.button;
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { cartItems } = useCart();
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +32,6 @@ const Header = () => {
   const safeTranslate = (key, fallback) => {
     try {
       const translation = t(key);
-      // If translation returns the key itself, it means the key doesn't exist
       return translation === key ? fallback : translation;
     } catch (error) {
       return fallback;
@@ -78,7 +77,7 @@ const Header = () => {
       { href: "/about", label: safeTranslate("common.about", "About Us") },
       { href: "/contact", label: safeTranslate("common.contact", "Contact") },
     ],
-    [t, i18n] // Remove i18n from dependencies since we're not using it directly
+    [t]
   );
 
   const isActive = useCallback(
@@ -238,7 +237,7 @@ const Header = () => {
                   />
                 </svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white  rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}

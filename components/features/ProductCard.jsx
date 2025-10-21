@@ -5,13 +5,18 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 const ProductCard = ({ product, addToCart }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [isAdding, setIsAdding] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Safe translation function for products
+  // Fixed safe translation function for products
   const safeTranslate = (key, fallback) => {
-    return i18n.exists(key) ? t(key) : fallback;
+    try {
+      const translation = t(key);
+      return translation === key ? fallback : translation;
+    } catch (error) {
+      return fallback;
+    }
   };
 
   // Get product translation key from product name

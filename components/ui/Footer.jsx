@@ -14,7 +14,6 @@ const Footer = () => {
   const safeTranslate = (key, fallback) => {
     try {
       const translation = t(key);
-      // If translation returns the key itself, it means the key doesn't exist
       return translation === key ? fallback : translation;
     } catch (error) {
       return fallback;

@@ -1,4 +1,4 @@
-import CartPage from "../../components/features/CartPage.jsx";
+import CartPage from "../../components/cart/CartPage.jsx";
 
 export const metadata = {
   title: "Shopping Cart - QuickCart",

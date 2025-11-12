@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   slides: [
-    { id: 1, image: "/images/slide1.jpg", title: "Slide 1" },
+    { id: 1, image: "/", title: "Slide 1" },
     { id: 2, image: "/images/slide2.jpg", title: "Slide 2" },
     { id: 3, image: "/images/slide3.jpg", title: "Slide 3" },
   ],

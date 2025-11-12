@@ -17,8 +17,18 @@ const ProductCard = ({ product, addToCart }) => {
     return numPrice.toFixed(2);
   };
 
+  // Map API fields to your expected fields
+  const productData = {
+    id: product.id,
+    name: product.title, // API uses 'title' instead of 'name'
+    description: product.description,
+    price: product.price,
+    rating: product.rating?.rate || 0, // API has rating.rate
+    image: product.image, // API uses 'image' instead of 'imgSrc'
+    category: product.category,
+  };
+
   if (!isMounted) {
-    // Optional: show nothing or placeholder
     return null;
   }
 
@@ -31,37 +41,47 @@ const ProductCard = ({ product, addToCart }) => {
     >
       <div className="relative h-48 sm:h-56 w-full">
         <img
-          src={product.imgSrc}
-          alt={product.name}
-          className="object-cover w-full h-full"
+          src={productData.image}
+          alt={productData.name}
+          className="w-full h-full object-contain p-4 bg-white"
+          onError={(e) => {
+            e.target.src = "/images/placeholder.jpg";
+          }}
         />
       </div>
 
       <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-lg font-bold text-gray-800 mb-2">{product.name}</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">
+          {productData.name}
+        </h3>
 
-        <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+          {productData.description}
+        </p>
 
         <div className="flex items-center mb-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <StarIcon
               key={i}
               className={`w-5 h-5 ${
-                i < Math.round(product.rating)
+                i < Math.round(productData.rating)
                   ? "text-yellow-400"
                   : "text-gray-300"
               }`}
             />
           ))}
+          <span className="ml-2 text-sm text-gray-500">
+            ({product.rating?.count || 0})
+          </span>
         </div>
 
         <div className="mt-auto flex items-center justify-between">
           <span className="text-2xl font-bold text-green-600">
-            ${formatPrice(product.price)}
+            ${formatPrice(productData.price)}
           </span>
 
           <button
-            onClick={() => addToCart(product)}
+            onClick={() => addToCart(productData)}
             className="px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition"
           >
             {t("common.addToCart")}

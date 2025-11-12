@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCart } from "@/context/cartContext";
+import { useCart } from "@/hooks/useCart";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";

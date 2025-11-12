@@ -1,7 +1,7 @@
 "use client";
 
 import ProductCard from "./ProductCard";
-import { useCart } from "@/context/cartContext";
+import { useCart } from "@/hooks/useCart";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { productAPI } from "../lib/api";

@@ -1,7 +1,6 @@
 "use client";
 
-import { useCart } from "../../context/cartContext";
-import Image from "next/image";
+import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -17,6 +16,7 @@ const CartPage = () => {
   } = useCart();
 
   const [isRemoving, setIsRemoving] = useState(null);
+  const [imageErrors, setImageErrors] = useState({});
 
   const parsePrice = (price) => {
     if (typeof price === "number") return price;
@@ -32,12 +32,13 @@ const CartPage = () => {
     return parsed;
   };
 
+  // FIXED: Remove the placeholder from imgSrc assignment
   const validatedCartItems = cartItems
     .map((item) => ({
       ...item,
       price: parsePrice(item.price),
       qty: Math.max(1, Math.min(Number(item.qty) || 1, 99)),
-      imgSrc: item.imgSrc || "/images/placeholder-product.jpg",
+      imgSrc: item.image || item.imgSrc, // Use the API image, don't add placeholder
       id: item.id || Math.random().toString(36).substr(2, 9),
     }))
     .filter((item) => item.price > 0);
@@ -60,6 +61,30 @@ const CartPage = () => {
     removeFromCart(id);
     setIsRemoving(null);
   };
+
+  // Handle image errors properly
+  const handleImageError = (itemId) => {
+    setImageErrors((prev) => ({ ...prev, [itemId]: true }));
+  };
+
+  // Fallback image component
+  const ImageFallback = () => (
+    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
+      <svg
+        className="w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1}
+          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+        />
+      </svg>
+    </div>
+  );
 
   if (validatedCartItems.length === 0) {
     return (
@@ -151,15 +176,17 @@ const CartPage = () => {
                   whileHover={{ scale: 1.05 }}
                   className="w-24 h-24 bg-gray-100 rounded-xl overflow-hidden mr-4 flex-shrink-0 relative"
                 >
-                  <Image
-                    src={item.imgSrc}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/placeholder-product.jpg";
-                    }}
-                  />
+                  {/* FIXED: Use proper error handling without placeholder */}
+                  {imageErrors[item.id] ? (
+                    <ImageFallback />
+                  ) : (
+                    <img
+                      src={item.imgSrc || item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                      onError={() => handleImageError(item.id)}
+                    />
+                  )}
                 </motion.div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 text-lg mb-1">

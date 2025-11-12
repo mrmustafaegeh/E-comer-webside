@@ -1,28 +1,48 @@
-// hooks/useSafeTranslation.js
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+// i18n.js - Place this in your project root or lib folder
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-export const useSafeTranslation = () => {
-  const { t, i18n, ready } = useTranslation();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const safeTranslate = (key, fallback) => {
-    // During SSR or if i18n isn't ready, return fallback
-    if (!isClient || !ready) {
-      return fallback;
-    }
-
-    try {
-      const translation = t(key);
-      return translation === key ? fallback : translation;
-    } catch (error) {
-      return fallback;
-    }
-  };
-
-  return { safeTranslate, t, i18n, ready };
+// Translation resources
+const resources = {
+  en: {
+    translation: {
+      "featured.title": "Featured Products",
+      "common.viewAll": "View All",
+      "common.addToCart": "Add to Cart",
+      "All Products": "All Products",
+      // Add all your translations here
+    },
+  },
+  tr: {
+    translation: {
+      "featured.title": "Öne Çıkan Ürünler",
+      "common.viewAll": "Tümünü Gör",
+      "common.addToCart": "Sepete Ekle",
+      "All Products": "Tüm Ürünler",
+      // Turkish translations
+    },
+  },
 };
+
+// Initialize i18next
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    resources,
+    lng: "en", // default language
+    fallbackLng: "en",
+
+    // This is important for SSR
+    react: {
+      useSuspense: false, // Disable suspense for SSR compatibility
+    },
+
+    interpolation: {
+      escapeValue: false, // React already escapes values
+    },
+
+    // Debug mode (disable in production)
+    debug: process.env.NODE_ENV === "development",
+  });
+
+export default i18n;

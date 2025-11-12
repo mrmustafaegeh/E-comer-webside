@@ -3,6 +3,7 @@ import Footer from "../components/ui/Footer.jsx";
 import ScrollToTop from "../components/ui/ScrollToTop.jsx";
 import { CartProvider } from "../context/cartContext.jsx";
 import ClientTranslationProvider from "../components/ClientTranslationProvider.jsx";
+import ReduxProvider from "./ReduxProvider.jsx";
 import "./globals.css";
 import "./i18n.js";
 
@@ -23,10 +24,12 @@ export default function RootLayout({ children }) {
         <ClientTranslationProvider>
           <CartProvider>
             <Header />
-            <ScrollToTop />
-            <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-              {children}
-            </main>
+            <ReduxProvider>
+              <ScrollToTop />
+              <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+                {children}
+              </main>
+            </ReduxProvider>
             <Footer />
           </CartProvider>
         </ClientTranslationProvider>

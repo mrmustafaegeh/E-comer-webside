@@ -1,4 +1,4 @@
-import Home from "../components/features/Home.jsx";
+import Home from "../components/home/Home.jsx";
 
 export const metadata = {
   title: "QuickCart - Best Electronics Store",

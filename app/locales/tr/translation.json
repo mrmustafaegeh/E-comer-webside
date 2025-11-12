@@ -28,18 +28,27 @@
     "toggleMenu": "Menüyü aç/kapat"
   },
   "hero": {
-    "alt1": "Modern elektronik mağazası",
-    "cta1": "Mağazamızı Keşfedin",
-    "desc1": "En son teknolojiyi keşfedin",
-    "alt2": "Çeşitli cihazların olduğu elektronik mağazası",
-    "cta2": "Yeni Gelen Ürünler",
-    "desc2": "Sizi bekleyen yeni teknolojiler",
-    "alt3": "Akıllı telefonların sergilendiği mağaza bölümü",
-    "cta3": "Premium Akıllı Telefonlar %25 İNDİRİM",
-    "desc3": "Sınırlı süre teklifi",
-    "prev": "Önceki Slayt",
-    "next": "Sonraki Slayt",
-    "goToSlide": "Slayta git"
+    "title": "Harika",
+    "titleHighlight": "E-ticaret Fırsatları",
+    "subtitle": "Elektronik, moda, ev eşyaları ve daha fazlasında rakipsiz fırsatları keşfedin. Hemen alışveriş yapın ve büyük tasarruf edin!",
+    "shopNow": "Hemen Alışveriş Yap",
+    "browseCollections": "Koleksiyonları Görüntüle",
+    "stats": {
+      "products": "10K+",
+      "productsLabel": "Ürün",
+      "support": "7/24",
+      "supportLabel": "Destek",
+      "customers": "50K+",
+      "customersLabel": "Mutlu Müşteri"
+    },
+    "showcase": {
+      "title": "Sıcak Fırsatlar",
+      "subtitle": "Sınırlı Süreli Teklifler"
+    },
+    "badges": {
+      "new": "🔥 Yeni",
+      "fast": "⚡ Hızlı"
+    }
   },
   "stats": {
     "customers": "Mutlu Müşteriler",
@@ -106,7 +115,8 @@
     "errorTitle": "Lütfen şu {{count}} hatayı düzeltin:"
   },
   "featured": {
-    "title": "Öne Çıkan Ürünler"
+    "title": "Öne Çıkan Ürünler",
+    "subtitle": "En popüler ürünlerimizi keşfedin"
   },
   "cart": {
     "title": "Alışveriş Sepetiniz",
@@ -161,86 +171,16 @@
     "accessibility": "Erişilebilirlik",
     "allSystemsOperational": "Tüm sistemler çalışıyor"
   },
+  "categories": {
+    "electronics": "Elektronik",
+    "jewelery": "Mücevher",
+    "men's clothing": "Erkek Giyim",
+    "women's clothing": "Kadın Giyim"
+  },
   "products": {
-    "appleAirpodsPro2": {
-      "name": "Apple AirPods Pro 2. nesil",
-      "description": "Apple AirPods Pro (2. Nesil) MagSafe Kılıf (USB-C) ile mükemmel ses, aktif gürültü önleme ve rahat bir kullanım sunar."
-    },
-    "boseQuietComfort45": {
-      "name": "Bose QuietComfort 45",
-      "description": "Bose QuietComfort 45 kulaklıkları, olağanüstü ses kalitesi ve benzersiz gürültü önleme için tasarlanmıştır."
-    },
-    "samsungGalaxyS23": {
-      "name": "Samsung Galaxy S23",
-      "description": "Samsung Galaxy S23, gelişmiş AMOLED ekranıyla kapsamlı bir mobil deneyim sunar."
-    },
-    "garminVenu2": {
-      "name": "Garmin Venu 2",
-      "description": "Garmin Venu 2 akıllı saat, gelişmiş fitness takibi ve şık tasarımı bir araya getirir."
-    },
-    "playstation5": {
-      "name": "PlayStation 5",
-      "description": "PlayStation 5, ultra HD grafiklerle oyun deneyimini bir sonraki seviyeye taşır."
-    },
-    "canonEOSR5": {
-      "name": "Canon EOS R5",
-      "description": "Canon EOS R5, 45MP full-frame sensörüyle oyun değiştiren bir aynasız fotoğraf makinesidir."
-    },
-    "macbookPro16": {
-      "name": "MacBook Pro 16",
-      "description": "Apple'ın M2 Pro çipiyle güçlenen MacBook Pro 16, olağanüstü performans sunar."
-    },
-    "sonyWF1000XM5": {
-      "name": "Sony WF-1000XM5",
-      "description": "Sony WF-1000XM5 gerçek kablosuz kulaklıklar, Hi-Res Audio ile sürükleyici ses deneyimi sunar."
-    },
-    "samsungProjector4k": {
-      "name": "Samsung 4K Projektör",
-      "description": "Samsung 4K Projektör, sürükleyici bir sinema deneyimi sunar."
-    },
-    "asusROGZephyrusG16": {
-      "name": "ASUS ROG Zephyrus G16",
-      "description": "ASUS ROG Zephyrus G16 gaming laptop, Intel Core i9 işlemciyle güçlendirilmiştir."
-    },
-    "googlePixel7": {
-      "name": "Google Pixel 7",
-      "description": "Gelişmiş Kamera, Tensor Çipi"
-    },
-    "djiMini3Pro": {
-      "name": "DJI Mini 3 Pro",
-      "description": "Kompakt Drone, 4K Video"
-    },
-    "fitbitCharge5": {
-      "name": "Fitbit Charge 5",
-      "description": "Sağlık Metrikleri, Yerleşik GPS"
-    },
-    "appleWatchSeries8": {
-      "name": "Apple Watch Series 8",
-      "description": "Gelişmiş Sağlık Takibi"
-    },
-    "nintendoSwitchOLED": {
-      "name": "Nintendo Switch OLED",
-      "description": "7 inç OLED Ekran, Taşınabilir Oyun"
-    },
-    "jblFlip6": {
-      "name": "JBL Flip 6",
-      "description": "Taşınabilir Bluetooth Hoparlör"
-    },
-    "logitechMXMaster3": {
-      "name": "Logitech MX Master 3",
-      "description": "Gelişmiş Kablosuz Fare"
-    },
-    "kindlePaperwhite": {
-      "name": "Kindle Paperwhite",
-      "description": "Su Geçirmez, Yüksek Çözünürlüklü Ekran"
-    },
-    "razerBlackWidowV4": {
-      "name": "Razer BlackWidow V4",
-      "description": "Mekanik Gaming Klavye"
-    },
-    "samsungGalaxyTabS8": {
-      "name": "Samsung Galaxy Tab S8",
-      "description": "11 inç Ekran, S Kalem Dahil"
-    }
+    "mensShirts": "Erkek Gömlekleri",
+    "womensDresses": "Kadın Elbiseleri",
+    "electronics": "Elektronik",
+    "jewelry": "Mücevher"
   }
 }

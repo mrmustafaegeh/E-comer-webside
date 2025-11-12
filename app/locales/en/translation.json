@@ -48,19 +48,7 @@
     "badges": {
       "new": "🔥 New",
       "fast": "⚡ Fast"
-    },
-    "alt1": "Modern electronics store with displays",
-    "cta1": "Explore Our Showroom",
-    "desc1": "Discover the latest in technology",
-    "alt2": "Electronics shop with various gadgets",
-    "cta2": "New Arrivals Just In",
-    "desc2": "Fresh tech waiting for you",
-    "alt3": "Store section with smartphones on display",
-    "cta3": "Premium Smartphones 25% OFF",
-    "desc3": "Limited time offer",
-    "prev": "Previous Slide",
-    "next": "Next Slide",
-    "goToSlide": "Go to slide"
+    }
   },
   "stats": {
     "customers": "Happy Customers",
@@ -184,86 +172,16 @@
     "accessibility": "Accessibility",
     "allSystemsOperational": "All systems operational"
   },
+  "categories": {
+    "electronics": "Electronics",
+    "jewelery": "Jewelry",
+    "men's clothing": "Men's Clothing",
+    "women's clothing": "Women's Clothing"
+  },
   "products": {
-    "appleAirpodsPro2": {
-      "name": "Apple AirPods Pro 2nd gen",
-      "description": "Apple AirPods Pro (2nd Gen) with MagSafe Case (USB-C) provide excellent sound, active noise cancellation, and a comfortable fit."
-    },
-    "boseQuietComfort45": {
-      "name": "Bose QuietComfort 45",
-      "description": "The Bose QuietComfort 45 headphones are engineered for exceptional sound quality and unparalleled noise cancellation."
-    },
-    "samsungGalaxyS23": {
-      "name": "Samsung Galaxy S23",
-      "description": "The Samsung Galaxy S23 offers an all-encompassing mobile experience with its advanced AMOLED display."
-    },
-    "garminVenu2": {
-      "name": "Garmin Venu 2",
-      "description": "The Garmin Venu 2 smartwatch blends advanced fitness tracking with sophisticated design."
-    },
-    "playstation5": {
-      "name": "PlayStation 5",
-      "description": "The PlayStation 5 takes gaming to the next level with ultra-HD graphics."
-    },
-    "canonEOSR5": {
-      "name": "Canon EOS R5",
-      "description": "The Canon EOS R5 is a game-changing mirrorless camera with a 45MP full-frame sensor."
-    },
-    "macbookPro16": {
-      "name": "MacBook Pro 16",
-      "description": "The MacBook Pro 16, powered by Apple's M2 Pro chip, offers outstanding performance."
-    },
-    "sonyWF1000XM5": {
-      "name": "Sony WF-1000XM5",
-      "description": "Sony WF-1000XM5 true wireless earbuds deliver immersive sound with Hi-Res Audio."
-    },
-    "samsungProjector4k": {
-      "name": "Samsung Projector 4k",
-      "description": "The Samsung 4K Projector offers an immersive cinematic experience."
-    },
-    "asusROGZephyrusG16": {
-      "name": "ASUS ROG Zephyrus G16",
-      "description": "The ASUS ROG Zephyrus G16 gaming laptop is powered by the Intel Core i9 processor."
-    },
-    "googlePixel7": {
-      "name": "Google Pixel 7",
-      "description": "Advanced Camera, Tensor Chip"
-    },
-    "djiMini3Pro": {
-      "name": "DJI Mini 3 Pro",
-      "description": "Compact Drone, 4K Video"
-    },
-    "fitbitCharge5": {
-      "name": "Fitbit Charge 5",
-      "description": "Health Metrics, Built-in GPS"
-    },
-    "appleWatchSeries8": {
-      "name": "Apple Watch Series 8",
-      "description": "Advanced Health Tracking"
-    },
-    "nintendoSwitchOLED": {
-      "name": "Nintendo Switch OLED",
-      "description": "7-inch OLED Screen, Portable Gaming"
-    },
-    "jblFlip6": {
-      "name": "JBL Flip 6",
-      "description": "Portable Bluetooth Speaker"
-    },
-    "logitechMXMaster3": {
-      "name": "Logitech MX Master 3",
-      "description": "Advanced Wireless Mouse"
-    },
-    "kindlePaperwhite": {
-      "name": "Kindle Paperwhite",
-      "description": "Waterproof, High-resolution Display"
-    },
-    "razerBlackWidowV4": {
-      "name": "Razer BlackWidow V4",
-      "description": "Mechanical Gaming Keyboard"
-    },
-    "samsungGalaxyTabS8": {
-      "name": "Samsung Galaxy Tab S8",
-      "description": "11-inch Display, S Pen Included"
-    }
+    "mensShirts": "Men's Shirts",
+    "womensDresses": "Women's Dresses",
+    "electronics": "Electronics",
+    "jewelry": "Jewelry"
   }
 }

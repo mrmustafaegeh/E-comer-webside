@@ -5,6 +5,12 @@ import { useTranslation } from "react-i18next";
 export default function HeroSection() {
   const { t } = useTranslation();
 
+  // Fallback function to prevent missing translations
+  const getTranslation = (key, fallback) => {
+    const translation = t(key);
+    return translation === key ? fallback : translation;
+  };
+
   return (
     <section className="relative w-full min-h-[80vh] bg-gray-900 flex items-center overflow-hidden">
       {/* Background with Gradient */}
@@ -24,9 +30,9 @@ export default function HeroSection() {
                 transition={{ duration: 0.8 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
               >
-                {t("hero.title")}{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  {t("hero.titleHighlight")}
+                {getTranslation("hero.title", "Amazing")}{" "}
+                <span className="text-blue-400">
+                  {getTranslation("hero.titleHighlight", "E-commerce Offers")}
                 </span>
               </motion.h1>
 
@@ -36,7 +42,10 @@ export default function HeroSection() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg"
               >
-                {t("hero.subtitle")}
+                {getTranslation(
+                  "hero.subtitle",
+                  "Discover unbeatable deals on electronics, fashion, home goods and more. Shop now and save big!"
+                )}
               </motion.p>
 
               {/* CTA Buttons */}
@@ -50,13 +59,16 @@ export default function HeroSection() {
                   href="#shop"
                   className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition duration-300 transform hover:scale-105 text-center"
                 >
-                  {t("hero.shopNow")}
+                  {getTranslation("hero.shopNow", "Shop Now")}
                 </a>
                 <a
                   href="#collections"
                   className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-semibold px-8 py-4 rounded-lg transition duration-300 text-center"
                 >
-                  {t("hero.browseCollections")}
+                  {getTranslation(
+                    "hero.browseCollections",
+                    "Browse Collections"
+                  )}
                 </a>
               </motion.div>
 
@@ -69,26 +81,29 @@ export default function HeroSection() {
               >
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {t("hero.stats.products")}
+                    {getTranslation("hero.stats.products", "10K+")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {t("hero.stats.productsLabel")}
+                    {getTranslation("hero.stats.productsLabel", "Products")}
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {t("hero.stats.support")}
+                    {getTranslation("hero.stats.support", "24/7")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {t("hero.stats.supportLabel")}
+                    {getTranslation("hero.stats.supportLabel", "Support")}
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {t("hero.stats.customers")}
+                    {getTranslation("hero.stats.customers", "50K+")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {t("hero.stats.customersLabel")}
+                    {getTranslation(
+                      "hero.stats.customersLabel",
+                      "Happy Customers"
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -117,10 +132,13 @@ export default function HeroSection() {
                         />
                       </svg>
                       <p className="text-xl font-semibold mb-2">
-                        {t("hero.showcase.title")}
+                        {getTranslation("hero.showcase.title", "Hot Deals")}
                       </p>
                       <p className="text-gray-400">
-                        {t("hero.showcase.subtitle")}
+                        {getTranslation(
+                          "hero.showcase.subtitle",
+                          "Limited Time Offers"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -133,14 +151,14 @@ export default function HeroSection() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm"
               >
-                {t("hero.badges.new")}
+                {getTranslation("hero.badges.new", "🔥 New")}
               </motion.div>
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 1 }}
                 className="absolute -bottom-3 -left-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm"
               >
-                {t("hero.badges.fast")}
+                {getTranslation("hero.badges.fast", "⚡ Fast")}
               </motion.div>
             </motion.div>
           </div>

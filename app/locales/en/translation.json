@@ -28,6 +28,27 @@
     "toggleMenu": "Toggle menu"
   },
   "hero": {
+    "title": "Amazing",
+    "titleHighlight": "E-commerce Offers",
+    "subtitle": "Discover unbeatable deals on electronics, fashion, home goods and more. Shop now and save big!",
+    "shopNow": "Shop Now",
+    "browseCollections": "Browse Collections",
+    "stats": {
+      "products": "10K+",
+      "productsLabel": "Products",
+      "support": "24/7",
+      "supportLabel": "Support",
+      "customers": "50K+",
+      "customersLabel": "Happy Customers"
+    },
+    "showcase": {
+      "title": "Hot Deals",
+      "subtitle": "Limited Time Offers"
+    },
+    "badges": {
+      "new": "🔥 New",
+      "fast": "⚡ Fast"
+    },
     "alt1": "Modern electronics store with displays",
     "cta1": "Explore Our Showroom",
     "desc1": "Discover the latest in technology",
@@ -106,7 +127,8 @@
     "errorTitle": "Please fix the following {{count}} error(s):"
   },
   "featured": {
-    "title": "Featured Products"
+    "title": "Featured Products",
+    "subtitle": "Discover our most popular products"
   },
   "cart": {
     "title": "Your Shopping Cart",
@@ -130,6 +152,7 @@
     "checkout": "Proceed to Checkout"
   },
   "footer": {
+    "about": "About",
     "brandDescription": "Your one-stop shop for quality electronics and exceptional service. We bring the latest technology to your doorstep with fast delivery and 24/7 support.",
     "stayUpdated": "Stay Updated",
     "thankYouSubscribing": "Thank you for subscribing!",

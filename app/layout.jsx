@@ -24,9 +24,7 @@ export default function RootLayout({ children }) {
           <ClientTranslationProvider>
             <Header />
             <ScrollToTop />
-            <main className="flex-1 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-              {children}
-            </main>
+            <main className="flex-1 w-full">{children}</main>
             <Footer />
           </ClientTranslationProvider>
         </ReduxProvider>

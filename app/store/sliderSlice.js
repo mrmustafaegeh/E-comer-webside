@@ -1,11 +1,8 @@
+// store/sliderSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  slides: [
-    { id: 1, image: "/", title: "Slide 1" },
-    { id: 2, image: "/images/slide2.jpg", title: "Slide 2" },
-    { id: 3, image: "/images/slide3.jpg", title: "Slide 3" },
-  ],
+  slides: [],
   currentSlide: 0,
 };
 
@@ -23,8 +20,13 @@ const sliderSlice = createSlice({
     goToSlide: (state, action) => {
       state.currentSlide = action.payload;
     },
+    setSlides: (state, action) => {
+      state.slides = action.payload;
+      state.currentSlide = 0;
+    },
   },
 });
 
-export const { nextSlide, prevSlide, goToSlide } = sliderSlice.actions;
+export const { nextSlide, prevSlide, goToSlide, setSlides } =
+  sliderSlice.actions;
 export default sliderSlice.reducer;

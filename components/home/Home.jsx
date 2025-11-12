@@ -1,7 +1,8 @@
 "use client";
 import HeroSlider from "../slider/HeroSlider";
 import dynamic from "next/dynamic";
-import { useCart } from "@/hooks/useCart"; // Import the new hook
+import { useCart } from "@/hooks/useCart";
+import NewsletterSignup from "../features/NewLetterSignup";
 
 const FeaturedProducts = dynamic(() => import("../features/FeaturedProducts"), {
   ssr: false,
@@ -29,7 +30,8 @@ export default function HomePage() {
   return (
     <>
       <HeroSlider />
-      <FeaturedProducts addToCart={addToCart} />
+      <FeaturedProducts className="max-w-7xl" addToCart={addToCart} />
+      <NewsletterSignup />
     </>
   );
 }

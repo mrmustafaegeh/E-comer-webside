@@ -1,4 +1,3 @@
-// components/ClientTranslationProvider.jsx
 "use client";
 import { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
@@ -12,8 +11,7 @@ export default function ClientTranslationProvider({ children }) {
   }, []);
 
   if (!isClient) {
-    // Return a skeleton or loading state during SSR
-    return <div className="min-h-screen bg-gray-50">{children}</div>;
+    return <div className="text-center py-10 text-gray-500">Loading...</div>;
   }
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;

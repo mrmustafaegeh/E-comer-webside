@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import HeroSlider from "../slider/HeroSlider";
 import dynamic from "next/dynamic";
 import { useCart } from "@/hooks/useCart";
@@ -25,11 +26,13 @@ const FeaturedProducts = dynamic(() => import("../features/FeaturedProducts"), {
 });
 
 export default function HomePage() {
-  const { addToCart } = useCart(); // Use the new hook
+  const { addToCart } = useCart();
 
   return (
     <>
-      <HeroSlider />
+      <Suspense fallback={<div className="min-h-[80vh] bg-gray-900" />}>
+        <HeroSlider />
+      </Suspense>
       <FeaturedProducts className="max-w-7xl" addToCart={addToCart} />
       <NewsletterSignup />
     </>

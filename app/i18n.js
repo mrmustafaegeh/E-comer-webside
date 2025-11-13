@@ -9,11 +9,11 @@ import tr from "./locales/tr/translation.json";
 import ar from "./locales/ar/translation.json";
 import sm from "./locales/sm/translation.json";
 
-// Initialize only on the client side to avoid SSR issues
-if (typeof window !== "undefined" && !i18n.isInitialized) {
+// Simple initialization without complex client/server logic
+if (!i18n.isInitialized) {
   i18n
-    .use(LanguageDetector) // Automatically detect user language
-    .use(initReactI18next) // Bind i18n to React
+    .use(LanguageDetector)
+    .use(initReactI18next)
     .init({
       resources: {
         en: { translation: en },
@@ -23,22 +23,13 @@ if (typeof window !== "undefined" && !i18n.isInitialized) {
       },
       supportedLngs: ["en", "tr", "ar", "sm"],
       fallbackLng: "en",
-      detection: {
-        order: [
-          "localStorage",
-          "navigator",
-          "htmlTag",
-          "cookie",
-          "path",
-          "subdomain",
-        ],
-        caches: ["localStorage"], // Store detected language for later
-      },
+      lng: "en", // Force English as default for consistent SSR
       interpolation: {
-        escapeValue: false, // React already escapes output
+        escapeValue: false,
       },
-      debug: process.env.NODE_ENV === "development",
-      load: "languageOnly",
+      react: {
+        useSuspense: false,
+      },
     });
 }
 

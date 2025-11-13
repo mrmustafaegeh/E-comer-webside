@@ -1,18 +1,12 @@
 "use client";
-import { motion } from "framer-motion";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 export default function HeroSection() {
   const { t } = useTranslation();
 
-  // Fallback function to prevent missing translations
-  const getTranslation = (key, fallback) => {
-    const translation = t(key);
-    return translation === key ? fallback : translation;
-  };
-
   return (
-    <section className="relative w-full min-h-[80vh] bg-gray-900 flex items-center overflow-hidden">
+    <section className="relative w-full min-h-[80vh] bg-gray-900 flex items-center">
       {/* Background with Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-gray-900">
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -24,98 +18,68 @@ export default function HeroSection() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12">
             {/* Text Content */}
             <div className="text-white">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6"
-              >
-                {getTranslation("hero.title", "Amazing")}{" "}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 animate-fade-in">
+                {t("hero.title", "Amazing")}{" "}
                 <span className="text-blue-400">
-                  {getTranslation("hero.titleHighlight", "E-commerce Offers")}
+                  {t("hero.titleHighlight", "E-commerce Offers")}
                 </span>
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg"
-              >
-                {getTranslation(
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg animate-fade-in animation-delay-200">
+                {t(
                   "hero.subtitle",
                   "Discover unbeatable deals on electronics, fashion, home goods and more. Shop now and save big!"
                 )}
-              </motion.p>
+              </p>
 
               {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 mb-8"
-              >
-                <a
-                  href="#shop"
+              <div className="flex flex-col sm:flex-row gap-4 mb-8 animate-fade-in animation-delay-400">
+                <Link
+                  href="/products"
                   className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition duration-300 transform hover:scale-105 text-center"
                 >
-                  {getTranslation("hero.shopNow", "Shop Now")}
-                </a>
-                <a
-                  href="#collections"
+                  {t("hero.shopNow", "Shop Now")}
+                </Link>
+
+                <Link
+                  href="/FeaturedProducts"
                   className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 font-semibold px-8 py-4 rounded-lg transition duration-300 text-center"
                 >
-                  {getTranslation(
-                    "hero.browseCollections",
-                    "Browse Collections"
-                  )}
-                </a>
-              </motion.div>
+                  {t("hero.browseCollections", "Browse Collections")}
+                </Link>
+              </div>
 
               {/* Stats */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-                className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-700 max-w-md"
-              >
+              <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-700 max-w-md animate-fade-in animation-delay-600">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {getTranslation("hero.stats.products", "10K+")}
+                    {t("hero.stats.products", "10K+")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {getTranslation("hero.stats.productsLabel", "Products")}
+                    {t("hero.stats.productsLabel", "Products")}
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {getTranslation("hero.stats.support", "24/7")}
+                    {t("hero.stats.support", "24/7")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {getTranslation("hero.stats.supportLabel", "Support")}
+                    {t("hero.stats.supportLabel", "Support")}
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-white">
-                    {getTranslation("hero.stats.customers", "50K+")}
+                    {t("hero.stats.customers", "50K+")}
                   </div>
                   <div className="text-gray-400 text-sm">
-                    {getTranslation(
-                      "hero.stats.customersLabel",
-                      "Happy Customers"
-                    )}
+                    {t("hero.stats.customersLabel", "Happy Customers")}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Image/Visual Content */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="relative"
-            >
+            <div className="relative animate-fade-in animation-delay-300">
               <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
                 <div className="bg-gray-800 rounded-xl p-6 shadow-2xl">
                   <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg flex items-center justify-center">
@@ -132,13 +96,10 @@ export default function HeroSection() {
                         />
                       </svg>
                       <p className="text-xl font-semibold mb-2">
-                        {getTranslation("hero.showcase.title", "Hot Deals")}
+                        {t("hero.showcase.title", "Hot Deals")}
                       </p>
                       <p className="text-gray-400">
-                        {getTranslation(
-                          "hero.showcase.subtitle",
-                          "Limited Time Offers"
-                        )}
+                        {t("hero.showcase.subtitle", "Limited Time Offers")}
                       </p>
                     </div>
                   </div>
@@ -146,21 +107,13 @@ export default function HeroSection() {
               </div>
 
               {/* Floating Elements */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm"
-              >
-                {getTranslation("hero.badges.new", "🔥 New")}
-              </motion.div>
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                className="absolute -bottom-3 -left-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm"
-              >
-                {getTranslation("hero.badges.fast", "⚡ Fast")}
-              </motion.div>
-            </motion.div>
+              <div className="absolute -top-3 -right-3 bg-blue-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm animate-float">
+                {t("hero.badges.new", "🔥 New")}
+              </div>
+              <div className="absolute -bottom-3 -left-3 bg-green-500 text-white px-3 py-1 rounded-lg shadow-lg text-sm animate-float animation-delay-1000">
+                {t("hero.badges.fast", "⚡ Fast")}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -175,6 +128,57 @@ export default function HeroSection() {
           }}
         ></div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+        }
+
+        .animation-delay-300 {
+          animation-delay: 0.3s;
+        }
+
+        .animation-delay-400 {
+          animation-delay: 0.4s;
+        }
+
+        .animation-delay-600 {
+          animation-delay: 0.6s;
+        }
+
+        .animation-delay-1000 {
+          animation-delay: 1s;
+        }
+      `}</style>
     </section>
   );
 }

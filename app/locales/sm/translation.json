@@ -28,8 +28,8 @@
     "toggleMenu": "Beddel menu-ga"
   },
   "hero": {
-    "title": "Badeecado",
-    "titleHighlight": "Qiimo Jaban",
+    "title": "Cajiib",
+    "titleHighlight": "Badeecad Ganacsi Internet",
     "subtitle": "Hel heerar aan la heli karin ee elektaroonigga, dhararka, alaabta guriga iyo in kale. Iibso hadda oo bad baadi!",
     "shopNow": "Iibso Hadda",
     "browseCollections": "Eeg Ururrada",
@@ -49,17 +49,6 @@
       "new": "🔥 Cusub",
       "fast": "⚡ Dego Deg"
     }
-  },
-  "stats": {
-    "customers": "Macamiil Faraxsan",
-    "products": "Alaabta",
-    "support": "Taageero 24/7",
-    "rating": "Qiimayn Sarreeya"
-  },
-  "badges": {
-    "secure": "🔒 Lacag Bixin Aamin",
-    "shipping": "🚚 Rarid Bilaash",
-    "quality": "💯 Damiin Tayo"
   },
   "newsletter": {
     "title": "Ku Biir Bulshadeena",

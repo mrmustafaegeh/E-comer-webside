@@ -22,25 +22,24 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "fakestoreapi.com",
-        pathname: "/**", // This covers /img/** and all other paths
+        pathname: "/**",
       },
     ],
     formats: ["image/webp", "image/avif"],
   },
 
-  // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
 
-  // Performance optimizations
   poweredByHeader: false,
   compress: true,
 
-  // Experimental features for performance
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ["framer-motion", "lucide-react"],
+    // It will remove unnecessary JS transforms
+    forceSwcTransforms: true,
   },
 };
 

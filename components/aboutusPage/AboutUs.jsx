@@ -1,6 +1,7 @@
 "use client";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   FadeInUp,
   ScaleIn,
@@ -51,7 +52,7 @@ const AboutUs = () => {
                   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group">
                     {/* Image container with fallback background */}
                     <div className="h-64 relative overflow-hidden bg-gradient-to-br from-blue-50 to-gray-100">
-                      <img
+                      <Image
                         src={item.img}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

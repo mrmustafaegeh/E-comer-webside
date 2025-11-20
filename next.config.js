@@ -19,6 +19,11 @@ const nextConfig = {
         hostname: "plus.unsplash.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "fakestoreapi.com",
+        pathname: "/**", // This covers /img/** and all other paths
+      },
     ],
     formats: ["image/webp", "image/avif"],
   },

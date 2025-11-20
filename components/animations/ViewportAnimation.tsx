@@ -13,6 +13,8 @@ interface AnimationProps {
   rotate?: number;
   once?: boolean;
   className?: string;
+  // Add a visible prop to trigger animations
+  isVisible?: boolean;
 }
 
 // Fade In Up Animation
@@ -21,18 +23,22 @@ export const FadeInUp = ({
   delay = 0,
   duration = 0.6,
   yOffset = 30,
-  once = true,
   className,
+  isVisible,
 }: AnimationProps) => {
+  const variants = {
+    hidden: { opacity: 0, y: yOffset },
+    visible: { opacity: 1, y: 0 },
+  };
   return (
     <motion.div
-      initial={{ opacity: 0, y: yOffset }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: "-50px" }}
+      variants={variants}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
       transition={{
         duration,
         delay,
-        ease: [0.25, 0.1, 0.25, 1.0], // Smooth ease-out
+        ease: [0.25, 0.1, 0.25, 1.0],
       }}
       className={className}
     >
@@ -47,14 +53,18 @@ export const FadeInLeft = ({
   delay = 0,
   duration = 0.6,
   xOffset = -30,
-  once = true,
   className,
+  isVisible,
 }: AnimationProps) => {
+  const variants = {
+    hidden: { opacity: 0, x: xOffset },
+    visible: { opacity: 1, x: 0 },
+  };
   return (
     <motion.div
-      initial={{ opacity: 0, x: xOffset }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once, margin: "-50px" }}
+      variants={variants}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
       transition={{
         duration,
         delay,
@@ -73,14 +83,18 @@ export const FadeInRight = ({
   delay = 0,
   duration = 0.6,
   xOffset = 30,
-  once = true,
   className,
+  isVisible,
 }: AnimationProps) => {
+  const variants = {
+    hidden: { opacity: 0, x: xOffset },
+    visible: { opacity: 1, x: 0 },
+  };
   return (
     <motion.div
-      initial={{ opacity: 0, x: xOffset }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once, margin: "-50px" }}
+      variants={variants}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
       transition={{
         duration,
         delay,
@@ -99,14 +113,18 @@ export const ScaleIn = ({
   delay = 0,
   duration = 0.6,
   scale = 0.8,
-  once = true,
   className,
+  isVisible,
 }: AnimationProps) => {
+  const variants = {
+    hidden: { opacity: 0, scale },
+    visible: { opacity: 1, scale: 1 },
+  };
   return (
     <motion.div
-      initial={{ opacity: 0, scale }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once, margin: "-50px" }}
+      variants={variants}
+      initial="hidden"
+      animate={isVisible ? "visible" : "hidden"}
       transition={{
         duration,
         delay,
@@ -123,21 +141,22 @@ export const ScaleIn = ({
 export const StaggerContainer = ({
   children,
   staggerDelay = 0.1,
-  once = true,
   className,
+  isVisible,
 }: AnimationProps & { staggerDelay?: number }) => {
+  const containerVariants = {
+    visible: {
+      transition: {
+        staggerChildren: staggerDelay,
+      },
+    },
+  };
+
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: "-100px" }}
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
+      animate={isVisible ? "visible" : "hidden"}
+      variants={containerVariants}
       className={className}
     >
       {children}
@@ -147,12 +166,13 @@ export const StaggerContainer = ({
 
 // Stagger Child Item
 export const StaggerItem = ({ children, className }: AnimationProps) => {
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
   return (
     <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 },
-      }}
+      variants={itemVariants}
       transition={{
         duration: 0.6,
         ease: [0.25, 0.1, 0.25, 1.0],
@@ -164,7 +184,31 @@ export const StaggerItem = ({ children, className }: AnimationProps) => {
   );
 };
 
-// Typewriter Effect
+// Floating Animation (optional, you can keep the infinite loop)
+export const Floating = ({
+  children,
+  intensity = 0.02,
+  duration = 3,
+  className,
+}: AnimationProps & { intensity?: number; duration?: number }) => {
+  return (
+    <motion.div
+      animate={{
+        y: [0, intensity * -100, 0],
+      }}
+      transition={{
+        duration,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Typewriter Effect (no change needed as it doesn't use whileInView)
 export const Typewriter = ({
   text,
   delay = 0,
@@ -190,29 +234,5 @@ export const Typewriter = ({
     >
       {text}
     </motion.span>
-  );
-};
-
-// Floating Animation
-export const Floating = ({
-  children,
-  intensity = 0.02,
-  duration = 3,
-  className,
-}: AnimationProps & { intensity?: number; duration?: number }) => {
-  return (
-    <motion.div
-      animate={{
-        y: [0, intensity * -100, 0],
-      }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
   );
 };

@@ -4,6 +4,7 @@ import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 const CartPage = () => {
   const { t } = useTranslation();
@@ -180,9 +181,11 @@ const CartPage = () => {
                   {imageErrors[item.id] ? (
                     <ImageFallback />
                   ) : (
-                    <img
+                    <Image
                       src={item.imgSrc || item.image}
                       alt={item.name}
+                      width={80}
+                      height={80}
                       className="w-full h-full object-cover"
                       onError={() => handleImageError(item.id)}
                     />

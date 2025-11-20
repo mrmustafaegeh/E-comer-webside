@@ -1,53 +1,59 @@
 "use client";
+
 import { StarIcon } from "@heroicons/react/24/solid";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "@/app/store/cartSlice";
+import { fakestoreLoader } from "@/components/lib/loaders";
 
-const ProductCard = ({ product }) => {
+const ADD_TO_CART_ARIA_LABEL = "Add to cart";
+const ADDED_TO_CART_TEXT = "Added to Cart";
+
+const ProductCard = ({ product, index = 0 }) => {
   const { t } = useTranslation();
-  const [isMounted, setIsMounted] = useState(false);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+
   const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const formatPrice = (price) => parseFloat(price).toFixed(2);
 
-  const formatPrice = (price) => {
-    const numPrice = typeof price === "number" ? price : parseFloat(price) || 0;
-    return numPrice.toFixed(2);
-  };
+  const isPriorityImage = index < 2;
+  const isInCart = cartItems.some((item) => item.id === product.id);
 
-  // Map API fields to your expected fields
-  const productData = {
-    id: product.id,
-    name: product.title,
-    description: product.description,
-    price: product.price,
-    rating: product.rating?.rate || 0,
-    image: product.image,
-    category: product.category,
-  };
-
-  if (!isMounted) {
-    return null;
-  }
-
-  const handleImageError = () => {
-    setImageError(true);
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        name: product.title,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+      })
+    );
   };
 
   return (
-    <motion.div
+    // ❗ Replaced div with <article> (correct semantic structure)
+    <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -5 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
       className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 overflow-hidden transition-all duration-500 flex flex-col h-full"
     >
-      <div className="relative h-48 sm:h-56 w-full bg-gray-100">
+      {/* IMAGE */}
+      <div className="relative h-48 sm:h-56 w-full bg-gray-100 overflow-hidden">
         {imageError ? (
-          // Fallback UI when image fails to load
-          <div className="w-full h-full flex flex-col items-center justify-center bg-gray-200 text-gray-400">
+          <div
+            className="w-full h-full flex flex-col items-center justify-center bg-gray-200 text-gray-400"
+            role="img"
+            aria-label={`Image for ${product.title} failed to load`}
+          >
             <svg
               className="w-12 h-12 mb-2"
               fill="none"
@@ -64,54 +70,99 @@ const ProductCard = ({ product }) => {
             <span className="text-sm">No Image</span>
           </div>
         ) : (
-          <img
-            src={productData.image}
-            alt={productData.name}
-            className="w-full h-full object-contain p-4 bg-white"
-            onError={handleImageError}
-          />
+          <>
+            {imageLoading && (
+              <div
+                className="absolute inset-0 bg-gray-200 animate-pulse z-10"
+                role="status"
+              >
+                <span className="sr-only">Loading product image...</span>
+              </div>
+            )}
+
+            <Image
+              loader={fakestoreLoader}
+              src={product.image}
+              alt={product.title}
+              width={400}
+              height={400}
+              loading={isPriorityImage ? "eager" : "lazy"}
+              priority={isPriorityImage}
+              className={`w-full h-full object-contain p-4 bg-white transition-opacity duration-300 ${
+                imageLoading ? "opacity-0" : "opacity-100"
+              }`}
+              onError={() => {
+                setImageError(true);
+                setImageLoading(false);
+              }}
+              onLoad={() => setImageLoading(false)}
+              sizes="(max-width: 640px) 100vw,
+                     (max-width: 768px) 50vw,
+                     (max-width: 1024px) 33vw,
+                     25vw"
+              unoptimized={true}
+            />
+          </>
         )}
       </div>
 
+      {/* CONTENT */}
       <div className="p-5 flex flex-col flex-1">
         <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">
-          {productData.name}
+          {product.title}
         </h3>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {productData.description}
+        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-1">
+          {product.description}
         </p>
 
-        <div className="flex items-center mb-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <StarIcon
-              key={i}
-              className={`w-5 h-5 ${
-                i < Math.round(productData.rating)
-                  ? "text-yellow-400"
-                  : "text-gray-300"
-              }`}
-            />
-          ))}
+        {/* RATING */}
+        <div
+          className="flex items-center mb-4"
+          aria-label={`Rating ${product.rating?.rate || 0} out of 5`}
+        >
+          <div className="flex">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <StarIcon
+                key={i}
+                className={`w-4 h-4 ${
+                  i < Math.round(product.rating?.rate || 0)
+                    ? "text-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
           <span className="ml-2 text-sm text-gray-500">
-            ({product.rating?.count || 0})
+            {product.rating?.rate || 0} ({product.rating?.count || 0})
           </span>
         </div>
 
+        {/* PRICE + ADD BUTTON */}
         <div className="mt-auto flex items-center justify-between">
           <span className="text-2xl font-bold text-green-600">
-            ${formatPrice(productData.price)}
+            ${formatPrice(product.price)}
           </span>
 
           <button
-            onClick={() => addToCart(productData)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition"
+            onClick={handleAddToCart}
+            disabled={isInCart}
+            className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 active:scale-95 ${
+              isInCart
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
+            aria-label={
+              isInCart
+                ? `${ADDED_TO_CART_TEXT}: ${product.title}`
+                : `${ADD_TO_CART_ARIA_LABEL}: ${product.title}`
+            }
           >
-            {t("common.addToCart")}
+            {isInCart ? ADDED_TO_CART_TEXT : t("Add to Cart")}
           </button>
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 };
 

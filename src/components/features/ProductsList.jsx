@@ -4,7 +4,7 @@ import ProductCard from "./ProductCard";
 import { useCart } from "@/hooks/useCart";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { productAPI } from "../lib/api";
+import { productAPI } from "../../lib/api";
 
 const ProductsList = () => {
   const { addToCart } = useCart();

@@ -3,7 +3,7 @@ import Link from "next/link";
 import ProductCard from "./ProductCard";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import { productAPI } from "../lib/api";
+import { productAPI } from "../../lib/api";
 
 const FeaturedProducts = () => {
   const { t } = useTranslation();

@@ -38,8 +38,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ["framer-motion", "lucide-react"],
-    // It will remove unnecessary JS transforms
-    forceSwcTransforms: true,
   },
 };
 

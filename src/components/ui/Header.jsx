@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useCart } from "@/hooks/useCart";
+import { useCart } from "../../hooks/useCart";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   LazyMotion,

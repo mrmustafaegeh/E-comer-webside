@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export const useProtectedRoute = () => {
   const router = useRouter();
 
-  const { isLoggedIn, role } = useSelector((state: RootState) => state.auth);
+  const { isLoggedIn, role } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!isLoggedIn) {

@@ -6,13 +6,13 @@ import {
   decreaseQuantity,
   removeFromCart,
   clearCart,
-} from "../src/store/cartSlice";
+} from "../store/cartSlice";
 import {
   selectCartItems,
   selectCartTotal,
   selectCartItemsCount,
   selectCartItemById,
-} from "../src/store/cartSelectors";
+} from "../store/cartSelectors";
 
 export const useCart = () => {
   const dispatch = useDispatch();

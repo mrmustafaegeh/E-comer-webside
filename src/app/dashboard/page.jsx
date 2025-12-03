@@ -1,8 +1,24 @@
 "use client";
-import useRequireAuth from "@/hooks/useRequireAuth";
 
-export default function Dashboard() {
-  useRequireAuth();
+import StatCard from "../../components/dashboard/StatCard";
+import { ShoppingCart, Users, Package } from "lucide-react";
 
-  return <div className="p-10 text-2xl">Welcome to the Dashboard</div>;
+export default function DashboardHome() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <StatCard
+        title="Total Products"
+        value="120"
+        icon={<Package size={32} />}
+      />
+
+      <StatCard
+        title="Orders Today"
+        value="34"
+        icon={<ShoppingCart size={32} />}
+      />
+
+      <StatCard title="Users" value="2,349" icon={<Users size={32} />} />
+    </div>
+  );
 }

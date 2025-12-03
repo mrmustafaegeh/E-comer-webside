@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { login, logout } from "@/store/slices/authSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { login, logout } from "../../store/authSlice";
 
 export default function AuthRestore() {
   const dispatch = useAppDispatch();

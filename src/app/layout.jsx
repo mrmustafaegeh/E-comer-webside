@@ -5,6 +5,7 @@ import ClientTranslationProvider from "../components/ClientTranslationProvider.j
 import ReduxProvider from "./ReduxProvider.jsx";
 import "./globals.css";
 import "./i18n.js";
+import AuthRestore from "../components/auth/AuthRestore.jsx";
 
 export const metadata = {
   title: {
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="flex flex-col min-h-screen w-full">
         <ReduxProvider>
+          <AuthRestore />
           <ClientTranslationProvider>
             <Header />
             <ScrollToTop />

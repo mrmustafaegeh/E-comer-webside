@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { logout as logoutAction } from "@/store/slices/authSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { logout as logoutAction } from "../../store/authSlice";
 import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {

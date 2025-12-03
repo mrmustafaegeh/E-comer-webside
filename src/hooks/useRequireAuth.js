@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "../store/hooks";
 
 export default function useRequireAuth() {
   const router = useRouter();

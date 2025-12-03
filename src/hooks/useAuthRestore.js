@@ -1,10 +1,10 @@
 "use client";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   login as loginAction,
   logout as logoutAction,
-} from "@/store/slices/authSlice";
+} from "../store/authSlice";
 
 export default function useAuthRestore() {
   const dispatch = useAppDispatch();

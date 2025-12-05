@@ -53,6 +53,8 @@ const AboutUs = () => {
                     {/* Image container with fallback background */}
                     <div className="h-64 relative overflow-hidden bg-gradient-to-br from-blue-50 to-gray-100">
                       <Image
+                        width={500}
+                        height={500}
                         src={item.img}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

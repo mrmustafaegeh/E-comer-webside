@@ -1,74 +1,147 @@
 "use client";
-import { useState, useEffect } from "react";
-import { validateForm } from "../lib/validations/formValidation";
-import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { saveTempForm, clearTempForm } from "../store/formSlice";
-import { login as loginAction } from "../store/authSlice"; // if you need
 
-export function useFormLogic(t) {
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "./useAuth";
+
+export function useFormLogic(initialForm = {}) {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const tempForm = useAppSelector((state) => state.form.tempForm);
+  const { isAuthenticated, user, updateProfile } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
-    phoneNumber: "",
+    phone: "",
     age: "",
     isEmployee: false,
     salary: "",
+    ...initialForm,
   });
 
   const [errors, setErrors] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    if (tempForm) {
-      setForm(tempForm);
-      dispatch(clearTempForm());
-    }
-  }, [tempForm, dispatch]);
+  // Handle form field changes
+  const handleChange = useCallback(
+    (field, value) => {
+      setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleChange = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+      // Clear errors when user starts typing
+      if (errors.length > 0) {
+        setErrors([]);
+      }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+      // Clear success message
+      if (success) {
+        setSuccess(false);
+      }
+    },
+    [errors, success]
+  );
 
-    // If not logged in save and redirect to login
-    if (!isLoggedIn) {
-      dispatch(saveTempForm(form));
-      router.push("/auth/login");
-      return;
-    }
+  // Validate form
+  const validateForm = useCallback(() => {
+    const validationErrors = [];
 
-    setIsSubmitting(true);
-    const validationErrors = validateForm(form, t);
-
-    if (validationErrors.length) {
-      setErrors(validationErrors);
-      setIsSubmitting(false);
-      return;
+    if (!form.name.trim()) {
+      validationErrors.push("Name is required");
     }
 
-    // success simulate
-    setTimeout(() => {
-      setShowAlert(true);
-      setIsSubmitting(false);
-    }, 600);
-  };
+    if (form.phone && !/^\d{10,15}$/.test(form.phone.replace(/\D/g, ""))) {
+      validationErrors.push("Please enter a valid phone number (10-15 digits)");
+    }
+
+    if (form.age) {
+      const ageNum = parseInt(form.age);
+      if (isNaN(ageNum) || ageNum < 18 || ageNum > 100) {
+        validationErrors.push("Age must be between 18 and 100");
+      }
+    }
+
+    return validationErrors;
+  }, [form]);
+
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (e) => {
+      if (e) e.preventDefault();
+
+      if (!isAuthenticated) {
+        router.push("/auth/login");
+        return;
+      }
+
+      const validationErrors = validateForm();
+
+      if (validationErrors.length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
+
+      setIsSubmitting(true);
+      setErrors([]);
+
+      try {
+        const result = await updateProfile({
+          name: form.name.trim(),
+          phone: form.phone.replace(/\D/g, ""),
+          age: parseInt(form.age) || null,
+          isEmployee: form.isEmployee,
+          salary: form.salary,
+        });
+
+        if (result.success) {
+          setSuccess(true);
+
+          // Reset form if needed
+          if (!user) {
+            setForm({
+              name: "",
+              phone: "",
+              age: "",
+              isEmployee: false,
+              salary: "",
+            });
+          }
+
+          // Auto-hide success message after 3 seconds
+          setTimeout(() => setSuccess(false), 3000);
+        } else {
+          setErrors([result.error || "Failed to update profile"]);
+        }
+      } catch (err) {
+        setErrors(["An error occurred. Please try again."]);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [form, isAuthenticated, router, updateProfile, user, validateForm]
+  );
+
+  // Initialize form with user data
+  const initializeWithUser = useCallback((userData) => {
+    if (userData) {
+      setForm({
+        name: userData.name || "",
+        phone: userData.phone || "",
+        age: userData.age?.toString() || "",
+        isEmployee: userData.isEmployee || false,
+        salary: userData.salary || "",
+      });
+    }
+  }, []);
 
   return {
     form,
     errors,
     isSubmitting,
-    showAlert,
-    setShowAlert,
+    success,
     handleChange,
     handleSubmit,
-    setForm,
+    setErrors,
+    setSuccess,
+    setIsSubmitting,
+    initializeWithUser,
+    isFormValid: form.name && form.phone && form.age,
   };
 }

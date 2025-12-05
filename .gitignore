@@ -460,3 +460,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 d3fd00b (Initial commit)
+
+/src/generated/prisma

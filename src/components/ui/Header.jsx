@@ -1,180 +1,297 @@
 "use client";
 
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import {
-  LoginLink,
-  RegisterLink,
-  LogoutLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
 import Link from "next/link";
-import { ShoppingCart, Menu, X, User } from "lucide-react";
-import { useState } from "react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useCart } from "@/hooks/useCart";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  LazyMotion,
+  domAnimation,
+  m,
+  AnimatePresence,
+  motion,
+} from "framer-motion";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../features/LanguageSwitcher";
+
+// Motion shorthands
+const MotionNav = m.nav;
+const MotionDiv = m.div;
+const MotionButton = m.button;
+const MotionSpan = m.span;
 
 export default function Header() {
-  const { user, isAuthenticated, isLoading } = useKindeBrowserClient();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useTranslation();
+  const pathname = usePathname();
+  const { cartItems } = useCart();
 
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/products", label: "Products" },
-    { href: "/cart", label: "Cart" },
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/form", label: "Profile" },
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  /** Safe Translation */
+  const safeT = (key, fallback) => {
+    try {
+      const translated = t(key);
+      return translated === key ? fallback : translated;
+    } catch {
+      return fallback;
+    }
+  };
+
+  /** Scroll Listener */
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 10);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    let ticking = false;
+
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [mounted, handleScroll]);
+
+  /** Cart Count */
+  const cartCount = useMemo(
+    () => cartItems.reduce((sum, item) => sum + (item.qty || 1), 0),
+    [cartItems]
+  );
+
+  /** Navigation */
+  const navItems = [
+    { href: "/", label: safeT("common.home", "Home") },
+    { href: "/products", label: safeT("common.products", "Products") },
+    { href: "/about", label: safeT("common.about", "About Us") },
+    { href: "/contact", label: safeT("common.contact", "Contact") },
   ];
 
+  const isActive = (path) =>
+    pathname === path
+      ? "bg-blue-600 text-white shadow-lg"
+      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition";
+
+  /** Mobile Toggle */
+  useEffect(() => setIsMobileMenuOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
+  }, [isMobileMenuOpen, mounted]);
+
+  if (!mounted)
+    return (
+      <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-md h-16 md:h-20 shadow-sm"></nav>
+    );
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <ShoppingCart className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              My Shop
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Auth Buttons - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
-            {isLoading ? (
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-10 bg-gray-200 rounded-lg animate-pulse"></div>
-                <div className="w-24 h-10 bg-gray-200 rounded-lg animate-pulse"></div>
-              </div>
-            ) : isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                {/* User Profile */}
-                <Link href="/dashboard" className="flex items-center gap-2">
-                  {user?.picture ? (
-                    <img
-                      src={user.picture}
-                      alt={user.given_name}
-                      className="w-8 h-8 rounded-full"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-white" />
-                    </div>
-                  )}
-                  <span className="text-gray-700 font-medium">
-                    {user?.given_name || "Profile"}
-                  </span>
-                </Link>
-
-                {/* Logout Button */}
-                <LogoutLink className="px-4 py-2 text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                  Log out
-                </LogoutLink>
-              </div>
-            ) : (
-              <>
-                <LoginLink className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
-                  Sign In
-                </LoginLink>
-                <RegisterLink className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all">
-                  Get Started
-                </RegisterLink>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            {/* Mobile Navigation Links */}
-            <div className="space-y-2 mb-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block py-2 px-4 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            {/* Mobile Auth Buttons */}
-            {isLoading ? (
-              <div className="space-y-2">
-                <div className="h-10 bg-gray-200 rounded-lg animate-pulse"></div>
-                <div className="h-10 bg-gray-200 rounded-lg animate-pulse"></div>
-              </div>
-            ) : isAuthenticated ? (
-              <div className="space-y-3">
-                {/* Mobile User Profile */}
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  {user?.picture ? (
-                    <img
-                      src={user.picture}
-                      alt={user.given_name}
-                      className="w-10 h-10 rounded-full"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <User className="w-6 h-6 text-white" />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-800">
-                      {user?.given_name || "User"}
-                    </p>
-                    <p className="text-sm text-gray-500 truncate">
-                      {user?.email}
-                    </p>
-                  </div>
+    <LazyMotion features={domAnimation}>
+      <MotionNav
+        initial={{ y: -70, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.45 }}
+        className={`sticky top-0 z-50 transition-all ${
+          isScrolled
+            ? "bg-white/95 backdrop-blur-lg shadow-xl border-b border-blue-100"
+            : "bg-white/80 backdrop-blur-sm shadow-sm"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* LOGO */}
+            <MotionDiv whileHover={{ scale: 1.04 }}>
+              <Link href="/" className="flex items-center">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">QC</span>
                 </div>
+                <span className="ml-3 text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                  {safeT("common.siteTitle", "QuickCart")}
+                </span>
+              </Link>
+            </MotionDiv>
 
-                {/* Mobile Logout */}
-                <LogoutLink className="flex items-center justify-center w-full py-3 text-red-600 hover:bg-red-50 rounded-lg border border-red-200 transition-colors">
-                  Log out
-                </LogoutLink>
+            {/* DESKTOP NAV */}
+            <div className="hidden md:flex flex-1 justify-between items-center">
+              <ul className="flex ml-10 space-x-1">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${isActive(
+                        item.href
+                      )}`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex items-center space-x-4">
+                <LanguageSwitcher />
+
+                <Link
+                  href="/form"
+                  className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition font-semibold text-sm"
+                >
+                  {safeT("common.signIn", "Sign In")}
+                </Link>
+
+                {/* CART */}
+                <Link
+                  href="/cart"
+                  className="relative p-3 rounded-xl bg-gradient-to-r from-gray-50 to-white shadow hover:from-blue-50 hover:to-blue-100 transition"
+                  aria-label="Cart"
+                >
+                  <svg
+                    className="w-6 h-6 text-gray-700"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+
+                  {cartCount > 0 && (
+                    <MotionSpan
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full text-xs h-6 w-6 flex items-center justify-center"
+                    >
+                      {cartCount > 99 ? "99+" : cartCount}
+                    </MotionSpan>
+                  )}
+                </Link>
               </div>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <LoginLink className="flex items-center justify-center py-3 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
-                  Sign In
-                </LoginLink>
-                <RegisterLink className="flex items-center justify-center py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all">
-                  Create Account
-                </RegisterLink>
-              </div>
-            )}
+            </div>
+
+            {/* MOBILE RIGHT SIDE */}
+            <div className="md:hidden flex items-center space-x-3">
+              <LanguageSwitcher />
+
+              {/* CART */}
+              <Link
+                href="/cart"
+                className="relative p-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                <svg
+                  className="w-6 h-6 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4z"
+                  />
+                </svg>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs h-5 w-5 flex items-center justify-center">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* MENU BUTTON */}
+              <MotionButton
+                whileTap={{ scale: 0.9 }}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition"
+                onClick={() => setIsMobileMenuOpen((p) => !p)}
+              >
+                {isMobileMenuOpen ? (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
+              </MotionButton>
+            </div>
           </div>
-        )}
-      </div>
-    </nav>
+
+          {/* MOBILE MENU */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="md:hidden mt-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-200 overflow-hidden"
+              >
+                <ul className="p-2 space-y-1">
+                  {navItems.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`block px-4 py-3 rounded-lg text-sm font-medium transition ${isActive(
+                          item.href
+                        )}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+
+                  <li className="pt-2 border-t border-gray-200">
+                    <Link
+                      href="/form"
+                      className="block px-4 py-3 text-center border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition font-medium"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {safeT("common.signIn", "Sign In")}
+                    </Link>
+                  </li>
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </MotionNav>
+    </LazyMotion>
   );
 }

@@ -2,7 +2,7 @@
 import { Suspense } from "react";
 import HeroSlider from "../slider/HeroSlider";
 import dynamic from "next/dynamic";
-import { useCart } from "../../hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 import NewsletterSignup from "../features/NewLetterSignup";
 
 const FeaturedProducts = dynamic(() => import("../features/FeaturedProducts"), {

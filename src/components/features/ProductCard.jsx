@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/src/store/cartSlice";
-import { fakestoreLoader } from "../../lib/loaders";
+import { fakestoreLoader } from "@/lib/loaders";
 
 const ADD_TO_CART_ARIA_LABEL = "Add to cart";
 const ADDED_TO_CART_TEXT = "Added to Cart";

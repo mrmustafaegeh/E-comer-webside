@@ -1,5 +1,5 @@
-import Header from "../components/ui/Header.jsx";
-import Footer from "../components/ui/Footer.jsx";
+import Header from "../components/layout/Header.jsx";
+import Footer from "../components/layout/Footer.jsx";
 import ScrollToTop from "../components/ui/ScrollToTop.jsx";
 import ClientTranslationProvider from "../components/ClientTranslationProvider.jsx";
 import ReduxProvider from "./ReduxProvider.jsx";

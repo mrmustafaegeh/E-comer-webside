@@ -6,20 +6,27 @@ import {
   decreaseQuantity,
   removeFromCart,
   clearCart,
-} from "../src/store/cartSlice";
+} from "../store/cartSlice";
+
 import {
   selectCartItems,
   selectCartTotal,
   selectCartItemsCount,
   selectCartItemById,
-} from "../src/store/cartSelectors";
+} from "../store/cartSelectors";
 
 export const useCart = () => {
   const dispatch = useDispatch();
 
+  // Global selectors (safe)
   const cartItems = useSelector(selectCartItems);
   const cartTotal = useSelector(selectCartTotal);
   const cartItemsCount = useSelector(selectCartItemsCount);
+
+  // New SAFE approach for selecting item by id:
+  const getCartItem = (id) => {
+    return useSelector((state) => selectCartItemById(id)(state));
+  };
 
   return {
     // State
@@ -28,7 +35,7 @@ export const useCart = () => {
     cartItemsCount,
 
     // Selectors
-    getCartItem: (id) => useSelector(selectCartItemById(id)),
+    getCartItem,
 
     // Actions
     addToCart: (product) => dispatch(addToCart(product)),

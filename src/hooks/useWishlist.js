@@ -1,21 +1,30 @@
-// src/hooks/useWishlist.js
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addToWishlist,
-  removeFromWishlist,
-  clearWishlist,
-} from "../store/wishlistSlice";
+"use client";
 
-export const useWishlist = () => {
-  const dispatch = useDispatch();
-  const items = useSelector((s) => s.wishlist.items);
+import { useState, useEffect } from "react";
 
-  return {
-    items,
-    count: items.length,
-    isSaved: (id) => items.some((i) => i.id === id),
-    add: (product) => dispatch(addToWishlist(product)),
-    remove: (id) => dispatch(removeFromWishlist(id)),
-    clear: () => dispatch(clearWishlist()),
+export function useWishlist() {
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("wishlist")) || [];
+    setWishlistItems(stored);
+  }, []);
+
+  const toggleWishlist = (product) => {
+    setWishlistItems((prev) => {
+      const exists = prev.some((item) => item._id === product._id);
+
+      let updated;
+      if (exists) {
+        updated = prev.filter((item) => item._id !== product._id);
+      } else {
+        updated = [...prev, product];
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+      return updated;
+    });
   };
-};
+
+  return { wishlistItems, toggleWishlist };
+}

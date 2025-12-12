@@ -10,14 +10,17 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const { wishlistItems, toggleWishlist } = useWishlist();
 
-  const isWishlisted = wishlistItems.some((item) => item.id === product.id);
+  // Prevent crash if wishlistItems is undefined
+  const safeWishlist = wishlistItems ?? [];
+
+  const isWishlisted = safeWishlist.some((item) => item._id === product._id);
 
   return (
     <div className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col">
       {/* IMAGE */}
       <div
         className="w-full h-60 bg-gray-100 rounded-lg overflow-hidden cursor-pointer"
-        onClick={() => router.push(`/products/${product.id}`)}
+        onClick={() => router.push(`/products/${product._id}`)}
       >
         <img
           src={product.image}

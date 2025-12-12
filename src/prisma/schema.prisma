@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model Product {
+  id          String   @id @map("_id") @default(auto()) @db.ObjectId
+  name        String
+  description String?
+  price       Float
+  salePrice   Float?
+  thumbnail   String?
+  image       String?
+  category    String?
+  stock       Int       @default(0)
+  rating      Float     @default(0)
+  numReviews  Int       @default(0)
+  featured    Boolean   @default(false)
+  isFeatured  Boolean?  // Optional for older data
+  createdAt   DateTime  @default(now())
+}
+
+model Order {
+  id         String   @id @map("_id") @default(auto()) @db.ObjectId
+  userId     String
+  products   Json
+  totalPrice Float
+  status     String   @default("processing") // processing, shipped, delivered
+  createdAt  DateTime @default(now())
+}
+
+
+
+model User {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  name      String
+  email     String  @unique
+  password  String
+  orders    Order[]
+  createdAt DateTime @default(now())
+}

@@ -1,11 +1,10 @@
-// scripts/seedProducts.js
-// Run this to populate your database with the products from fakeData
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.local" });
 
 import mongoose from "mongoose";
-import Product from "../../models/Product.js";
+import Product from "../models/product.js";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/your-ecommerce-db";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const products = [
   {
@@ -252,28 +251,24 @@ const products = [
 
 async function seedProducts() {
   try {
-    // Connect to MongoDB
+    console.log("⏳ Connecting to MongoDB Atlas...");
     await mongoose.connect(MONGODB_URI);
-    console.log("✅ Connected to MongoDB");
 
-    // Clear existing products
+    console.log("🗑️  Clearing existing products...");
     await Product.deleteMany({});
-    console.log("🗑️  Cleared existing products");
 
-    // Insert new products
+    console.log("📦 Seeding products...");
     await Product.insertMany(products);
-    console.log(`✅ Successfully seeded ${products.length} products`);
 
-    // Disconnect
+    console.log(`✅ Successfully seeded ${products.length} products!`);
     await mongoose.disconnect();
-    console.log("👋 Disconnected from MongoDB");
 
+    console.log("👋 Disconnected.");
     process.exit(0);
-  } catch (error) {
-    console.error("❌ Error seeding products:", error);
+  } catch (err) {
+    console.error("❌ Error seeding products:", err);
     process.exit(1);
   }
 }
 
-// Run the seed function
 seedProducts();

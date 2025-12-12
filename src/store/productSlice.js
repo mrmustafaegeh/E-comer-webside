@@ -1,37 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { productService } from "../services/productService";
 
+// Async thunk to fetch products with filters and pagination
 export const fetchProducts = createAsyncThunk(
-  "products/fetchAll",
+  "products/fetchProducts",
   async (params = {}) => {
-    const data = await productService.getProducts(params);
-    return (
-      data || {
-        products: [],
-        pagination: {
-          page: 1,
-          totalPages: 1,
-          pageSize: 12,
-          totalItems: 0,
-        },
-      }
-    );
-  }
-);
-
-export const fetchFeaturedProducts = createAsyncThunk(
-  "products/fetchFeatured",
-  async () => {
-    const data = await productService.getFeaturedProducts();
-    return Array.isArray(data) ? data : [];
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`/api/products?${query}`);
+    if (!res.ok) {
+      throw new Error("Failed to fetch products");
+    }
+    return res.json();
   }
 );
 
 const initialState = {
-  products: [],
-  featuredProducts: [],
+  list: [],
   loading: false,
-  featuredLoading: false,
   error: null,
   filters: {
     search: "",
@@ -42,9 +26,9 @@ const initialState = {
   },
   pagination: {
     page: 1,
+    limit: 12,
     totalPages: 1,
-    pageSize: 12,
-    totalItems: 0,
+    total: 0,
   },
 };
 
@@ -52,11 +36,21 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    setFilters(state, action) {
-      state.filters = action.payload;
+    setFilters: (state, action) => {
+      state.filters = { ...state.filters, ...action.payload };
     },
-    setPage(state, action) {
+    setPage: (state, action) => {
       state.pagination.page = action.payload;
+    },
+    clearFilters: (state) => {
+      state.filters = {
+        search: "",
+        category: "",
+        minPrice: 0,
+        maxPrice: 10000,
+        sort: "-createdAt",
+      };
+      state.pagination.page = 1;
     },
   },
   extraReducers: (builder) => {
@@ -67,26 +61,18 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload.products || [];
-        state.pagination = action.payload.pagination || state.pagination;
+        state.list = action.payload.products || [];
+        state.pagination.total = action.payload.total || 0;
+        state.pagination.totalPages = Math.ceil(
+          (action.payload.total || 0) / state.pagination.limit
+        );
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(fetchFeaturedProducts.pending, (state) => {
-        state.featuredLoading = true;
-      })
-      .addCase(fetchFeaturedProducts.fulfilled, (state, action) => {
-        state.featuredLoading = false;
-        state.featuredProducts = action.payload;
-      })
-      .addCase(fetchFeaturedProducts.rejected, (state, action) => {
-        state.featuredLoading = false;
         state.error = action.error.message;
       });
   },
 });
 
-export const { setFilters, setPage } = productSlice.actions;
+export const { setFilters, setPage, clearFilters } = productSlice.actions;
 export default productSlice.reducer;

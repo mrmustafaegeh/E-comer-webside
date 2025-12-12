@@ -1,20 +1,17 @@
-// app/api/featured/route.js
-import dbConnect from "../../../../lib/dbConnect"; // Fixed import
-import Product from "../../../../../models/Product";
+import prisma from "../../../../lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    await dbConnect();
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [{ featured: true }, { isFeatured: true }],
+      },
+      take: 4,
+      orderBy: { createdAt: "desc" },
+    });
 
-    // Check if 'featured' field exists, otherwise use isFeatured
-    const products = await Product.find({
-      $or: [{ featured: true }, { isFeatured: true }],
-    })
-      .limit(4)
-      .lean();
-
-    return NextResponse.json(products, { status: 200 });
+    return NextResponse.json(products);
   } catch (err) {
     console.error("FEATURED PRODUCTS API ERROR:", err);
     return NextResponse.json(

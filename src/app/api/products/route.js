@@ -1,46 +1,44 @@
+// app/api/products/route.js
+import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/dbConnect";
-import Product from "../../../../models/Product";
 
 export async function GET(req) {
-  await dbConnect();
+  try {
+    const client = await clientPromise;
+    const db = client.db(); // uses the default DB in URI
+    const collection = db.collection("products");
 
-  const {
-    search,
-    category,
-    minPrice,
-    maxPrice,
-    sort,
-    page = 1,
-    pageSize = 12,
-  } = Object.fromEntries(req.nextUrl.searchParams);
+    const {
+      search = "",
+      category,
+      page = 1,
+      limit = 12,
+      minPrice = 0,
+      maxPrice = 10000,
+    } = Object.fromEntries(req.nextUrl.searchParams);
 
-  const query = {};
+    const filters = {
+      price: { $gte: Number(minPrice), $lte: Number(maxPrice) },
+    };
 
-  if (search) query.title = { $regex: search, $options: "i" };
-  if (category) query.category = category;
-  if (minPrice || maxPrice) {
-    query.price = {};
-    if (minPrice) query.price.$gte = Number(minPrice);
-    if (maxPrice) query.price.$lte = Number(maxPrice);
+    if (category) filters.category = category;
+    if (search) filters.name = { $regex: search, $options: "i" };
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const products = await collection
+      .find(filters)
+      .skip(skip)
+      .limit(Number(limit))
+      .toArray();
+    const total = await collection.countDocuments(filters);
+
+    return NextResponse.json({ products, total }, { status: 200 });
+  } catch (err) {
+    console.error("PRODUCTS API ERROR:", err);
+    return NextResponse.json(
+      { error: "Failed to load products" },
+      { status: 500 }
+    );
   }
-
-  const skip = (page - 1) * pageSize;
-
-  const products = await Product.find(query)
-    .sort(sort || "-createdAt")
-    .skip(skip)
-    .limit(Number(pageSize));
-
-  const totalItems = await Product.countDocuments(query);
-
-  return NextResponse.json({
-    products,
-    pagination: {
-      page: Number(page),
-      totalPages: Math.ceil(totalItems / pageSize),
-      pageSize: Number(pageSize),
-      totalItems,
-    },
-  });
 }

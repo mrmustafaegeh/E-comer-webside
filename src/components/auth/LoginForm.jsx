@@ -15,7 +15,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    state: { errors, isSubmitting },
     setError,
   } = useForm({
     defaultValues: { email: "mr.mustafaegeh@gmail.com" },
@@ -62,9 +62,9 @@ export default function LoginPage() {
             type="email"
             className="w-full px-4 py-2 border rounded"
           />
-          {errors.email && (
+          {state?.errors.email && (
             <div className="text-red-500 text-sm mt-1">
-              {errors.email.message}
+              {state.errors.email.message}
             </div>
           )}
         </div>
@@ -76,9 +76,9 @@ export default function LoginPage() {
             type="password"
             className="w-full px-4 py-2 border rounded"
           />
-          {errors.password && (
+          {state?.errors.password && (
             <div className="text-red-500 text-sm mt-1">
-              {errors.password.message}
+              {state.errors.password.message}
             </div>
           )}
         </div>
@@ -91,8 +91,10 @@ export default function LoginPage() {
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
 
-        {errors.root && (
-          <div className="text-red-500 text-sm mt-4">{errors.root.message}</div>
+        {state?.errors.root && (
+          <div className="text-red-500 text-sm mt-4">
+            {state.errors.root.message}
+          </div>
         )}
       </form>
     </div>

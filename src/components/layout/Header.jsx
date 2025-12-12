@@ -13,6 +13,8 @@ import {
 } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../features/LanguageSwitcher";
+import UserProfile from "./UserProfile";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Motion shorthands
 const MotionNav = m.nav;
@@ -20,7 +22,7 @@ const MotionDiv = m.div;
 const MotionButton = m.button;
 const MotionSpan = m.span;
 
-// === AUTH BUTTON COMPONENTS ===
+// === AUTH BUTTON COMPONENT ===
 const LoginButton = () => (
   <Link
     href="/auth/login"
@@ -35,6 +37,7 @@ export default function Header() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const { cartItems } = useCart();
+  const { user, loading } = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -148,7 +151,14 @@ export default function Header() {
 
               <div className="flex items-center space-x-4">
                 <LanguageSwitcher />
-                <LoginButton />
+                {/* Show UserProfile if logged in, otherwise Login button */}
+                {loading ? (
+                  <div className="w-20 h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+                ) : user ? (
+                  <UserProfile user={user} />
+                ) : (
+                  <LoginButton />
+                )}
 
                 {/* CART */}
                 <Link
@@ -257,27 +267,31 @@ export default function Header() {
                 exit={{ opacity: 0, height: 0 }}
                 className="md:hidden mt-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-200 overflow-hidden"
               >
-                <ul className="p-2 space-y-1">
+                <div className="p-4 space-y-2">
                   {navItems.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className={`block px-4 py-3 rounded-lg text-sm font-medium transition ${isActive(
-                          item.href
-                        )}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`block px-4 py-3 rounded-lg text-sm font-medium transition ${isActive(
+                        item.href
+                      )}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
                   ))}
-                  <li className="pt-2 border-t border-gray-200">
-                    <LoginButton />
-                  </li>
-                  <li>
-                    <RegisterButton />
-                  </li>
-                </ul>
+
+                  {/* Show user profile or login button based on login status */}
+                  <div className="pt-2 border-t border-gray-200">
+                    {loading ? (
+                      <div className="w-full h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+                    ) : user ? (
+                      <UserProfile user={user} />
+                    ) : (
+                      <LoginButton />
+                    )}
+                  </div>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

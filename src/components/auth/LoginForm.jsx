@@ -1,125 +1,100 @@
 "use client";
 
-import { useState, useEffect, useActionState } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import toast from "react-hot-toast";
-import SubmitButton from "../ui/SubmitButton";
-import { loginAction } from "../../lib/auth";
+import { useAuth } from "../../contexts/AuthContext";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-export default function xLoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [state, formAction, isPending] = useActionState(loginAction, null);
+export const LoginSchema = z.object({
+  email: z.string().email().toLowerCase().trim(),
+  password: z.string().min(1, "Password is required"),
+});
+
+export default function LoginPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm({
+    defaultValues: { email: "mr.mustafaegeh@gmail.com" },
+    resolver: zodResolver(LoginSchema),
+  });
+
   const router = useRouter();
+  const { refreshUser } = useAuth(); // ✅ Make sure to get refreshUser
 
-  useEffect(() => {
-    if (state?.success) {
-      toast.success("Login successful!");
-      // Add a small delay to ensure toast is visible
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 500);
-    } else if (state?.message && !state?.success) {
-      toast.error(state.message);
+  async function onSubmit(data) {
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Display backend error on email field
+        setError("email", { message: result.error || "Login failed" });
+        return;
+      }
+
+      // Refresh user context and redirect
+      await refreshUser();
+      router.push("/");
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("root", { message: "Something went wrong" });
     }
-  }, [state, router]);
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-2xl">
-        <div>
-          <h2 className="text-center text-4xl font-extrabold text-gray-900">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to your account
-          </p>
+    <div className="min-h-screen flex items-center justify-center">
+      <form className="w-full max-w-md p-6" onSubmit={handleSubmit(onSubmit)}>
+        <h1 className="text-2xl font-bold mb-6">Login</h1>
+
+        <div className="mb-4">
+          <label className="block mb-2">Email</label>
+          <input
+            {...register("email")}
+            type="email"
+            className="w-full px-4 py-2 border rounded"
+          />
+          {errors.email && (
+            <div className="text-red-500 text-sm mt-1">
+              {errors.email.message}
+            </div>
+          )}
         </div>
 
-        <form action={formAction} className="mt-8 space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="[email protected]"
-                  required
-                />
-              </div>
-              {state?.errors?.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {state.errors.email}
-                </p>
-              )}
+        <div className="mb-6">
+          <label className="block mb-2">Password</label>
+          <input
+            {...register("password")}
+            type="password"
+            className="w-full px-4 py-2 border rounded"
+          />
+          {errors.password && (
+            <div className="text-red-500 text-sm mt-1">
+              {errors.password.message}
             </div>
+          )}
+        </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="••••••••"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
-              </div>
-              {state?.errors?.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {state.errors.password}
-                </p>
-              )}
-            </div>
-          </div>
+        <button
+          disabled={isSubmitting}
+          type="submit"
+          className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+        >
+          {isSubmitting ? "Logging in..." : "Login"}
+        </button>
 
-          <SubmitButton loading={isPending}>Sign In</SubmitButton>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link
-                href="/auth/register"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Sign up now
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
+        {errors.root && (
+          <div className="text-red-500 text-sm mt-4">{errors.root.message}</div>
+        )}
+      </form>
     </div>
   );
 }

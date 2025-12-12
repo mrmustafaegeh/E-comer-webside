@@ -1,15 +1,8 @@
 import { z } from "zod";
 
-// Simple email validation
-const emailField = z
-  .string()
-  .email({ message: "Invalid email address" })
-  .toLowerCase()
-  .trim();
-
 // Simplified password validation for testing
 export const LoginSchema = z.object({
-  email: emailField,
+  email: z.string().email().toLowerCase().trim(),
   password: z.string().min(1, "Password is required"),
 });
 

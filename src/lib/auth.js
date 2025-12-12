@@ -7,9 +7,18 @@ import {
 } from "../lib/validation";
 import { createSession, deleteSession } from "../lib/session";
 import bcrypt from "bcryptjs";
+import { id } from "zod/v4/locales";
+import { redirect } from "next/dist/server/api-utils";
 
 // Mock database - IMPORTANT: Use hashed password
-let users = [];
+let users = [
+  {
+    id: "1",
+    name: "Test User",
+    email: "mr.mustafaegeh@gmail.com",
+    password: "$2a$10$7QJH6r5j1Z0F1xX1Z0F1xeu1Z0F1xeu1Z0F1xeu", // Hashed version of "Ve0ir1990"
+  },
+];
 
 // Initialize with a test user (hashed password)
 async function initializeUsers() {
@@ -75,6 +84,7 @@ export async function loginAction(prevState, formData) {
     console.log("✅ Validation passed for:", result.data.email);
 
     // Find user
+    console.log(result.data.email);
     const user = await findUserByEmail(result.data.email);
 
     if (!user) {

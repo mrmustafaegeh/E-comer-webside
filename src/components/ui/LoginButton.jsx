@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react";
 
-export default function SubmitButton({ children, loading }) {
+export default function LoginButton({ children, loading }) {
   return (
     <button
       type="submit"

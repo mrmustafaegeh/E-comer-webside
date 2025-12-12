@@ -5,8 +5,24 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
-import SubmitButton from "../ui/SubmitButton";
+import SubmitButton from "../ui/LoginButton";
 import { registerAction } from "../../lib/auth";
+
+export const RegisterSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, "Name must be at least 2 characters")
+      .max(50, "Name must be at most 50 characters")
+      .trim(),
+    email: emailField,
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);

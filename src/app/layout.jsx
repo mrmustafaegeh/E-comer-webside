@@ -3,6 +3,7 @@ import Footer from "../components/layout/Footer.jsx";
 import ScrollToTop from "../components/ui/ScrollToTop.jsx";
 import ClientTranslationProvider from "../components/ClientTranslationProvider.jsx";
 import ReduxProvider from "./ReduxProvider.jsx";
+import { AuthProvider } from "../contexts/AuthContext.js";
 import "./globals.css";
 import "./i18n.js";
 
@@ -21,12 +22,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="flex flex-col min-h-screen w-full">
         <ReduxProvider>
-          <ClientTranslationProvider>
-            <Header />
-            <ScrollToTop />
-            <main className="flex-1 w-full">{children}</main>
-            <Footer />
-          </ClientTranslationProvider>
+          <AuthProvider>
+            <ClientTranslationProvider>
+              <Header />
+              <ScrollToTop />
+              <main className="flex-1 w-full">{children}</main>
+              <Footer />
+            </ClientTranslationProvider>
+          </AuthProvider>
         </ReduxProvider>
       </body>
     </html>

@@ -1,29 +1,28 @@
+import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { ObjectId } from "mongodb";
 
 export async function GET(req, { params }) {
-  const product = await prisma.product.findUnique({
-    where: { id: Number(params.id) },
-  });
+  try {
+    const { id } = await params; // ✅ REQUIRED in App Router
 
-  return NextResponse.json(product);
-}
+    const client = await clientPromise;
+    const db = client.db();
 
-export async function PUT(req, { params }) {
-  const data = await req.json();
+    const product = await db
+      .collection("products")
+      .findOne({ _id: new ObjectId(id) });
 
-  const updated = await prisma.product.update({
-    where: { id: Number(params.id) },
-    data,
-  });
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
 
-  return NextResponse.json(updated);
-}
-
-export async function DELETE(req, { params }) {
-  await prisma.product.delete({
-    where: { id: Number(params.id) },
-  });
-
-  return NextResponse.json({ message: "Deleted" });
+    return NextResponse.json(product);
+  } catch (err) {
+    console.error("PRODUCT DETAIL API ERROR:", err);
+    return NextResponse.json(
+      { error: "Failed to load product" },
+      { status: 500 }
+    );
+  }
 }

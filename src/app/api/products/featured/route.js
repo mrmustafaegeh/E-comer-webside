@@ -1,21 +1,27 @@
-import prisma from "../../../../lib/prisma";
+import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      where: {
-        OR: [{ featured: true }, { isFeatured: true }],
-      },
-      take: 4,
-      orderBy: { createdAt: "desc" },
-    });
+    const client = await clientPromise;
+    const db = client.db(); // Remove "my-shop" - use default from URI
+
+    const products = await db
+      .collection("products")
+      .find({
+        $or: [{ featured: true }, { rating: { $gte: 4.5 } }],
+      })
+      .sort({ rating: -1 })
+      .limit(4)
+      .toArray();
+
+    console.log("Found featured products:", products.length);
 
     return NextResponse.json(products);
   } catch (err) {
     console.error("FEATURED PRODUCTS API ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to load featured products" },
+      { error: "Failed to load featured products", message: err.message },
       { status: 500 }
     );
   }

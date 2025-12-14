@@ -1,263 +1,206 @@
 "use client";
 
-import { useState, useEffect, useActionState } from "react";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 import Link from "next/link";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
-import toast from "react-hot-toast";
-import SubmitButton from "../ui/LoginButton";
-import { registerAction } from "../../lib/auth";
+import { useRouter } from "next/navigation";
 
-export const RegisterSchema = z
-  .object({
-    name: z
-      .string()
-      .min(2, "Name must be at least 2 characters")
-      .max(50, "Name must be at most 50 characters")
-      .trim(),
-    email: emailField,
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-export default function RegisterPage() {
+export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [state, formAction, isPending] = useActionState(registerAction, null);
   const router = useRouter();
 
-  // Debug: Log state changes
-  useEffect(() => {
-    console.log("📊 Registration form state updated:", state);
-    console.log("⏳ Registration loading state:", isPending);
-  }, [state, isPending]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+    watch,
+  } = useForm();
 
-  useEffect(() => {
-    if (state?.success) {
-      console.log("✅ Registration success in useEffect, showing toast...");
-      toast.success(state.message || "Registration successful!");
+  const password = watch("password");
 
-      console.log("🔄 Setting up redirect to /dashboard in 500ms...");
-      const timer = setTimeout(() => {
-        console.log("🚀 Executing router.push('/dashboard')");
-        router.push("/dashboard");
-      }, 500);
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-      return () => clearTimeout(timer);
-    } else if (state?.message && !state?.success) {
-      console.log("❌ Registration error in useEffect:", state.message);
-      toast.error(state.message);
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError("root", {
+          type: "manual",
+          message: result.error || "Registration failed",
+        });
+        return;
+      }
+
+      // Success - redirect to login
+      alert("Registration successful! Please login.");
+      router.push("/auth/login");
+    } catch (error) {
+      setError("root", {
+        type: "manual",
+        message: "Registration failed. Please try again.",
+      });
     }
-  }, [state, router]);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-2xl">
-        <div>
-          <h2 className="text-center text-4xl font-extrabold text-gray-900">
-            Create Account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Join us today
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Create Account</h2>
+          <p className="text-gray-600 mt-2">Sign up to get started</p>
         </div>
 
-        <form
-          action={formAction}
-          className="mt-8 space-y-6"
-          onSubmit={(e) => {
-            console.log("📝 Registration form submitted");
-          }}
-        >
-          <div className="space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Full Name
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="John Doe"
-                  required
-                  defaultValue="Test User" // Default for testing
-                />
-              </div>
-              {state?.errors?.name && (
-                <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="[email protected]"
-                  required
-                  defaultValue="test@example.com" // Default for testing
-                />
-              </div>
-              {state?.errors?.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {state.errors.email}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
-                  defaultValue="Password123" // Default for testing
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
-                  )}
-                </button>
-              </div>
-              {state?.errors?.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {state.errors.password}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Confirm Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="••••••••"
-                  required
-                  minLength={6}
-                  defaultValue="Password123" // Default for testing
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors" />
-                  )}
-                </button>
-              </div>
-              {state?.errors?.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {state.errors.confirmPassword}
-                </p>
-              )}
-            </div>
-
-            {/* Password requirements hint */}
-            <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600">
-              <p className="font-medium mb-1">Password must:</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li>Be at least 6 characters long</li>
-                <li>Match in both fields</li>
-              </ul>
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Name Field */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Full Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              {...register("name", {
+                required: "Name is required",
+                minLength: {
+                  value: 2,
+                  message: "Name must be at least 2 characters",
+                },
+              })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+              placeholder="John Doe"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
           </div>
 
-          <SubmitButton loading={isPending}>
-            {isPending ? "Creating Account..." : "Create Account"}
-          </SubmitButton>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{" "}
-              <Link
-                href="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
-              >
-                Sign in
-              </Link>
-            </p>
-          </div>
-
-          {/* Debug info - remove in production */}
-          {process.env.NODE_ENV === "development" && state && (
-            <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-              <p className="text-xs text-gray-500 font-mono">
-                Debug State: {JSON.stringify(state, null, 2)}
+          {/* Email Field */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Email Address
+            </label>
+            <input
+              id="email"
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+              placeholder="you@example.com"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
               </p>
+            )}
+          </div>
+
+          {/* Password Field */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                placeholder="Create a strong password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          {/* Confirm Password Field */}
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              {...register("confirmPassword", {
+                required: "Please confirm your password",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+              placeholder="Confirm your password"
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+          {/* Error Message */}
+          {errors.root && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {errors.root.message}
             </div>
           )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? "Creating account..." : "Create Account"}
+          </button>
         </form>
 
-        {/* Test credentials reminder */}
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm text-yellow-800 text-center">
-            💡 <strong>Testing Tip:</strong> Use the pre-filled values for quick
-            testing
-          </p>
-          <p className="text-xs text-yellow-700 text-center mt-1">
-            (Remove defaults in production)
-          </p>
-        </div>
+        {/* Login Link */}
+        <p className="text-center text-gray-600 mt-6">
+          Already have an account?{" "}
+          <Link
+            href="/auth/login"
+            className="text-purple-600 hover:text-purple-700 font-semibold"
+          >
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );

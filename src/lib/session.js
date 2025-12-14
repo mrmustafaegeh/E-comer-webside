@@ -1,7 +1,6 @@
 import "server-only";
-import { decodeJwt, SignJWT, jwtVerify } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { Sign } from "crypto";
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-key-change-in-production"
@@ -12,27 +11,28 @@ console.log("🔑 JWT Secret Key (Base64):", encodedKey);
 
 export const createSession = async (userId, email, roles) => {
   console.log("🛡️ Creating session for:", email);
-  const expiresIn = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days
-  const session = await encrypt({ userId, expiresIn });
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days
 
-  cookies().set("session", session, {
+  // ✅ FIXED: Pass all required fields to encrypt
+  const session = await encrypt({
+    userId,
+    email,
+    roles,
+    expiresAt,
+  });
+
+  const cookieStore = await cookies();
+  cookieStore.set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     path: "/",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-  console.log("✅ Session created and cookie set for:", email);
-};
 
-class SessionPlayload {
-  constructor(userId, email, roles, expiresIn) {
-    this.userId = userId;
-    this.email = email;
-    this.roles = roles;
-    this.expiresIn = expiresIn;
-  }
-}
+  console.log("✅ Session created and cookie set for:", email);
+  return session;
+};
 
 export const encrypt = async (payload) => {
   return SignJWT(payload)
@@ -43,7 +43,6 @@ export const encrypt = async (payload) => {
 };
 
 export const verifySession = async () => {
-  // await cookies() in Next.js 15+
   const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
@@ -55,16 +54,34 @@ export const verifySession = async () => {
   try {
     const { payload } = await jwtVerify(token, secret);
     console.log("✅ Session verified for:", payload.email);
+
+    // Check if session is expired
+    if (payload.expiresAt && new Date(payload.expiresAt) < new Date()) {
+      console.log("❌ Session expired");
+      return null;
+    }
+
     return payload;
   } catch (e) {
-    console.error("❌ Invalid token", e);
+    console.error("❌ Invalid token:", e.message);
     return null;
   }
 };
 
 export const deleteSession = async () => {
-  // await cookies() in Next.js 15+
   const cookieStore = await cookies();
   cookieStore.delete("session");
   console.log("✅ Session deleted");
+};
+
+// Helper to get current user
+export const getCurrentUser = async () => {
+  const session = await verifySession();
+  if (!session) return null;
+
+  return {
+    userId: session.userId,
+    email: session.email,
+    roles: session.roles || [],
+  };
 };

@@ -31,9 +31,21 @@ export async function GET(req) {
       .skip(skip)
       .limit(Number(limit))
       .toArray();
+    const transformedProducts = products.map((product) => ({
+      ...product,
+      id: product._id.toString(), // Add id field
+      name: product.title, // Add name field
+      _id: product._id.toString(), // Keep _id as string
+    }));
     const total = await collection.countDocuments(filters);
 
-    return NextResponse.json({ products, total }, { status: 200 });
+    return NextResponse.json(
+      {
+        products: transformedProducts,
+        total,
+      },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("PRODUCTS API ERROR:", err);
     return NextResponse.json(

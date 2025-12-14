@@ -15,10 +15,21 @@ export default function ProductCard({ product }) {
   const safeWishlist = wishlistItems ?? [];
   const isWishlisted = safeWishlist.some((item) => item._id === product._id);
 
+  // ProductCard.jsx - Update handleAddToCart
   const handleAddToCart = async (e) => {
     e.stopPropagation();
     setIsAdding(true);
-    await addToCart(product);
+
+    // Transform product to match cart expectations
+    const cartProduct = {
+      ...product,
+      id: product._id, // Map _id to id
+      name: product.title, // Map title to name
+      price: product.offerPrice || product.price, // Use offer price if available
+      qty: 1, // Initial quantity
+    };
+
+    await addToCart(cartProduct);
     setTimeout(() => setIsAdding(false), 1000);
   };
 

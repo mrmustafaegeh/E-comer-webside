@@ -5,12 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-export const LoginSchema = z.object({
-  email: z.string().email().toLowerCase().trim(),
-  password: z.string().min(1, "Password is required"),
-});
-
+import { LoginSchema } from "../../lib/validation";
 export default function LoginPage() {
   const {
     register,
@@ -42,7 +37,10 @@ export default function LoginPage() {
       }
 
       // Refresh user context and redirect
-      await refreshUser();
+      await refreshUser({
+        email: data.email,
+        password: data.password,
+      });
       router.push("/");
     } catch (error) {
       console.error("Login error:", error);

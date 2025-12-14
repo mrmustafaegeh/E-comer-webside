@@ -4,7 +4,7 @@ import { createSession } from "../../../../lib/session";
 import clientPromise from "../../../../lib/mongodb";
 import bcrypt from "bcryptjs";
 
-export async function POST(req) {
+export async function GET(req) {
   try {
     const { email, password } = await req.json();
 

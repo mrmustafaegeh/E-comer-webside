@@ -11,17 +11,11 @@ console.log("🔑 JWT Secret Key (Base64):", encodedKey);
 
 export const createSession = async (userId, email, roles) => {
   console.log("🛡️ Creating session for:", email);
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days
-
-  // ✅ FIXED: Pass all required fields to encrypt
-  const session = await encrypt({
-    userId,
-    email,
-    roles,
-    expiresAt,
-  });
+  const expiresIn = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days
+  const session = await encrypt({ userId, expiresIn });
 
   const cookieStore = await cookies();
+
   cookieStore.set("session", session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -29,13 +23,11 @@ export const createSession = async (userId, email, roles) => {
     path: "/",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-
   console.log("✅ Session created and cookie set for:", email);
-  return session;
 };
 
 export const encrypt = async (payload) => {
-  return SignJWT(payload)
+  return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256", typ: "JWT" })
     .setIssuedAt()
     .setExpirationTime("7d")

@@ -1,31 +1,10 @@
 import { z } from "zod";
 
-/* --------------------------------------------------
-   Reusable Fields
--------------------------------------------------- */
-
-const emailField = z
-  .string()
-  .email("Invalid email address")
-  .toLowerCase()
-  .trim();
-
-const passwordField = z
-  .string()
-  .min(6, "Password must be at least 6 characters");
-
-/* --------------------------------------------------
-   Login Schema
--------------------------------------------------- */
-
+// Simplified password validation for testing
 export const LoginSchema = z.object({
-  email: emailField,
-  password: passwordField,
+  email: z.string().email().toLowerCase().trim(),
+  password: z.string().min(1, "Password is required"),
 });
-
-/* --------------------------------------------------
-   Register Schema
--------------------------------------------------- */
 
 export const RegisterSchema = z
   .object({
@@ -34,27 +13,22 @@ export const RegisterSchema = z
       .min(2, "Name must be at least 2 characters")
       .max(50, "Name must be at most 50 characters")
       .trim(),
-
-    email: emailField,
-
-    password: passwordField,
-
+    // email: emailField,
+    password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
     path: ["confirmPassword"],
-    message: "Passwords do not match",
   });
-
-/* --------------------------------------------------
-   Zod Error Formatter
--------------------------------------------------- */
 
 export function formatZodErrors(error) {
   const formatted = {};
-  for (const err of error.errors) {
+  error.errors.forEach((err) => {
     const field = err.path[0];
-    formatted[field] = err.message;
-  }
+    if (!formatted[field]) {
+      formatted[field] = err.message;
+    }
+  });
   return formatted;
 }

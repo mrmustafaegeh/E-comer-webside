@@ -26,30 +26,3 @@ export async function POST(request) {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }
-
-// import { NextResponse } from "next/server";
-
-// export async function POST(request) {
-//   try {
-//     const body = await request.json();
-//     const { email, password } = body;
-
-//     console.log("Login attempt:", email);
-
-//     // Simple test authentication
-//     if (email === "test@example.com" && password === "password") {
-//       return NextResponse.json({
-//         success: true,
-//         user: { email },
-//       });
-//     }
-
-//     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-//   } catch (error) {
-//     console.error("Login API error:", error);
-//     return NextResponse.json(
-//       { error: "Login failed: " + error.message },
-//       { status: 500 }
-//     );
-//   }
-// }

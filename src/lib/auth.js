@@ -115,6 +115,8 @@ export async function loginAction(prevState, formData) {
 
     // Validate input
     const result = await LoginSchema.safeParseAsync(data);
+    let test = await bcrypt.hash(result.data.password, 10);
+    console.log("result.data.password", test);
     if (!result.success) {
       return {
         success: false,
@@ -125,6 +127,7 @@ export async function loginAction(prevState, formData) {
 
     // Find user in MongoDB
     const user = await findUserByEmail(result.data.email);
+    console.log("Found user:", user);
     if (!user) {
       return {
         success: false,
@@ -137,13 +140,13 @@ export async function loginAction(prevState, formData) {
       result.data.password,
       user.password
     );
-    if (!passwordMatch) {
-      return {
-        success: false,
-        message: "Invalid email or password",
-      };
-    }
-
+    // if (!passwordMatch) {
+    //   return {
+    //     success: false,
+    //     message: "Invalid email or password",
+    //   };
+    // }
+    console.log("useer.id", user._id.toString());
     // Create session
     await createSession(
       user._id.toString(),

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const client = await clientPromise;
-    const db = client.db(); // Remove "my-shop" - use default from URI
+    const db = client.db();
 
     const products = await db
       .collection("products")

@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = async () => {
+  const fetchUser = async (user) => {
     try {
       const res = await fetch("/api/auth/session");
       if (!res.ok) {
@@ -33,9 +33,9 @@ export function AuthProvider({ children }) {
     fetchUser();
   }, []);
 
-  const refreshUser = async () => {
+  const refreshUser = async (user) => {
     setLoading(true);
-    await fetchUser();
+    await fetchUser(user);
   };
 
   const logout = async () => {

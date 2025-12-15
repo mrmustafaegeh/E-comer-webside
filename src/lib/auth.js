@@ -162,6 +162,7 @@ export async function loginAction(prevState, formData) {
         name: user.name,
         email: user.email,
       },
+      redirect: "/dashboard",
     };
   } catch (error) {
     console.error("💥 Login error:", error);

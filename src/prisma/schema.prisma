@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("MONGODB_URI")
+  // NOTE (Prisma v7 + prisma.config.ts): connection string is moved to prisma.config.ts
 }
 
 model Product {
@@ -16,12 +16,12 @@ model Product {
   thumbnail   String?
   image       String?
   category    String?
-  stock       Int       @default(0)
-  rating      Float     @default(0)
-  numReviews  Int       @default(0)
-  featured    Boolean   @default(false)
-  isFeatured  Boolean?  // Optional for older data
-  createdAt   DateTime  @default(now())
+  stock       Int      @default(0)
+  rating      Float    @default(0)
+  numReviews  Int      @default(0)
+  featured    Boolean  @default(false)
+  isFeatured  Boolean? // Optional for older data
+  createdAt   DateTime @default(now())
 }
 
 model Order {
@@ -33,13 +33,11 @@ model Order {
   createdAt  DateTime @default(now())
 }
 
-
-
 model User {
   id        String   @id @map("_id") @default(auto()) @db.ObjectId
   name      String
   email     String  @unique
   password  String
-  orders    Order[]
   createdAt DateTime @default(now())
 }
+

@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
             <ClientTranslationProvider>
               <Header />
               <ScrollToTop />
-              <main className="flex-1 w-full">{children}</main>
+              <div className="flex-1 w-full">{children}</div>
               <Footer />
             </ClientTranslationProvider>
           </AuthProvider>

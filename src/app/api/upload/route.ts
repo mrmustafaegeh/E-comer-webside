@@ -1,53 +1,98 @@
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+// src/app/api/upload/route.ts
+import { put, del } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+// POST - Upload image to Vercel Blob
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
-
   try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async (
-        pathname
-        /* clientPayload */
-      ) => {
-        // Generate a client token for the browser to upload the file
-        // Make sure to authenticate and authorize users before generating the token.
-        // Otherwise, you're allowing anonymous uploads.
+    //     const session = await getServerSession(authOptions);
+    // if (!session) {
+    //   return NextResponse.json(
+    //     { error: 'Unauthorized' },
+    //     { status: 401 }
+    //   );
+    // }
 
-        return {
-          allowedContentTypes: ["image/jpeg", "image/png", "image/webp"],
-          addRandomSuffix: true,
-          // callbackUrl: 'https://example.com/api/avatar/upload',
-          // optional, `callbackUrl` is automatically computed when hosted on Vercel
-          tokenPayload: JSON.stringify({
-            // optional, sent to your server on upload completion
-            // you could pass a user id from auth, or a value from clientPayload
-          }),
-        };
-      },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // Called by Vercel API on client upload completion
-        // Use tools like ngrok if you want this to work locally
+    const formData = await request.formData();
+    const file = formData.get("file") as File;
 
-        console.log("blob upload completed", blob, tokenPayload);
+    if (!file) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
 
-        try {
-          // Run any logic after the file upload completed
-          // const { userId } = JSON.parse(tokenPayload);
-          // await db.update({ avatar: blob.url, userId });
-        } catch (error) {
-          throw new Error("Could not update user");
-        }
-      },
+    // Validate file type
+    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    if (!validTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: "Invalid file type. Only JPEG, PNG, and WebP are allowed." },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { error: "File size too large. Maximum size is 5MB." },
+        { status: 400 }
+      );
+    }
+
+    // Upload to Vercel Blob
+    const blob = await put(file.name, file, {
+      access: "public",
+      addRandomSuffix: true, // Adds random suffix to prevent name conflicts
     });
 
-    return NextResponse.json(jsonResponse);
+    console.log("✅ Image uploaded successfully:", blob.url);
+
+    return NextResponse.json({
+      url: blob.url,
+      pathname: blob.pathname,
+      size: file.size,
+      contentType: file.type,
+    });
   } catch (error) {
+    console.error("❌ Upload error:", error);
     return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 } // The webhook will retry 5 times waiting for a 200
+      { error: "Upload failed. Please try again." },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Remove image from Vercel Blob
+export async function DELETE(request: Request): Promise<NextResponse> {
+  try {
+    // TODO: Add authentication check here
+    // const session = await getServerSession();
+    // if (!session?.user?.isAdmin) {
+    //   return NextResponse.json(
+    //     { error: 'Unauthorized - Admin access required' },
+    //     { status: 401 }
+    //   );
+    // }
+
+    const { url } = await request.json();
+
+    if (!url) {
+      return NextResponse.json({ error: "No URL provided" }, { status: 400 });
+    }
+
+    // Delete from Vercel Blob
+    await del(url);
+
+    console.log("✅ Image deleted successfully:", url);
+
+    return NextResponse.json({
+      success: true,
+      message: "Image deleted successfully",
+    });
+  } catch (error) {
+    console.error("❌ Delete error:", error);
+    return NextResponse.json(
+      { error: "Delete failed. Please try again." },
+      { status: 500 }
     );
   }
 }

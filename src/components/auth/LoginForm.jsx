@@ -41,7 +41,7 @@ export default function LoginPage() {
         email: data.email,
         password: data.password,
       });
-      router.push("/");
+      router.push("/admin/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       setError("root", { message: "Something went wrong" });

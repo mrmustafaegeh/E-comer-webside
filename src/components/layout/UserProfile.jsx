@@ -45,6 +45,13 @@ export default function UserProfile({ user }) {
             Orders
           </button>
           <button
+            onClick={() => router.push("/admin/dashboard")}
+            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+          >
+            Dashboard
+          </button>
+
+          <button
             onClick={handleLogout}
             className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
           >

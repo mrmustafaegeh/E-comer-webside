@@ -34,7 +34,11 @@ export default function AdminCreateProduct() {
       }
     } catch (err) {
       console.error("Failed to create product:", err);
-      setError(err.message || "Failed to create product. Please try again.");
+      setError(
+        err?.error ||
+          err?.message ||
+          "Failed to create product. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -55,17 +59,6 @@ export default function AdminCreateProduct() {
             />
             Back to Products
           </Link>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Create New Product
-              </h1>
-              <p className="text-gray-600 mt-2">
-                Add a new product to your store catalog
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Error message */}

@@ -1,25 +1,22 @@
-// app/api/products/route.js
-import clientPromise from "../../../lib/mongodb";
+// app/api/admin/admin-products/route.js
+import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
+// GET /api/admin/admin-products?search=&category=&page=1&limit=50
 export async function GET(req) {
   try {
     const client = await clientPromise;
-    const db = client.db(); // uses the default DB in URI
+    const db = client.db();
     const collection = db.collection("products");
 
     const {
       search = "",
       category,
       page = 1,
-      limit = 12,
-      minPrice = 0,
-      maxPrice = 10000,
+      limit = 50,
     } = Object.fromEntries(req.nextUrl.searchParams);
 
-    const filters = {
-      price: { $gte: Number(minPrice), $lte: Number(maxPrice) },
-    };
+    const filters = {};
 
     if (category) filters.category = category;
     if (search) filters.name = { $regex: search, $options: "i" };
@@ -28,15 +25,18 @@ export async function GET(req) {
 
     const products = await collection
       .find(filters)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit))
       .toArray();
+
     const transformedProducts = products.map((product) => ({
       ...product,
       id: product._id.toString(),
-      name: product.name ?? product.title,
       _id: product._id.toString(),
+      name: product.name ?? product.title,
     }));
+
     const total = await collection.countDocuments(filters);
 
     return NextResponse.json(
@@ -47,14 +47,18 @@ export async function GET(req) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("PRODUCTS API ERROR:", err);
+    console.error("ADMIN PRODUCTS GET ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to load products" },
+      {
+        error: "Failed to load products",
+        details: err.message,
+      },
       { status: 500 }
     );
   }
 }
 
+// POST /api/admin/admin-products
 export async function POST(req) {
   try {
     const client = await clientPromise;
@@ -63,6 +67,7 @@ export async function POST(req) {
 
     const body = await req.json();
 
+    // Accept name OR title
     const name = typeof body.name === "string" ? body.name : body.title;
 
     if (!name || typeof name !== "string" || !name.trim()) {
@@ -73,7 +78,7 @@ export async function POST(req) {
     }
 
     const price = Number(body.price);
-    if (!Number.isFinite(price)) {
+    if (!Number.isFinite(price) || price < 0) {
       return NextResponse.json(
         { error: "Valid price is required" },
         { status: 400 }
@@ -96,6 +101,7 @@ export async function POST(req) {
       featured: Boolean(body.featured),
       isFeatured: body.isFeatured ?? null,
       createdAt: now,
+      updatedAt: now,
     };
 
     const result = await collection.insertOne(doc);
@@ -109,9 +115,12 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (err) {
-    console.error("PRODUCTS POST API ERROR:", err);
+    console.error("ADMIN PRODUCTS POST ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to create product" },
+      {
+        error: "Failed to create product",
+        details: err.message,
+      },
       { status: 500 }
     );
   }

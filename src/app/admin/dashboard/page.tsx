@@ -1,7 +1,7 @@
 // src/app/admin/dashboard/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import StatGrid from "../../../components/dashboard/StatGrid";
 import RecentOrdersTable from "../../../components/dashboard/RecentOrdersTable";
 import QuickActions from "../../../components/dashboard/QuickActions";
@@ -9,18 +9,14 @@ import ChartSection from "../../../components/dashboard/ChartSection";
 import ActivityFeed from "../../../components/dashboard/ActivityFeed";
 import TopProducts from "../../../components/dashboard/TopProducts";
 import LoadingSpinner from "../../../components/ui/LoadingSpinner";
-import React from "react";
 import {
   Package,
   ShoppingCart,
   Users,
   DollarSign,
-  TrendingUp,
   RefreshCw,
   BarChart3,
   Clock,
-  ArrowUpRight,
-  ArrowDownRight,
 } from "lucide-react";
 import api from "../../../services/api";
 
@@ -73,43 +69,63 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadDashboardData = async () => {
     try {
       setLoading(true);
 
-      // Fetch all data in parallel
-      const [productsRes, ordersRes, usersRes] = await Promise.all([
-        api.get("/products?limit=100"),
-        api.get("/orders?limit=10&sort=-createdAt"),
-        api.get("/users?limit=1"),
+      const [productsRes, ordersRes, usersRes] = await Promise.allSettled([
+        api.get("/admin/admin-products?limit=100"),
+        api.get("/admin/admin-orders?limit=10&sort=-createdAt"),
+        api.get("/admin/admin-users?limit=1"),
       ]);
 
-      const products = productsRes.data || [];
-      const orders = ordersRes.data || [];
-      const users = usersRes.data || [];
+      const productsPayload =
+        productsRes.status === "fulfilled" ? productsRes.value.data : null;
+      const ordersPayload =
+        ordersRes.status === "fulfilled" ? ordersRes.value.data : null;
+      const usersPayload =
+        usersRes.status === "fulfilled" ? usersRes.value.data : null;
+
+      const products: any[] = productsPayload?.products ?? [];
+      const orders: any[] = ordersPayload?.orders ?? [];
+      const users: any[] = usersPayload?.users ?? [];
+
+      const productsTotal =
+        typeof productsPayload?.total === "number"
+          ? productsPayload.total
+          : products.length;
+
+      const ordersTotal =
+        typeof ordersPayload?.total === "number"
+          ? ordersPayload.total
+          : orders.length;
+
+      const usersTotal =
+        typeof usersPayload?.total === "number"
+          ? usersPayload.total
+          : users.length;
 
       const recentOrders = Array.isArray(orders) ? orders.slice(0, 5) : [];
 
-      // Calculate total revenue safely
       const totalRevenue = Array.isArray(orders)
         ? orders.reduce(
-            (sum: number, order: any) => sum + (order.totalPrice || 0),
+            (sum: number, order: any) => sum + (Number(order.totalPrice) || 0),
             0
           )
         : 0;
 
-      // Mock data for charts and activities
       const mockTopProducts = (
         Array.isArray(products) ? products.slice(0, 5) : []
       ).map((p: any) => ({
         id: p.id || p._id || `prod-${Math.random()}`,
-        name: p.title || p.name || "Unnamed Product",
+        name: p.name || p.title || "Unnamed Product",
         sales: Math.floor(Math.random() * 100) + 50,
-        revenue: (p.price || 0) * 100,
+        revenue: (Number(p.price) || 0) * 100,
         stock: p.stock || 0,
-        image: p.image || "",
+        image: p.image || p.thumbnail || "",
       }));
 
       const mockActivities = recentOrders.map((order: any) => ({
@@ -117,11 +133,10 @@ export default function AdminDashboard() {
         type: "order",
         user: order.user?.email || order.customerEmail || "Customer",
         action: "placed an order",
-        amount: `$${order.totalPrice || 0}`,
+        amount: `$${Number(order.totalPrice || 0)}`,
         time: order.createdAt || new Date().toISOString(),
       }));
 
-      // Generate monthly data for the last 6 months
       const months = [
         "Jan",
         "Feb",
@@ -149,7 +164,6 @@ export default function AdminDashboard() {
         }
       );
 
-      // Calculate order stats
       const orderStats = {
         pending: Array.isArray(orders)
           ? orders.filter((o: any) => o.status === "pending").length
@@ -166,11 +180,11 @@ export default function AdminDashboard() {
       };
 
       setStats({
-        products: Array.isArray(products) ? products.length : 0,
-        orders: Array.isArray(orders) ? orders.length : 0,
-        users: Array.isArray(users) ? users.length : 0,
+        products: productsTotal,
+        orders: ordersTotal,
+        users: usersTotal,
         revenue: totalRevenue,
-        orderGrowth: 12.5, // Mock growth percentage
+        orderGrowth: 12.5,
         revenueGrowth: 18.3,
         recentOrders,
         topProducts: mockTopProducts,
@@ -178,6 +192,16 @@ export default function AdminDashboard() {
         activities: mockActivities,
         orderStats,
       });
+
+      if (productsRes.status === "rejected") {
+        console.error("Products request failed:", productsRes.reason);
+      }
+      if (ordersRes.status === "rejected") {
+        console.error("Orders request failed:", ordersRes.reason);
+      }
+      if (usersRes.status === "rejected") {
+        console.error("Users request failed:", usersRes.reason);
+      }
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
     } finally {
@@ -191,7 +215,6 @@ export default function AdminDashboard() {
     loadDashboardData();
   };
 
-  // Prepare stat cards data
   const statCards = [
     {
       title: "Total Products",
@@ -248,7 +271,8 @@ export default function AdminDashboard() {
             Dashboard Overview
           </h1>
           <p className="text-gray-600 mt-2">
-            Welcome back! Here's what's happening with your store today.
+            Welcome back! Here&apos;s what&apos;s happening with your store
+            today.
           </p>
         </div>
 
@@ -281,7 +305,7 @@ export default function AdminDashboard() {
 
       {/* Charts & Tables Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-        {/* Left Column - Chart */}
+        {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
           <ChartSection data={stats.monthlyData} />
 

@@ -19,9 +19,22 @@ const nextConfig = {
         hostname: "plus.unsplash.com",
         pathname: "/**",
       },
+
       {
         protocol: "https",
         hostname: "fakestoreapi.com",
+        pathname: "/**",
+      },
+      // Vercel Blob Storage - specific hostname
+      {
+        protocol: "https",
+        hostname: "lv4ihdf4sxac4yjo.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
+      // Vercel Blob Storage - wildcard for all blob storage URLs
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
         pathname: "/**",
       },
     ],

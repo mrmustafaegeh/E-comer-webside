@@ -12,6 +12,7 @@ import {
   fetchAdminProducts,
   deleteAdminProduct,
 } from "../../../store/adminProductSlice";
+import ProductTable from "../../../components/dashboard/ProductTable";
 
 export default function AdminProductsPage() {
   const dispatch = useDispatch();
@@ -77,24 +78,6 @@ export default function AdminProductsPage() {
 
   return (
     <div className="p-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <p className="text-gray-600 mt-1">
-            Manage your product catalog ({filteredProducts.length} products)
-          </p>
-        </div>
-
-        <Link
-          href="/admin/admin-products/create"
-          className="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
-        >
-          <FiPlus className="mr-2" />
-          Add New Product
-        </Link>
-      </div>
-
       {/* Filters */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
@@ -147,7 +130,7 @@ export default function AdminProductsPage() {
             </p>
             {!searchTerm && selectedCategory === "all" && (
               <Link
-                href="/admin/admin-products/create"
+                href="/admin/create-product"
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
               >
                 <FiPlus className="mr-2" />

@@ -7,7 +7,7 @@ export default function DashboardOrders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch("/api/orders")
+    fetch("/api/admin/admin-orders")
       .then((res) => res.json())
       .then(setOrders);
   }, []);

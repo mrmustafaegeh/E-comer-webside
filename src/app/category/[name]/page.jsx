@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import ProductFilters from "@/components/products/ProductFilters";
-import useDebouncedValue from "@/hooks/useDebouncedValue";
+import ProductFilters from "../../../components/products/ProductFilters";
+import useDebouncedValue from "../../../hooks/useDebouncedValue";
 import { motion } from "framer-motion";
 
 export default function CategoryPage({ params }) {

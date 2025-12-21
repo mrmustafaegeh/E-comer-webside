@@ -1,25 +1,29 @@
 import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
+// ✅ Cache for 30 seconds in development, 5 minutes in production
+export const revalidate = process.env.NODE_ENV === "production" ? 300 : 30;
+
 export async function GET(req) {
   const startTime = Date.now();
 
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("ecommerce");
     const collection = db.collection("products");
 
-    const params = Object.fromEntries(req.nextUrl.searchParams);
-
-    const search = (params.search || "").trim();
-    const category = (params.category || "").trim();
-    const pageNum = Math.max(1, Number(params.page || 1));
-    const limitNum = Math.min(100, Math.max(1, Number(params.limit || 50)));
-    const skip = (pageNum - 1) * limitNum;
+    const {
+      search = "",
+      category,
+      page = "1",
+      limit = "50",
+    } = Object.fromEntries(req.nextUrl.searchParams);
 
     const filters = {};
+
     if (category) filters.category = category;
 
+    // ✅ IMPROVED: Search both name AND title fields
     if (search) {
       filters.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -27,41 +31,49 @@ export async function GET(req) {
       ];
     }
 
-    const projection = {
-      name: 1,
-      title: 1,
-      price: 1,
-      salePrice: 1,
-      image: 1,
-      thumbnail: 1,
-      category: 1,
-      stock: 1,
-      featured: 1,
-      rating: 1,
-      createdAt: 1,
-    };
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.min(100, Math.max(1, Number(limit))); // ✅ Cap at 100
+    const skip = (pageNum - 1) * limitNum;
 
+    // ✅ PARALLEL QUERIES: Run find and count at the same time
     const [products, total] = await Promise.all([
       collection
-        .find(filters, { projection })
+        .find(filters)
+        .project({
+          // ✅ Only select needed fields
+          name: 1,
+          title: 1,
+          price: 1,
+          salePrice: 1,
+          image: 1,
+          thumbnail: 1,
+          category: 1,
+          stock: 1,
+          featured: 1,
+          rating: 1,
+          createdAt: 1,
+        })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNum)
         .toArray(),
+
       collection.countDocuments(filters),
     ]);
 
-    const transformedProducts = products.map((p) => ({
-      ...p,
-      _id: p._id.toString(),
-      id: p._id.toString(),
-      name: p.name ?? p.title,
-      title: p.title ?? p.name,
+    const transformedProducts = products.map((product) => ({
+      ...product,
+      id: product._id.toString(),
+      _id: product._id.toString(),
+      name: product.name ?? product.title,
     }));
 
-    const ms = Date.now() - startTime;
+    const queryTime = Date.now() - startTime;
+
     if (process.env.NODE_ENV === "development") {
-      console.log(`✅ Admin products: ${products.length} in ${ms}ms`);
+      console.log(
+        `✅ Admin products loaded: ${products.length} items in ${queryTime}ms`
+      );
     }
 
     return NextResponse.json(
@@ -75,17 +87,18 @@ export async function GET(req) {
       {
         status: 200,
         headers: {
-          "Cache-Control":
-            process.env.NODE_ENV === "production"
-              ? "private, max-age=60"
-              : "private, max-age=10",
+          "Cache-Control": "private, max-age=30", // ✅ Cache for 30 seconds
         },
       }
     );
   } catch (err) {
     console.error("ADMIN PRODUCTS GET ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to load products" },
+      {
+        error: "Failed to load products",
+        message:
+          process.env.NODE_ENV === "development" ? err.message : undefined,
+      },
       { status: 500 }
     );
   }
@@ -99,7 +112,9 @@ export async function POST(req) {
 
     const body = await req.json();
 
+    // Accept name OR title
     const name = typeof body.name === "string" ? body.name : body.title;
+
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
         { error: "Product name is required" },
@@ -119,7 +134,7 @@ export async function POST(req) {
 
     const doc = {
       name: name.trim(),
-      title: (body.title || name).trim(),
+      title: name.trim(), // ✅ Store in both fields for compatibility
       description: body.description ?? null,
       price,
       salePrice: body.salePrice != null ? Number(body.salePrice) : null,
@@ -148,7 +163,10 @@ export async function POST(req) {
   } catch (err) {
     console.error("ADMIN PRODUCTS POST ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to create product" },
+      {
+        error: "Failed to create product",
+        details: err.message,
+      },
       { status: 500 }
     );
   }

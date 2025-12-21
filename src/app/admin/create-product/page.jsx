@@ -50,7 +50,7 @@ export default function AdminCreateProduct() {
         {/* Header with back button */}
         <div className="mb-8">
           <Link
-            href="/admin/products"
+            href="/admin/admin-products"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 group"
           >
             <ArrowLeft

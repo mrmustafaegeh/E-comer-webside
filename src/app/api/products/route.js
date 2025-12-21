@@ -1,15 +1,12 @@
-// app/api/products/route.js
-import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
+import clientPromise from "../../../lib/mongodb";
 
-// Optional: cache GET for a short time (helps a lot in production)
-// If you prefer no caching, remove these headers in the return.
 export async function GET(req) {
   const start = Date.now();
 
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("ecommerce"); // Change to your DB name
     const collection = db.collection("products");
 
     const params = Object.fromEntries(req.nextUrl.searchParams);
@@ -18,9 +15,8 @@ export async function GET(req) {
     const category = (params.category || "").trim();
 
     const page = Math.max(1, Number(params.page || 1));
-    const limit = Math.min(48, Math.max(1, Number(params.limit || 12))); // ✅ cap at 48
+    const limit = Math.min(48, Math.max(1, Number(params.limit || 24)));
 
-    // Only apply price filter if provided (or keep defaults)
     const minPriceRaw = params.minPrice;
     const maxPriceRaw = params.maxPrice;
 
@@ -33,43 +29,94 @@ export async function GET(req) {
         ? Number(maxPriceRaw)
         : null;
 
+    // Build filters
     const filters = {};
 
-    if (category) filters.category = category;
-
-    if (Number.isFinite(minPrice) || Number.isFinite(maxPrice)) {
-      filters.price = {};
-      if (Number.isFinite(minPrice)) filters.price.$gte = minPrice;
-      if (Number.isFinite(maxPrice)) filters.price.$lte = maxPrice;
+    // Category filter
+    if (category && category !== "all") {
+      filters.category = new RegExp(`^${category}$`, "i"); // Case-insensitive match
     }
 
-    // ✅ search both name and title
+    // Price filter - check both price and salePrice
+    if (Number.isFinite(minPrice) || Number.isFinite(maxPrice)) {
+      const priceConditions = [];
+
+      const priceFilter = {};
+      if (Number.isFinite(minPrice)) priceFilter.$gte = minPrice;
+      if (Number.isFinite(maxPrice)) priceFilter.$lte = maxPrice;
+
+      priceConditions.push({ price: priceFilter });
+
+      // Also check salePrice if it exists
+      priceConditions.push({
+        salePrice: {
+          ...priceFilter,
+          $ne: null,
+        },
+      });
+
+      filters.$or = priceConditions;
+    }
+
+    // Search filter - search in name, title, and description
     if (search) {
+      const searchRegex = new RegExp(search, "i");
       filters.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { title: { $regex: search, $options: "i" } },
+        { name: searchRegex },
+        { title: searchRegex },
+        { description: searchRegex },
       ];
+    }
+
+    // If we have both price and search filters, combine them with $and
+    if (search && (Number.isFinite(minPrice) || Number.isFinite(maxPrice))) {
+      const searchRegex = new RegExp(search, "i");
+      const priceFilter = {};
+      if (Number.isFinite(minPrice)) priceFilter.$gte = minPrice;
+      if (Number.isFinite(maxPrice)) priceFilter.$lte = maxPrice;
+
+      filters.$and = [
+        {
+          $or: [
+            { name: searchRegex },
+            { title: searchRegex },
+            { description: searchRegex },
+          ],
+        },
+        {
+          $or: [
+            { price: priceFilter },
+            { salePrice: { ...priceFilter, $ne: null } },
+          ],
+        },
+      ];
+
+      delete filters.$or;
     }
 
     const skip = (page - 1) * limit;
 
-    // ✅ only return fields needed for product cards
+    // Projection - only return needed fields
     const projection = {
       name: 1,
       title: 1,
       price: 1,
       salePrice: 1,
+      oldPrice: 1,
+      discount: 1,
       image: 1,
       thumbnail: 1,
+      emoji: 1,
       category: 1,
       rating: 1,
       numReviews: 1,
       featured: 1,
+      isFeatured: 1,
       stock: 1,
       createdAt: 1,
     };
 
-    // ✅ run queries in parallel
+    // Run queries in parallel
     const [products, total] = await Promise.all([
       collection
         .find(filters, { projection })
@@ -80,12 +127,13 @@ export async function GET(req) {
       collection.countDocuments(filters),
     ]);
 
+    // Transform products
     const transformedProducts = products.map((p) => ({
       ...p,
       _id: p._id.toString(),
       id: p._id.toString(),
-      title: p.title ?? p.name,
-      name: p.name ?? p.title,
+      title: p.title || p.name,
+      name: p.name || p.title,
     }));
 
     const ms = Date.now() - start;
@@ -106,7 +154,6 @@ export async function GET(req) {
       {
         status: 200,
         headers: {
-          // short caching
           "Cache-Control":
             process.env.NODE_ENV === "production"
               ? "public, s-maxage=60, stale-while-revalidate=300"
@@ -126,7 +173,7 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("ecommerce");
     const collection = db.collection("products");
 
     const body = await req.json();
@@ -147,22 +194,44 @@ export async function POST(req) {
       );
     }
 
+    // Create slug from name
+    const slug = (body.slug || name)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    // Check if slug already exists
+    const existing = await collection.findOne({ slug });
+    if (existing) {
+      return NextResponse.json(
+        { error: "A product with this slug already exists" },
+        { status: 409 }
+      );
+    }
+
     const now = new Date();
 
     const doc = {
       name: name.trim(),
-      title: (body.title || name).trim(), // keep both
-      description: body.description ?? null,
+      title: (body.title || name).trim(),
+      slug,
+      description: body.description || null,
       price,
       salePrice: body.salePrice != null ? Number(body.salePrice) : null,
-      thumbnail: body.thumbnail ?? null,
-      image: body.image ?? null,
-      category: body.category ?? null,
+      oldPrice: body.oldPrice != null ? Number(body.oldPrice) : null,
+      discount: body.discount || null,
+      thumbnail: body.thumbnail || null,
+      image: body.image || null,
+      emoji: body.emoji || null,
+      category: body.category || null,
       stock: body.stock != null ? Number(body.stock) : 0,
       rating: body.rating != null ? Number(body.rating) : 0,
       numReviews: body.numReviews != null ? Number(body.numReviews) : 0,
       featured: Boolean(body.featured),
-      isFeatured: body.isFeatured ?? null,
+      isFeatured: body.isFeatured != null ? Boolean(body.isFeatured) : false,
+      featuredOrder:
+        body.featuredOrder != null ? Number(body.featuredOrder) : null,
+      gradient: body.gradient || null,
       createdAt: now,
       updatedAt: now,
     };

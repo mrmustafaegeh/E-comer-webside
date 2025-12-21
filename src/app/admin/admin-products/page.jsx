@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FiPlus, FiFilter, FiSearch } from "react-icons/fi";
 import ProtectedAdmin from "../../../components/dashboard/ProtectedAdmin";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import {
   fetchAdminProducts,
@@ -78,6 +79,30 @@ export default function AdminProductsPage() {
 
   return (
     <div className="p-6">
+      {/* Header */}
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Left: back */}
+        <Link
+          href="/admin/admin-products"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 group"
+        >
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          Back to Products
+        </Link>
+
+        {/* Right: create button */}
+        <Link
+          href="/admin/create-product"
+          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
+        >
+          <FiPlus className="mr-2" />
+          Create Product
+        </Link>
+      </div>
+
       {/* Filters */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">

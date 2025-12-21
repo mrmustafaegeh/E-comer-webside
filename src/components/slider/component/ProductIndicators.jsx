@@ -1,3 +1,5 @@
+"use client";
+import { motion } from "framer-motion";
 const ProductIndicators = ({ products, activeProduct, setActiveProduct }) => {
   return (
     <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -15,3 +17,5 @@ const ProductIndicators = ({ products, activeProduct, setActiveProduct }) => {
     </div>
   );
 };
+
+export default ProductIndicators;

@@ -2,7 +2,7 @@ import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 
-export async function GET(req, { params }) {
+export async function GET(request, { params }) {
   try {
     const { id } = await params; // ✅ REQUIRED in App Router
 

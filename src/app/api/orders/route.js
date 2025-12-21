@@ -2,13 +2,13 @@
 import clientPromise from "../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function GET(request) {
   try {
     const client = await clientPromise;
     const db = client.db();
     const col = db.collection("orders");
 
-    const params = Object.fromEntries(req.nextUrl.searchParams);
+    const params = Object.fromEntries(request.nextUrl.searchParams);
     const page = Math.max(1, Number(params.page || 1));
     const limit = Math.min(50, Math.max(1, Number(params.limit || 10)));
     const skip = (page - 1) * limit;
@@ -60,13 +60,13 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
     const client = await clientPromise;
     const db = client.db();
     const col = db.collection("orders");
 
-    const body = await req.json();
+    const body = await request.json();
 
     const userId = body.userId;
     const products = body.products;

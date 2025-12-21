@@ -2,7 +2,7 @@ import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-export async function GET(req) {
+export async function GET(request) {
   const startTime = Date.now();
 
   try {
@@ -10,7 +10,7 @@ export async function GET(req) {
     const db = client.db();
     const col = db.collection("users");
 
-    const params = Object.fromEntries(req.nextUrl.searchParams);
+    const params = Object.fromEntries(request.nextUrl.searchParams);
     const page = Math.max(1, Number(params.page || 1));
     const limit = Math.min(100, Math.max(1, Number(params.limit || 10)));
     const search = (params.search || "").trim();
@@ -79,13 +79,13 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
     const client = await clientPromise;
     const db = client.db();
     const col = db.collection("users");
 
-    const body = await req.json();
+    const body = await request.json();
 
     const name = (body.name || "").trim();
     const email = (body.email || "").trim().toLowerCase();

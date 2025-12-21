@@ -2,14 +2,14 @@ import clientPromise from "../../../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 
-export async function PUT(req, { params }) {
+export async function PUT(request, { params }) {
   try {
     const client = await clientPromise;
     const db = client.db();
     const ordersCol = db.collection("orders");
 
     const { id } = params;
-    const body = await req.json();
+    const body = await request.json();
     const status = body.status;
 
     if (!status)

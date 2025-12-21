@@ -4,9 +4,9 @@ import { writeFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp"; // ✅ Install: npm install sharp
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const formData = await req.formData();
+    const formData = await request.formData();
     const file = formData.get("file");
 
     if (!file) {

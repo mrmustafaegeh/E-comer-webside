@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 // ✅ Cache for 30 seconds in development, 5 minutes in production
 export const revalidate = process.env.NODE_ENV === "production" ? 300 : 30;
 
-export async function GET(req) {
+export async function GET(request) {
   const startTime = Date.now();
 
   try {
@@ -17,7 +17,7 @@ export async function GET(req) {
       category,
       page = "1",
       limit = "50",
-    } = Object.fromEntries(req.nextUrl.searchParams);
+    } = Object.fromEntries(request.nextUrl.searchParams);
 
     const filters = {};
 
@@ -104,13 +104,13 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
     const client = await clientPromise;
     const db = client.db();
     const collection = db.collection("products");
 
-    const body = await req.json();
+    const body = await request.json();
 
     // Accept name OR title
     const name = typeof body.name === "string" ? body.name : body.title;

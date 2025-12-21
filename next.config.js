@@ -6,8 +6,9 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig = {
-  // ⭐ ADD THIS LINE for static export
-  output: "export",
+  // ⭐ EXPLICITLY DISABLE static export
+  output: process.env.NODE_ENV === "production" ? undefined : undefined,
+  // Or simply omit the output key entirely
 
   images: {
     remotePatterns: [
@@ -38,8 +39,7 @@ const nextConfig = {
       },
     ],
     formats: ["image/webp", "image/avif"],
-    // ⭐ ADD THIS for static export
-    unoptimized: true,
+    // ⭐ Keep image optimization enabled (remove unoptimized: true)
   },
 
   compiler: {
@@ -49,15 +49,13 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
-  // ⭐ REMOVE or MODIFY experimental features
-  // Some experimental features don't work with static export
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ["framer-motion", "lucide-react"],
   },
 
-  // ⭐ ADD trailing slash for better compatibility
-  trailingSlash: true,
+  // ⭐ REMOVE trailingSlash if you added it
+  // trailingSlash: true, // Only for static export
 };
 
 export default process.env.ANALYZE ? bundleAnalyzer(nextConfig) : nextConfig;

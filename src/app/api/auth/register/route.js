@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import clientPromise from "../../../../lib/mongodb";
 import bcrypt from "bcryptjs";
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const { email, password, name } = await req.json();
+    const { email, password, name } = await request.json();
 
     // Validate input
     if (!email || !password || !name) {

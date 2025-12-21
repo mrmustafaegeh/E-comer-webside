@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import clientPromise from "../../../lib/mongodb";
 
-export async function GET(req) {
+export async function GET(request) {
   const start = Date.now();
 
   try {
@@ -9,7 +9,7 @@ export async function GET(req) {
     const db = client.db("ecommerce"); // Change to your DB name
     const collection = db.collection("products");
 
-    const params = Object.fromEntries(req.nextUrl.searchParams);
+    const params = Object.fromEntries(request.nextUrl.searchParams);
 
     const search = (params.search || "").trim();
     const category = (params.category || "").trim();
@@ -170,13 +170,13 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
     const client = await clientPromise;
     const db = client.db("ecommerce");
     const collection = db.collection("products");
 
-    const body = await req.json();
+    const body = await request.json();
 
     const name = typeof body.name === "string" ? body.name : body.title;
     if (!name || typeof name !== "string" || !name.trim()) {

@@ -5,11 +5,12 @@ export const adminService = {
   // ========================================
   // PRODUCT MANAGEMENT
   // ========================================
-  listProducts: (params = {}) => get("/products", params),
-  getProduct: (id) => get(`/products/${id}`),
-  createProduct: (productData) => post("/products", productData),
-  updateProduct: (id, productData) => put(`/products/${id}`, productData),
-  deleteProduct: (id) => del(`/products/${id}`),
+  listProducts: (params = {}) => get("/admin/admin-products", params),
+  getProduct: (id) => get(`/admin/admin-products/${id}`),
+  createProduct: (productData) => post("/admin/admin-products", productData),
+  updateProduct: (id, productData) =>
+    put(`/admin/admin-products/${id}`, productData),
+  deleteProduct: (id) => del(`/admin/admin-products/${id}`),
 
   // ========================================
   // IMAGE UPLOAD & DELETE (Vercel Blob)

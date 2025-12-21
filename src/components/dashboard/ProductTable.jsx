@@ -148,7 +148,7 @@ export default function ProductTable({ products }) {
 
                   {/* Edit */}
                   <Link
-                    href={`/admin/products/${product._id || product.id}/edit`}
+                    href={`/admin/admin-products/${product._id || product.id}`}
                     className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-lg transition-colors"
                     title="Edit Product"
                   >

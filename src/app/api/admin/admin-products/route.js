@@ -1,64 +1,96 @@
-// app/api/admin/admin-products/route.js
 import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
-// GET /api/admin/admin-products?search=&category=&page=1&limit=50
 export async function GET(req) {
+  const startTime = Date.now();
+
   try {
     const client = await clientPromise;
     const db = client.db();
     const collection = db.collection("products");
 
-    const {
-      search = "",
-      category,
-      page = 1,
-      limit = 50,
-    } = Object.fromEntries(req.nextUrl.searchParams);
+    const params = Object.fromEntries(req.nextUrl.searchParams);
+
+    const search = (params.search || "").trim();
+    const category = (params.category || "").trim();
+    const pageNum = Math.max(1, Number(params.page || 1));
+    const limitNum = Math.min(100, Math.max(1, Number(params.limit || 50)));
+    const skip = (pageNum - 1) * limitNum;
 
     const filters = {};
-
     if (category) filters.category = category;
-    if (search) filters.name = { $regex: search, $options: "i" };
 
-    const skip = (Number(page) - 1) * Number(limit);
+    if (search) {
+      filters.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
+      ];
+    }
 
-    const products = await collection
-      .find(filters)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(Number(limit))
-      .toArray();
+    const projection = {
+      name: 1,
+      title: 1,
+      price: 1,
+      salePrice: 1,
+      image: 1,
+      thumbnail: 1,
+      category: 1,
+      stock: 1,
+      featured: 1,
+      rating: 1,
+      createdAt: 1,
+    };
 
-    const transformedProducts = products.map((product) => ({
-      ...product,
-      id: product._id.toString(),
-      _id: product._id.toString(),
-      name: product.name ?? product.title,
+    const [products, total] = await Promise.all([
+      collection
+        .find(filters, { projection })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .toArray(),
+      collection.countDocuments(filters),
+    ]);
+
+    const transformedProducts = products.map((p) => ({
+      ...p,
+      _id: p._id.toString(),
+      id: p._id.toString(),
+      name: p.name ?? p.title,
+      title: p.title ?? p.name,
     }));
 
-    const total = await collection.countDocuments(filters);
+    const ms = Date.now() - startTime;
+    if (process.env.NODE_ENV === "development") {
+      console.log(`✅ Admin products: ${products.length} in ${ms}ms`);
+    }
 
     return NextResponse.json(
       {
         products: transformedProducts,
         total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Cache-Control":
+            process.env.NODE_ENV === "production"
+              ? "private, max-age=60"
+              : "private, max-age=10",
+        },
+      }
     );
   } catch (err) {
     console.error("ADMIN PRODUCTS GET ERROR:", err);
     return NextResponse.json(
-      {
-        error: "Failed to load products",
-        details: err.message,
-      },
+      { error: "Failed to load products" },
       { status: 500 }
     );
   }
 }
 
-// POST /api/admin/admin-products
 export async function POST(req) {
   try {
     const client = await clientPromise;
@@ -67,9 +99,7 @@ export async function POST(req) {
 
     const body = await req.json();
 
-    // Accept name OR title
     const name = typeof body.name === "string" ? body.name : body.title;
-
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
         { error: "Product name is required" },
@@ -89,6 +119,7 @@ export async function POST(req) {
 
     const doc = {
       name: name.trim(),
+      title: (body.title || name).trim(),
       description: body.description ?? null,
       price,
       salePrice: body.salePrice != null ? Number(body.salePrice) : null,
@@ -117,10 +148,7 @@ export async function POST(req) {
   } catch (err) {
     console.error("ADMIN PRODUCTS POST ERROR:", err);
     return NextResponse.json(
-      {
-        error: "Failed to create product",
-        details: err.message,
-      },
+      { error: "Failed to create product" },
       { status: 500 }
     );
   }

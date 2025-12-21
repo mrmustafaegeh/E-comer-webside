@@ -17,8 +17,8 @@ import {
 const navItems = [
   { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { title: "Products", href: "/admin/admin-products", icon: Package },
-  { title: "Orders", href: "/admin/orders", icon: ShoppingCart },
-  { title: "Customers", href: "/admin/customers", icon: Users },
+  { title: "Orders", href: "/admin/order", icon: ShoppingCart },
+  { title: "Customers", href: "/admin/users", icon: Users },
   { title: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { title: "Media Library", href: "/admin/media", icon: ImageIcon },
   { title: "Settings", href: "/admin/settings", icon: Settings },

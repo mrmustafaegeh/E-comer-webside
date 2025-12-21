@@ -10,7 +10,11 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "analyze": "ANALYZE=true next build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "check:db": "node scripts/check-db.mjs",
+    "fix:images": "node scripts/fix-image-paths.mjs",
+    "setup:admin": "node scripts/setup-admin-indexes.mjs",
+    "analyze:queries": "node scripts/analyze-slow-queries.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.1",
@@ -43,6 +47,7 @@
     "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
     "recharts": "^3.6.0",
+    "sharp": "^0.34.5",
     "zod": "^4.2.1"
   },
   "devDependencies": {

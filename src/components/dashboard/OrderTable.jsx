@@ -1,4 +1,18 @@
 export default function OrderTable({ orders }) {
+  const list = Array.isArray(orders)
+    ? orders
+    : Array.isArray(orders?.orders)
+    ? orders.orders
+    : [];
+
+  if (list.length === 0) {
+    return (
+      <div className="rounded-md border border-gray-200 bg-white p-6 text-gray-600">
+        No orders found.
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto rounded-md border border-gray-200 shadow-sm">
       <table className="min-w-full bg-white">
@@ -15,28 +29,37 @@ export default function OrderTable({ orders }) {
         </thead>
 
         <tbody>
-          {orders?.map((order) => (
-            <tr key={order.id} className="border-b hover:bg-gray-50">
-              <td className="p-3">{order.id}</td>
-              <td className="p-3">{order.user?.email}</td>
-              <td className="p-3">{order.status}</td>
-              <td className="p-3">${order.total}</td>
+          {list.map((order) => {
+            const id = order?.id || order?._id;
+            const total = order?.totalPrice ?? order?.total ?? 0;
+            const itemsCount = Array.isArray(order?.items)
+              ? order.items.length
+              : Array.isArray(order?.products)
+              ? order.products.length
+              : 0;
 
-              <td className="p-3">
-                {Array.isArray(order.items) ? order.items.length : 0} items
-              </td>
+            const created = order?.createdAt ? new Date(order.createdAt) : null;
 
-              <td className="p-3">
-                {new Date(order.createdAt).toLocaleDateString()}
-              </td>
-
-              <td className="p-3 space-x-2">
-                <button className="rounded bg-blue-500 px-3 py-1 text-sm text-white">
-                  Update Status
-                </button>
-              </td>
-            </tr>
-          ))}
+            return (
+              <tr key={id} className="border-b hover:bg-gray-50">
+                <td className="p-3">{id}</td>
+                <td className="p-3">
+                  {order?.user?.email || order?.userEmail || "-"}
+                </td>
+                <td className="p-3">{order?.status || "-"}</td>
+                <td className="p-3">${Number(total).toFixed(2)}</td>
+                <td className="p-3">{itemsCount} items</td>
+                <td className="p-3">
+                  {created ? created.toLocaleDateString() : "-"}
+                </td>
+                <td className="p-3 space-x-2">
+                  <button className="rounded bg-blue-500 px-3 py-1 text-sm text-white">
+                    Update Status
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

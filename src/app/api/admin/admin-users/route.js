@@ -1,54 +1,79 @@
 import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
-
-function parseSort(sortStr) {
-  if (!sortStr) return { createdAt: -1 };
-  const dir = sortStr.startsWith("-") ? -1 : 1;
-  const field = sortStr.startsWith("-") ? sortStr.slice(1) : sortStr;
-  return { [field]: dir };
-}
+import bcrypt from "bcryptjs";
 
 export async function GET(req) {
+  const startTime = Date.now();
+
   try {
     const client = await clientPromise;
     const db = client.db();
-    const col = db.collection("orders");
+    const col = db.collection("users");
 
     const params = Object.fromEntries(req.nextUrl.searchParams);
-    const page = Number(params.page || 1);
-    const limit = Number(params.limit || 10);
-    const sort = params.sort || "-createdAt";
-    const status = params.status;
+    const page = Math.max(1, Number(params.page || 1));
+    const limit = Math.min(100, Math.max(1, Number(params.limit || 10)));
+    const search = (params.search || "").trim();
 
     const filter = {};
-    if (status) filter.status = status;
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ];
+    }
 
     const skip = (page - 1) * limit;
 
-    const orders = await col
-      .find(filter)
-      .skip(skip)
-      .limit(limit)
-      .sort(parseSort(sort))
-      .toArray();
+    // ✅ Use INCLUDE projection only (no password field included)
+    const projection = {
+      name: 1,
+      email: 1,
+      role: 1,
+      createdAt: 1,
+    };
 
-    const total = await col.countDocuments(filter);
+    const [users, total] = await Promise.all([
+      col
+        .find(filter, { projection })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray(),
+      col.countDocuments(filter),
+    ]);
+
+    const ms = Date.now() - startTime;
+    if (process.env.NODE_ENV === "development") {
+      console.log(`✅ Admin users: ${users.length} in ${ms}ms`);
+    }
 
     return NextResponse.json(
       {
-        orders: orders.map((o) => ({
-          ...o,
-          _id: o._id.toString(),
-          id: o._id.toString(),
+        users: users.map((u) => ({
+          ...u,
+          _id: u._id.toString(),
+          id: u._id.toString(),
         })),
         total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          "Cache-Control":
+            process.env.NODE_ENV === "production"
+              ? "private, max-age=60"
+              : "private, max-age=10",
+        },
+      }
     );
   } catch (err) {
-    console.error("ADMIN ORDERS GET ERROR:", err);
+    console.error("ADMIN USERS GET ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to load orders" },
+      { error: "Failed to load users", details: err.message },
       { status: 500 }
     );
   }
@@ -58,52 +83,60 @@ export async function POST(req) {
   try {
     const client = await clientPromise;
     const db = client.db();
-    const col = db.collection("orders");
+    const col = db.collection("users");
 
     const body = await req.json();
 
-    const userId = body.userId;
-    const products = body.products;
-    const totalPrice = Number(body.totalPrice);
+    const name = (body.name || "").trim();
+    const email = (body.email || "").trim().toLowerCase();
+    const password = body.password || "";
 
-    if (!userId)
+    if (!name)
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    if (!email)
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    if (!password || password.length < 6) {
       return NextResponse.json(
-        { error: "userId is required" },
+        { error: "Password must be at least 6 characters" },
         { status: 400 }
       );
-    if (!products)
+    }
+
+    const exists = await col.findOne({ email }, { projection: { _id: 1 } });
+    if (exists)
       return NextResponse.json(
-        { error: "products is required" },
-        { status: 400 }
+        { error: "Email already exists" },
+        { status: 409 }
       );
-    if (!Number.isFinite(totalPrice))
-      return NextResponse.json(
-        { error: "Valid totalPrice is required" },
-        { status: 400 }
-      );
+
+    const passwordHash = await bcrypt.hash(password, 10);
 
     const doc = {
-      userId,
-      products,
-      totalPrice,
-      status: body.status || "processing",
+      name,
+      email,
+      password: passwordHash,
+      role: body.role || "user",
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     const result = await col.insertOne(doc);
 
     return NextResponse.json(
       {
-        ...doc,
         _id: result.insertedId.toString(),
         id: result.insertedId.toString(),
+        name,
+        email,
+        role: doc.role,
+        createdAt: doc.createdAt,
       },
       { status: 201 }
     );
   } catch (err) {
-    console.error("ADMIN ORDERS POST ERROR:", err);
+    console.error("ADMIN USERS POST ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to create order" },
+      { error: "Failed to create user", details: err.message },
       { status: 500 }
     );
   }

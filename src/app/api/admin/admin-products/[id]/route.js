@@ -20,7 +20,7 @@ export async function GET(req, { params }) {
     if (!id || !ObjectId.isValid(id)) return badRequest("Invalid product ID");
 
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("ecommerce");
     const collection = db.collection("products");
 
     const product = await collection.findOne({ _id: new ObjectId(id) });

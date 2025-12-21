@@ -1,4 +1,3 @@
-// app/components/AnimatedHeroSection.js
 "use client";
 
 import AnimatedBackground from "./component/AnimatedBackground";
@@ -9,14 +8,17 @@ import {
   useTransform,
   AnimatePresence,
 } from "framer-motion";
+
 import AnimatedBadge from "./component/AnimatedBadge";
 import HeroTitle from "./component/HeroTitle";
 import CTAButtons from "./component/CtpButton";
 import StatsSection from "./component/StatsComponent";
+
 import ProductCard from "./component/ProductCard";
 import ProductIndicators from "./component/ProductIndicators";
 import FloatingBadges from "./component/FloatingBadges";
 import HeroProductSkeleton from "./component/HeroProductSkeleton";
+
 import { useHeroProducts } from "../../hooks/useHeroProducts";
 
 export default function AnimatedHeroSection() {
@@ -29,66 +31,71 @@ export default function AnimatedHeroSection() {
   const scale = useTransform(scrollYProgress, [0, 0.3], [1, 0.8]);
   const y = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
 
-  // ✅ Default fallback products (keep these enabled)
+  // ✅ demo products (same SHAPE as API)
   const defaultProducts = useMemo(
     () => [
       {
         id: "demo-1",
-        title: "Wireless Headphones",
-        price: 199.99,
-        oldPrice: 299.99,
+        title: "Wireless Headphones Pro",
+        price: "$199.99",
+        oldPrice: "$299.99",
         discount: "-33%",
         rating: 4.9,
-        image: "🎧",
+        imageUrl: null,
+        emoji: "🎧",
         gradient: "from-blue-500 to-purple-600",
       },
       {
         id: "demo-2",
-        title: "Smart Watch Pro",
-        price: 349.99,
-        oldPrice: 499.99,
+        title: "Smart Watch Ultra",
+        price: "$349.99",
+        oldPrice: "$499.99",
         discount: "-30%",
         rating: 4.8,
-        image: "⌚",
+        imageUrl: null,
+        emoji: "⌚",
         gradient: "from-purple-500 to-pink-600",
       },
       {
         id: "demo-3",
-        title: "Premium Camera",
-        price: 899.99,
-        oldPrice: 1299.99,
+        title: "Premium Camera 4K",
+        price: "$899.99",
+        oldPrice: "$1299.99",
         discount: "-31%",
         rating: 5.0,
-        image: "📷",
+        imageUrl: null,
+        emoji: "📷",
         gradient: "from-pink-500 to-orange-600",
       },
     ],
     []
   );
 
-  // ✅ Normalize fetched products so ProductCard always receives same shape
+  // ✅ Normalize API products to the SAME shape as ProductCard expects
   const normalizeHeroProducts = (arr) =>
     (arr ?? []).map((p, idx) => ({
       id: p._id || p.id || `api-${idx}`,
       title: p.title || p.name || "Untitled Product",
-      price: typeof p.price === "number" ? p.price : Number(p.price) || 0,
-      oldPrice:
-        p.oldPrice == null
-          ? null
-          : typeof p.oldPrice === "number"
-          ? p.oldPrice
-          : Number(p.oldPrice) || null,
+
+      // ✅ keep strings from API like "$199.99"
+      price: p.price ?? "",
+      oldPrice: p.oldPrice ?? null,
+
       discount: p.discount ?? null,
       rating: typeof p.rating === "number" ? p.rating : Number(p.rating) || 4.8,
-      image: p.image || "🛍️",
+
+      // ✅ IMPORTANT: correct API keys
+      imageUrl: p.imageUrl || null,
+      emoji: p.emoji || "🛍️",
+
       gradient: p.gradient || "from-slate-700 to-slate-900",
     }));
 
   // ✅ Decide what to display
   const displayProducts = useMemo(() => {
-    if (loading) return defaultProducts; // while loading: demo products
+    if (loading) return defaultProducts;
     const normalized = normalizeHeroProducts(products);
-    return normalized.length > 0 ? normalized : defaultProducts; // empty: demo
+    return normalized.length > 0 ? normalized : defaultProducts;
   }, [products, loading, defaultProducts]);
 
   // ✅ Keep activeProduct safe when list changes
@@ -105,12 +112,9 @@ export default function AnimatedHeroSection() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [displayProducts]);
+  }, [displayProducts.length]);
 
-  // ✅ Handle manual product selection
-  const handleProductSelect = (index) => {
-    setActiveProduct(index);
-  };
+  const handleProductSelect = (index) => setActiveProduct(index);
 
   const currentProduct = displayProducts[activeProduct];
 
@@ -123,7 +127,7 @@ export default function AnimatedHeroSection() {
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 min-h-screen flex items-center"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
-          {/* Left Content */}
+          {/* Left */}
           <div className="space-y-8 text-center lg:text-left">
             <AnimatedBadge />
             <HeroTitle />
@@ -131,26 +135,26 @@ export default function AnimatedHeroSection() {
             <StatsSection />
           </div>
 
-          {/* Right Content - Product Showcase */}
+          {/* Right */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.8 }}
             className="relative"
           >
-            {/* Loading State */}
+            {/* Loading */}
             {loading ? (
               <HeroProductSkeleton />
             ) : (
               <>
-                {/* Warning if API failed */}
-                {!loading && error && (
+                {/* Error Warning */}
+                {!loading && error ? (
                   <div className="mb-3 text-center lg:text-left">
                     <p className="text-sm text-yellow-400">
                       Couldn’t load hero products. Showing demo products.
                     </p>
                   </div>
-                )}
+                ) : null}
 
                 <AnimatePresence mode="wait">
                   <ProductCard
@@ -172,7 +176,7 @@ export default function AnimatedHeroSection() {
         </div>
       </motion.div>
 
-      {/* Scroll for More Content Demo */}
+      {/* Bottom demo section */}
       <div className="relative z-10 py-20 bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div

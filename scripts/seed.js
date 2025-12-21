@@ -529,7 +529,8 @@ const newProducts = [
     numReviews: 245,
     emoji: "🎧",
     category: "electronics",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/wirrless-MnXsxlsfgdhpRlrcjPY7ug2xAxts74.jpg",
     stock: 50,
     featured: true,
     isFeatured: true,
@@ -552,7 +553,8 @@ const newProducts = [
     numReviews: 189,
     emoji: "⌚",
     category: "electronics",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/smart%20watch%20-KJr0JSFqheZxqyWmMu8P66S3aV4gqe.webp",
     stock: 35,
     featured: true,
     isFeatured: true,
@@ -575,7 +577,8 @@ const newProducts = [
     numReviews: 156,
     emoji: "📷",
     category: "electronics",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/soney%20camera-43aoGLKQjpCa0RpLxrmhyqBaAhVg8F.jpg",
     stock: 20,
     featured: true,
     isFeatured: true,
@@ -597,7 +600,8 @@ const newProducts = [
     numReviews: 312,
     emoji: "🕶️",
     category: "fashion",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/glasses-ZS7FEhvU3PZGDowpGBmtIqAPjFwK5m.webp",
     stock: 100,
     featured: true,
     isFeatured: true,
@@ -620,7 +624,8 @@ const newProducts = [
     numReviews: 278,
     emoji: "🎒",
     category: "fashion",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/BackPack-w9r5BAHqeIbIpQUWrjkABZbZ978wsY.jpeg",
     stock: 75,
     featured: true,
     isFeatured: true,
@@ -643,7 +648,8 @@ const newProducts = [
     numReviews: 421,
     emoji: "👟",
     category: "sports",
-    image: null,
+    image:
+      "https://lv4ihdf4sxac4yjo.public.blob.vercel-storage.com/Adizero_EVO_SL_Shoes_Black_JP7149_HM1-L1QVQ2IQRuvbjKjebuRNEDaYgeGv5B.jpg",
     stock: 120,
     featured: false,
     isFeatured: false,

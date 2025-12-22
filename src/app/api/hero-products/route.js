@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
+export const runtime = "nodejs";
+
 function formatMoney(value) {
   const num = Number(value);
   if (!Number.isFinite(num)) return null;
@@ -43,6 +45,8 @@ export async function GET() {
         gradient: 1,
       })
       .toArray();
+
+    console.log("MONGODB_URI exists?", !!process.env.MONGODB_URI);
 
     const products = docs.map((p) => {
       const rawPrice = p.salePrice ?? p.price ?? 0;

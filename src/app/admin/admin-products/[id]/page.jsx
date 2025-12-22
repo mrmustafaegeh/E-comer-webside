@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import ProductForm from "../../../../components/dashboard/ProductForm";
+import ProductForm from "../../../../Component/dashboard/ProductForm";
 
 export default function AdminEditProductPage() {
   const params = useParams();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import OrderTable from "../../../components/dashboard/OrderTable";
+import OrderTable from "../../../Component/dashboard/OrderTable";
 
 export default function DashboardOrders() {
   const [orders, setOrders] = useState([]);

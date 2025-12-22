@@ -4,8 +4,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import ProductForm from "../../../components/dashboard/ProductForm";
-import ProtectedAdmin from "../../../components/dashboard/ProtectedAdmin";
+import ProductForm from "../../../Component/dashboard/ProductForm";
+import ProtectedAdmin from "../../../Component/dashboard/ProtectedAdmin";
 import { ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { createAdminProduct } from "../../../store/adminProductSlice";

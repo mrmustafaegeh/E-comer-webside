@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import ProductFilters from "../../../components/products/ProductFilters";
+import ProductFilters from "../../../Component/products/ProductFilters";
 import useDebouncedValue from "../../../hooks/useDebouncedValue";
 import { motion } from "framer-motion";
 

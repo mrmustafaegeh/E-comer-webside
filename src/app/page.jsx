@@ -1,12 +1,12 @@
 "use client";
 import { Suspense } from "react";
-import HeroSlider from "../components/slider/HeroSlider";
+import HeroSlider from "../Component/slider/HeroSlider";
 import dynamic from "next/dynamic";
 import { useCart } from "../hooks/useCart";
-import NewsletterSignup from "../components/features/NewLetterSignup";
+import NewsletterSignup from "../Component/features/NewLetterSignup";
 
 const FeaturedProducts = dynamic(
-  () => import("../components/products/FeaturedProducts"),
+  () => import("../Component/products/FeaturedProducts"),
   {
     ssr: false,
     loading: () => (

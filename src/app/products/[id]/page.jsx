@@ -14,7 +14,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import LoadingSpinner from "../../../components/ui/LoadingSpinner";
+import LoadingSpinner from "../../../Component/ui/LoadingSpinner";
 
 export default function ProductDetailPage() {
   const params = useParams();

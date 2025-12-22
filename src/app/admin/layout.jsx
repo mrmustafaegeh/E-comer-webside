@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminSidebar from "../../components/dashboard/Sidebar";
-import AdminHeader from "../../components/dashboard/Header";
+import AdminSidebar from "../../Component/dashboard/Sidebar";
+import AdminHeader from "../../Component/dashboard/Header";
 import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 

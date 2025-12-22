@@ -1,6 +1,6 @@
 // app/api/hero-products/route.js
 import { NextResponse } from "next/server";
-import clientPromise from "../../../lib/mongodb";
+import clientPromise from "../../../lib/MongoDB";
 
 function formatMoney(value) {
   const num = Number(value);

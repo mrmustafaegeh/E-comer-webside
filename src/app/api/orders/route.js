@@ -1,5 +1,5 @@
 // app/api/orders/route.js
-import clientPromise from "../../../lib/mongodb";
+import clientPromise from "../../../lib/MongoDB";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {

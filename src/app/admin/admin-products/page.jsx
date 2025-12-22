@@ -3,17 +3,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 import { FiPlus, FiFilter, FiSearch } from "react-icons/fi";
-import ProtectedAdmin from "../../../components/dashboard/ProtectedAdmin";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import {
-  fetchAdminProducts,
-  deleteAdminProduct,
-} from "../../../store/adminProductSlice";
-import ProductTable from "../../../components/dashboard/ProductTable";
+import { fetchAdminProducts } from "../../../store/adminProductSlice";
+import ProductTable from "../../../Component/dashboard/ProductTable";
 
 export default function AdminProductsPage() {
   const dispatch = useDispatch();

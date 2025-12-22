@@ -1,7 +1,7 @@
-import Header from "../components/layout/Header.jsx";
-import Footer from "../components/layout/Footer.jsx";
-import ScrollToTop from "../components/ui/ScrollToTop.jsx";
-import ClientTranslationProvider from "../components/ClientTranslationProvider.jsx";
+import Header from "../Component/layout/Header.jsx";
+import Footer from "../Component/layout/Footer.jsx";
+import ScrollToTop from "../Component/ui/ScrollToTop.jsx";
+import ClientTranslationProvider from "../Component/ClientTranslationProvider.jsx";
 import ReduxProvider from "./ReduxProvider.jsx";
 import { AuthProvider } from "../contexts/AuthContext.js";
 import "./globals.css";

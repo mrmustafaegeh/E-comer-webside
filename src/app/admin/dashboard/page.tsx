@@ -2,13 +2,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import StatGrid from "../../../components/dashboard/StatGrid";
-import RecentOrdersTable from "../../../components/dashboard/RecentOrdersTable";
-import QuickActions from "../../../components/dashboard/QuickActions";
-import ChartSection from "../../../components/dashboard/ChartSection";
-import ActivityFeed from "../../../components/dashboard/ActivityFeed";
-import TopProducts from "../../../components/dashboard/TopProducts";
-import LoadingSpinner from "../../../components/ui/LoadingSpinner";
+import StatGrid from "../../../Component/dashboard/StatGrid";
+import RecentOrdersTable from "../../../Component/dashboard/RecentOrdersTable";
+import QuickActions from "../../../Component/dashboard/QuickActions";
+import ChartSection from "../../../Component/dashboard/ChartSection";
+import ActivityFeed from "../../../Component/dashboard/ActivityFeed";
+import TopProducts from "../../../Component/dashboard/TopProducts";
+import LoadingSpinner from "../../../Component/ui/LoadingSpinner";
 import {
   Package,
   ShoppingCart,

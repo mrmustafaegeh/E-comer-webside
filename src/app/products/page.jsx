@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import ProductList from "../../components/products/ProductsList";
-import ProductFilters from "../../components/products/ProductFilters";
-import ProductPagination from "../../components/products/ProductPagination";
-import LoadingSpinner from "../../components/ui/LoadingSpinner";
-import EmptyState from "../../components/ui/EmptyState";
+import ProductList from "../../Component/products/ProductsList";
+import ProductFilters from "../../Component/products/ProductFilters";
+import ProductPagination from "../../Component/products/ProductPagination";
+import LoadingSpinner from "../../Component/ui/LoadingSpinner";
+import EmptyState from "../../Component/ui/EmptyState";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);

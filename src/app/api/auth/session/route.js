@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifySession } from "../../../../lib/session";
+import { verifySession } from "@/lib/session";
 
 export async function GET() {
   const session = await verifySession();

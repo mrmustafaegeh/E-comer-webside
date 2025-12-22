@@ -7,7 +7,7 @@ import {
 } from "../lib/validation";
 import { createSession, deleteSession } from "../lib/session";
 import bcrypt from "bcryptjs";
-import clientPromise from "./MongoDB"; // MongoDB connection helper
+import clientPromise from "./mongodb"; // MongoDB connection helper
 
 // ------------------------
 // Helper functions

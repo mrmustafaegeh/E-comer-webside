@@ -1,8 +1,6 @@
 // src/app/wishlist/page.jsx
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import Link from "next/link";
 import { useWishlist } from "../../hooks/useWishlist";
 

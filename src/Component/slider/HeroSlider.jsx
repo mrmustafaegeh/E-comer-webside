@@ -1,6 +1,6 @@
 "use client";
 
-import AnimatedBackground from "./component/AnimatedBackground";
+import AnimatedBackground from "./Component/AnimatedBackground";
 import { useState, useEffect, useMemo } from "react";
 import {
   motion,
@@ -9,15 +9,15 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-import AnimatedBadge from "./component/AnimatedBadge";
-import HeroTitle from "./component/HeroTitle";
-import CTAButtons from "./component/CtpButton";
-import StatsSection from "./component/StatsComponent";
+import AnimatedBadge from "./Component/AnimatedBadge";
+import HeroTitle from "./Component/HeroTitle";
+import CTAButtons from "./Component/CtpButton";
+import StatsSection from "./Component/StatsComponent";
 
-import ProductCard from "./component/ProductCard";
-import ProductIndicators from "./component/ProductIndicators";
-import FloatingBadges from "./component/FloatingBadges";
-import HeroProductSkeleton from "./component/HeroProductSkeleton";
+import ProductCard from "./Component/ProductCard";
+import ProductIndicators from "./Component/ProductIndicators";
+import FloatingBadges from "./Component/FloatingBadges";
+import HeroProductSkeleton from "./Component/HeroProductSkeleton";
 
 import { useHeroProducts } from "../../hooks/useHeroProducts";
 

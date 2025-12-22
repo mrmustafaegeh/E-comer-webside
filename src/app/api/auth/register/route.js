@@ -6,7 +6,6 @@ export async function POST(request) {
   try {
     const { email, password, name } = await request.json();
 
-    // Validate input
     if (!email || !password || !name) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -14,7 +13,6 @@ export async function POST(request) {
       );
     }
 
-    // Password length check
     if (password.length < 6) {
       return NextResponse.json(
         { error: "Password must be at least 6 characters" },
@@ -22,14 +20,11 @@ export async function POST(request) {
       );
     }
 
-    // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db(process.env.MONGODB_DB); // ✅ always same DB
     const usersCollection = db.collection("users");
 
-    // Check if user already exists
     const existingUser = await usersCollection.findOne({ email });
-
     if (existingUser) {
       return NextResponse.json(
         { error: "User already exists" },
@@ -37,10 +32,8 @@ export async function POST(request) {
       );
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const result = await usersCollection.insertOne({
       email,
       password: hashedPassword,
@@ -49,15 +42,24 @@ export async function POST(request) {
       createdAt: new Date(),
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "User created successfully",
-      userId: result.insertedId.toString(),
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "User created successfully",
+        userId: result.insertedId.toString(),
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("❌ Register error:", error);
     return NextResponse.json(
-      { error: "Registration failed. Please try again." },
+      {
+        error: "Registration failed. Please try again.",
+        details:
+          process.env.NODE_ENV === "development"
+            ? String(error?.message || error)
+            : undefined,
+      },
       { status: 500 }
     );
   }

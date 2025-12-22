@@ -5,40 +5,58 @@ import {
   RegisterSchema,
   formatZodErrors,
 } from "../lib/validation";
+
 import { createSession, deleteSession } from "../lib/session";
 import bcrypt from "bcryptjs";
-import clientPromise from "./mongodb"; // MongoDB connection helper
+import clientPromise from "./mongodb";
+
+// Use ONE database name everywhere (same locally + Vercel)
+const DB_NAME = process.env.MONGODB_DB || "ecommerce";
 
 // ------------------------
-// Helper functions
+// Helpers
 // ------------------------
+
+async function getUsersCollection() {
+  const client = await clientPromise;
+  const db = client.db(DB_NAME);
+  return db.collection("users");
+}
 
 export async function findUserByEmail(email) {
-  const client = await clientPromise;
-  const db = client.db();
-  const usersCollection = db.collection("users");
-
-  const user = await usersCollection.findOne({ email: email.toLowerCase() });
-  return user;
+  const users = await getUsersCollection();
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
+  if (!normalizedEmail) return null;
+  return users.findOne({ email: normalizedEmail });
 }
 
 export async function createUser(name, email, password) {
+  const users = await getUsersCollection();
+
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
+  const safeName = String(name || "").trim();
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const client = await clientPromise;
-  const db = client.db();
-  const usersCollection = db.collection("users");
-
   const newUser = {
-    name,
-    email: email.toLowerCase(),
+    name: safeName,
+    email: normalizedEmail,
     password: hashedPassword,
     roles: ["user"],
     createdAt: new Date(),
   };
 
-  const result = await usersCollection.insertOne(newUser);
-  return { ...newUser, id: result.insertedId.toString() };
+  const result = await users.insertOne(newUser);
+
+  return {
+    ...newUser,
+    id: result.insertedId.toString(),
+    _id: result.insertedId.toString(),
+  };
 }
 
 // ------------------------
@@ -54,18 +72,16 @@ export async function registerAction(prevState, formData) {
       confirmPassword: formData.get("confirmPassword"),
     };
 
-    // Validate input
-    const result = await RegisterSchema.safeParseAsync(data);
-    if (!result.success) {
+    const parsed = await RegisterSchema.safeParseAsync(data);
+    if (!parsed.success) {
       return {
         success: false,
-        errors: formatZodErrors(result.error),
+        errors: formatZodErrors(parsed.error),
         message: "Validation failed",
       };
     }
 
-    // Check if user exists
-    const existingUser = await findUserByEmail(result.data.email);
+    const existingUser = await findUserByEmail(parsed.data.email);
     if (existingUser) {
       return {
         success: false,
@@ -74,15 +90,13 @@ export async function registerAction(prevState, formData) {
       };
     }
 
-    // Create user in MongoDB
     const newUser = await createUser(
-      result.data.name,
-      result.data.email,
-      result.data.password
+      parsed.data.name,
+      parsed.data.email,
+      parsed.data.password
     );
 
-    // Create session
-    await createSession(newUser.id, newUser.email, ["user"]);
+    await createSession(newUser.id, newUser.email, newUser.roles || ["user"]);
 
     return {
       success: true,
@@ -91,7 +105,9 @@ export async function registerAction(prevState, formData) {
         id: newUser.id,
         name: newUser.name,
         email: newUser.email,
+        roles: newUser.roles || ["user"],
       },
+      redirect: "/dashboard",
     };
   } catch (error) {
     console.error("💥 Registration error:", error);
@@ -113,41 +129,32 @@ export async function loginAction(prevState, formData) {
       password: formData.get("password"),
     };
 
-    // Validate input
-    const result = await LoginSchema.safeParseAsync(data);
-    let test = await bcrypt.hash(result.data.password, 10);
-    console.log("result.data.password", test);
-    if (!result.success) {
+    const parsed = await LoginSchema.safeParseAsync(data);
+    if (!parsed.success) {
       return {
         success: false,
-        errors: formatZodErrors(result.error),
+        errors: formatZodErrors(parsed.error),
         message: "Validation failed. Please check your input.",
       };
     }
 
-    // Find user in MongoDB
-    const user = await findUserByEmail(result.data.email);
-    console.log("Found user:", user);
+    const user = await findUserByEmail(parsed.data.email);
+
+    // Don’t reveal which one is wrong (security)
     if (!user) {
-      return {
-        success: false,
-        message: "Invalid email or password",
-      };
+      return { success: false, message: "Invalid email or password" };
     }
 
-    // Compare password
+    // ✅ MUST be true
     const passwordMatch = await bcrypt.compare(
-      result.data.password,
+      parsed.data.password,
       user.password
     );
-    // if (!passwordMatch) {
-    //   return {
-    //     success: false,
-    //     message: "Invalid email or password",
-    //   };
-    // }
-    console.log("useer.id", user._id.toString());
-    // Create session
+
+    if (!passwordMatch) {
+      return { success: false, message: "Invalid email or password" };
+    }
+
     await createSession(
       user._id.toString(),
       user.email,
@@ -161,6 +168,7 @@ export async function loginAction(prevState, formData) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        roles: user.roles || ["user"],
       },
       redirect: "/dashboard",
     };

@@ -3,26 +3,40 @@ import { loginAction } from "@/lib/auth";
 
 export async function POST(request) {
   try {
-    console.error("Login attempt:", request);
     const body = await request.json();
 
-    // Convert body to the format loginAction expects
-
+    // This matches your current loginAction signature expectation:
+    // loginAction(_, formDataLike)
     const result = await loginAction(null, {
-      get: (key) => body[key],
+      get: (key) => body?.[key],
     });
 
-    if (!result.success) {
-      return NextResponse.json({ error: result.message }, { status: 401 });
+    if (!result?.success) {
+      return NextResponse.json(
+        { error: result?.message || "Invalid email or password" },
+        { status: 401 }
+      );
     }
 
-    // createSession() is already called inside loginAction
-    return NextResponse.json({
-      success: true,
-      user: result.user,
-    });
+    // createSession should happen inside loginAction
+    return NextResponse.json(
+      { success: true, user: result.user },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Login API error:", error);
-    return NextResponse.json({ error: "Login failed" }, { status: 500 });
+    // ✅ This is what you need to debug on Vercel
+    console.error("❌ Login API crashed:", error);
+
+    // Don't leak internal info to users in prod
+    return NextResponse.json(
+      {
+        error: "An error occurred during login",
+        details:
+          process.env.NODE_ENV === "development"
+            ? String(error?.message || error)
+            : undefined,
+      },
+      { status: 500 }
+    );
   }
 }

@@ -12,8 +12,7 @@ function notFound(message = "Product not found") {
   return NextResponse.json({ error: message }, { status: 404 });
 }
 
-// For Next.js 13.4+ with dynamic params
-export const dynamic = "force-dynamic"; // ⭐ Add this if you need dynamic params
+export const dynamic = "force-dynamic";
 
 // GET /api/admin/admin-products/[id]
 export async function GET(request) {

@@ -1,8 +1,7 @@
 import clientPromise from "../../../../lib/mongodb";
 import { NextResponse } from "next/server";
 
-// ✅ Cache for 30 seconds in development, 5 minutes in production
-export const revalidate = process.env.NODE_ENV === "production" ? 300 : 30;
+export const dynamic = "force-dynamic";
 
 export async function GET(request) {
   const startTime = Date.now();

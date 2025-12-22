@@ -1,5 +1,5 @@
 // app/api/admin/admin-products/[id]/route.js
-import clientPromise from "../../../../../lib/mongodb";
+import clientPromise from "../../../../../lib/MongoDB";
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 

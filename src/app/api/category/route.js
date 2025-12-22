@@ -4,7 +4,7 @@ import clientPromise from "@/lib/mongodb";
 export async function GET(request) {
   try {
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db(process.env.MONGODB_DB);
 
     const categories = await db
       .collection("categories")
@@ -34,7 +34,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db(process.env.MONGODB_DB);
 
     // Create slug from name
     const slug = (body.slug || body.name)

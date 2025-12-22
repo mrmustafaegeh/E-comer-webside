@@ -8,7 +8,7 @@ export async function GET(request) {
 
   try {
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db(process.env.MONGODB_DB);
     const collection = db.collection("products");
 
     const {

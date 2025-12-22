@@ -25,7 +25,7 @@ export async function GET(request) {
     if (!id || !ObjectId.isValid(id)) return badRequest("Invalid product ID");
 
     const client = await clientPromise;
-    const db = client.db("ecommerce");
+    const db = client.db(process.env.MONGODB_DB);
     const collection = db.collection("products");
 
     const product = await collection.findOne({ _id: new ObjectId(id) });

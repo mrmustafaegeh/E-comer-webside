@@ -24,7 +24,7 @@ export async function GET() {
     const client = await clientPromise;
 
     // if you already set your DB in MONGODB_URI you can do: client.db()
-    const db = client.db("ecommerce");
+    const db = client.db(process.env.MONGODB_DB);
 
     const docs = await db
       .collection("products")

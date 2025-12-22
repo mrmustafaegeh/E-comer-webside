@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
 const uri = process.env.MONGODB_URI;
-const dbName = "ecommerce"; // your DB name
 
 // --------------------
 // CATEGORIES (as you sent)
@@ -680,8 +679,8 @@ async function seed() {
     await client.connect();
     console.log("✅ Connected to MongoDB");
 
-    const db = client.db(dbName);
-    console.log("🧠 Using DB:", dbName);
+    const db = client.db(process.env.MONGODB_DBame);
+    console.log("🧠 Using DB:", process.env.MONGODB_DB);
 
     // Clear
     console.log("🗑️ Clearing existing data...");

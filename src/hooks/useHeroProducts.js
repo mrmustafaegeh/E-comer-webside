@@ -6,13 +6,13 @@ const getApiUrl = () => {
     // Client-side: use relative path for same-origin, full URL for different origin
     return process.env.NODE_ENV === "production"
       ? "/api/hero-products" // Same origin in production
-      : "http://localhost:3000/api/hero-products"; // Local development
+      : "/api/hero-products"; // Use relative path
   }
 
   // Server-side: use environment variable
   return process.env.NEXT_PUBLIC_API_URL
     ? `${process.env.NEXT_PUBLIC_API_URL}/hero-products`
-    : "http://localhost:3000/api/hero-products";
+    : "/api/hero-products";
 };
 
 export function useHeroProducts() {

@@ -1,9 +1,11 @@
+// src/app/layout.tsx
 import Header from "../Component/layout/Header.jsx";
 import Footer from "../Component/layout/Footer.jsx";
 import ScrollToTop from "../Component/ui/ScrollToTop.jsx";
 import ClientTranslationProvider from "../Component/ClientTranslationProvider.jsx";
 import ReduxProvider from "./ReduxProvider.jsx";
 import { AuthProvider } from "../contexts/AuthContext.js";
+import DeferredCSS from "../Component/ui/eferredCSS.jsx";
 import "./globals.css";
 import "./i18n.js";
 
@@ -21,6 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen w-full">
+        <DeferredCSS />
         <ReduxProvider>
           <AuthProvider>
             <ClientTranslationProvider>

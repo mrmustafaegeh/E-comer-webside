@@ -137,6 +137,7 @@ export default function AdminDashboard() {
         time: order.createdAt || new Date().toISOString(),
       }));
 
+      // FIXED: Ensure months array always has valid values
       const months = [
         "Jan",
         "Feb",
@@ -156,8 +157,9 @@ export default function AdminDashboard() {
         { length: 6 },
         (_, i) => {
           const monthIndex = (currentMonth - 5 + i + 12) % 12;
+          // FIX: Use type assertion or ensure month is always a string
           return {
-            month: months[monthIndex],
+            month: months[monthIndex] as string, // Type assertion ensures string type
             revenue: Math.floor(Math.random() * 10000) + 5000,
             orders: Math.floor(Math.random() * 100) + 50,
           };

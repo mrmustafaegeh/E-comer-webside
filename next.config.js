@@ -47,7 +47,7 @@ const nextConfig = {
   compress: true,
   experimental: {
     optimizeCss: true,
-    workerThreads: true,
+    workerThreads: false,
     optimizePackageImports: ["framer-motion", "lucide-react"],
   },
 

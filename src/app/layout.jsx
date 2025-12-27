@@ -26,8 +26,6 @@ export default function RootLayout({ children }) {
       <body className="flex flex-col min-h-screen w-full">
         <DeferredCSS />
         <ReactQueryProvider>
-          {" "}
-          {/* ✅ Add this wrapper */}
           <ReduxProvider>
             <AuthProvider>
               <ClientTranslationProvider>
@@ -38,8 +36,7 @@ export default function RootLayout({ children }) {
               </ClientTranslationProvider>
             </AuthProvider>
           </ReduxProvider>
-        </ReactQueryProvider>{" "}
-        {/* ✅ Close wrapper */}
+        </ReactQueryProvider>
       </body>
     </html>
   );

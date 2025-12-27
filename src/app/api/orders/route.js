@@ -1,11 +1,10 @@
-// app/api/orders/route.js
 import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db(process.env.MONGODB_DB);
     const col = db.collection("orders");
 
     const params = Object.fromEntries(request.nextUrl.searchParams);
@@ -34,23 +33,25 @@ export async function GET(request) {
       col.countDocuments({}),
     ]);
 
-    return NextResponse.json(
-      {
-        orders: orders.map((o) => ({
-          ...o,
-          _id: o._id.toString(),
-          id: o._id.toString(),
-        })),
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
-      {
-        status: 200,
-        headers: { "Cache-Control": "private, max-age=30" },
-      }
+    const response = NextResponse.json({
+      orders: orders.map((o) => ({
+        ...o,
+        _id: o._id.toString(),
+        id: o._id.toString(),
+      })),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
+
+    // ✅ Orders are user-specific - short private cache only
+    response.headers.set(
+      "Cache-Control",
+      "private, max-age=30, must-revalidate"
     );
+
+    return response;
   } catch (err) {
     console.error("ORDERS GET ERROR:", err);
     return NextResponse.json(
@@ -63,7 +64,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db(process.env.MONGODB_DB);
     const col = db.collection("orders");
 
     const body = await request.json();

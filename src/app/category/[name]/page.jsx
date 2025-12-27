@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import ProductFilters from "../../../Component/products/ProductFilters";
 import useDebouncedValue from "../../../hooks/useDebouncedValue";
-import { motion } from "framer-motion";
+import { get } from "../../../services/api"; // Import your API service
 
 export default function CategoryPage({ params }) {
   const categoryName = decodeURIComponent(params.name);
@@ -32,18 +34,19 @@ export default function CategoryPage({ params }) {
   // Debounce search
   const debouncedSearch = useDebouncedValue(appliedFilters.search, 450);
 
-  // Build query
-  const queryString = useMemo(() => {
-    const sp = new URLSearchParams();
-    sp.set("page", String(meta.page));
-    sp.set("limit", String(meta.limit));
+  // Build params object
+  const queryParams = useMemo(() => {
+    const params = {
+      page: String(meta.page),
+      limit: String(meta.limit),
+    };
 
-    if (appliedFilters.category) sp.set("category", appliedFilters.category);
-    if (debouncedSearch) sp.set("search", debouncedSearch);
-    if (appliedFilters.minPrice) sp.set("minPrice", appliedFilters.minPrice);
-    if (appliedFilters.maxPrice) sp.set("maxPrice", appliedFilters.maxPrice);
+    if (appliedFilters.category) params.category = appliedFilters.category;
+    if (debouncedSearch) params.search = debouncedSearch;
+    if (appliedFilters.minPrice) params.minPrice = appliedFilters.minPrice;
+    if (appliedFilters.maxPrice) params.maxPrice = appliedFilters.maxPrice;
 
-    return sp.toString();
+    return params;
   }, [
     appliedFilters.category,
     appliedFilters.minPrice,
@@ -60,12 +63,8 @@ export default function CategoryPage({ params }) {
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/products?${queryString}`, {
-          cache: "no-store",
-        });
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data?.error || "Failed");
+        // Use the API service - it handles the /api prefix correctly
+        const data = await get("products", queryParams);
 
         if (!cancelled) {
           setProducts(data.products || []);
@@ -87,7 +86,7 @@ export default function CategoryPage({ params }) {
     return () => {
       cancelled = true;
     };
-  }, [queryString]);
+  }, [queryParams]);
 
   // Sync category when route changes
   useEffect(() => {
@@ -180,25 +179,26 @@ export default function CategoryPage({ params }) {
             >
               {products.map((product, idx) => (
                 <motion.div
-                  key={product.id}
+                  key={product.id || product._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                 >
                   <Link
-                    href={`/products/${product.id}`}
+                    href={`/products/${product.id || product._id}`}
                     className="group block bg-white p-4 border border-gray-200 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden bg-gray-100">
-                      <img
+                      <Image
                         src={
                           product.image ||
                           product.thumbnail ||
                           "/placeholder.png"
                         }
-                        alt={product.title}
-                        loading="lazy"
-                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                        alt={product.title || product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-contain group-hover:scale-110 transition-transform duration-300"
                       />
                       {product.discount && (
                         <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -208,12 +208,15 @@ export default function CategoryPage({ params }) {
                     </div>
 
                     <h2 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                      {product.title}
+                      {product.title || product.name}
                     </h2>
 
                     <div className="flex items-center gap-2 mb-2">
                       <p className="text-blue-600 font-bold text-xl">
-                        ${product.salePrice ?? product.price}
+                        $
+                        {product.salePrice ||
+                          product.offerPrice ||
+                          product.price}
                       </p>
                       {product.oldPrice && (
                         <p className="text-gray-400 text-sm line-through">

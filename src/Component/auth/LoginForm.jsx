@@ -1,29 +1,34 @@
+// app/auth/login/page.jsx
 "use client";
 
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { LoginSchema } from "../../lib/validation";
+import { useState } from "react";
+
 export default function LoginPage() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm({
     defaultValues: { email: "mr.mustafaegeh@gmail.com" },
     resolver: zodResolver(LoginSchema),
   });
 
   const router = useRouter();
-  const { refreshUser } = useAuth(); // ✅ Make sure to get refreshUser
+  const { refreshUser } = useAuth();
+  const [loginError, setLoginError] = useState("");
 
   async function onSubmit(data) {
     try {
+      setLoginError("");
+
       const response = await fetch("/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
@@ -31,20 +36,20 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        // Display backend error on email field
-        setError("email", { message: result.error || "Login failed" });
+        setLoginError(result.error || "Login failed");
         return;
       }
 
-      // Refresh user context and redirect
-      await refreshUser({
-        email: data.email,
-        password: data.password,
-      });
-      router.push("/admin/dashboard");
+      if (result.success) {
+        // Refresh user context (will fetch from /api/auth/session)
+        await refreshUser();
+        // Redirect to dashboard
+        router.push("/admin/dashboard");
+        router.refresh(); // Refresh server components
+      }
     } catch (error) {
       console.error("Login error:", error);
-      setError("root", { message: "Something went wrong" });
+      setLoginError("Something went wrong. Please try again.");
     }
   }
 
@@ -52,6 +57,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center">
       <form className="w-full max-w-md p-6" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-2xl font-bold mb-6">Login</h1>
+
+        {loginError && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {loginError}
+          </div>
+        )}
 
         <div className="mb-4">
           <label className="block mb-2">Email</label>
@@ -88,10 +99,6 @@ export default function LoginPage() {
         >
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
-
-        {errors.root && (
-          <div className="text-red-500 text-sm mt-4">{errors.root.message}</div>
-        )}
       </form>
     </div>
   );

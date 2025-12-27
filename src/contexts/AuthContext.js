@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import { get, post } from "@/services/api";
 
 const AuthContext = createContext({
   user: null,
@@ -13,37 +20,35 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUser = async (user) => {
+  const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch("/api/auth/session");
-      if (!res.ok) {
-        setUser(null);
-      } else {
-        const data = await res.json();
-        setUser(data.user || null);
-      }
+      const data = await get("/api/auth/session");
+      setUser(data?.user || null);
     } catch (err) {
+      console.error("Failed to fetch user session:", err);
       setUser(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
-  const refreshUser = async (user) => {
+  const refreshUser = async () => {
     setLoading(true);
-    await fetchUser(user);
+    await fetchUser();
   };
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await post("/api/auth/logout", {});
       setUser(null);
     } catch (err) {
-      console.error(err);
+      console.error("Logout failed:", err);
+      // Still clear user on client side
+      setUser(null);
     }
   };
 
@@ -55,5 +60,9 @@ export function AuthProvider({ children }) {
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
 }

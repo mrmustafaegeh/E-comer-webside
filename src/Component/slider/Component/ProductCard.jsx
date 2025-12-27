@@ -2,6 +2,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function ProductCard({ product }) {
   if (!product) return null;
@@ -58,11 +59,16 @@ export default function ProductCard({ product }) {
           className="aspect-square rounded-xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-700 mb-6 flex items-center justify-center"
         >
           {isImageUrl ? (
-            <img
+            <Image
               src={imageSrc}
               alt={product.title || "Product"}
               className="w-full h-full object-cover"
-              loading="lazy"
+              priority
+              fetchPriority="high"
+              width={528}
+              height={528}
+              quality={85}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <div className="text-9xl">{fallbackEmoji || "✨"}</div>

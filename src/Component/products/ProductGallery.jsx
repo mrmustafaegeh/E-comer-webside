@@ -1,6 +1,7 @@
 // src/components/products/ProductGallery.jsx
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 export default function ProductGallery({ images = [], alt = "" }) {
   // images: array of image urls. FakeStore uses single `image` string; to support thumbnails we accept array fallback.
@@ -10,7 +11,7 @@ export default function ProductGallery({ images = [], alt = "" }) {
   return (
     <div className="space-y-4">
       <div className="bg-white rounded-lg shadow p-4 flex items-center justify-center overflow-hidden">
-        <img
+        <Image
           src={current}
           alt={alt}
           className="max-h-[520px] object-contain transition-transform duration-200 hover:scale-105"
@@ -27,7 +28,7 @@ export default function ProductGallery({ images = [], alt = "" }) {
                 current === img ? "ring-2 ring-blue-500" : ""
               }`}
             >
-              <img
+              <Image
                 src={img}
                 alt={`thumb-${i}`}
                 className="w-full h-full object-contain"

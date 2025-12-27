@@ -4,6 +4,7 @@
 import { useState, useRef } from "react";
 import { Upload, X, CheckCircle } from "lucide-react";
 import React from "react";
+import Image from "next/image";
 
 interface UploadResponse {
   url: string;
@@ -155,7 +156,7 @@ export default function ImageUploader() {
           {preview ? (
             <div className="space-y-4">
               <div className="relative mx-auto max-w-xs h-48">
-                <img
+                <Image
                   src={preview}
                   alt="Preview"
                   className="w-full h-full object-contain rounded"

@@ -2,7 +2,12 @@ import axios from "axios";
 
 // Get the correct API URL based on environment
 const getApiBaseUrl = () => {
-  // Priority: Environment variable -> Production URL -> Localhost
+  // For Next.js API routes, just use /api (relative path)
+  if (typeof window !== "undefined") {
+    return "/api"; // Client-side: always use relative path
+  }
+
+  // Server-side
   return (
     process.env.NEXT_PUBLIC_API_URL ||
     (process.env.NODE_ENV === "production"
@@ -12,6 +17,10 @@ const getApiBaseUrl = () => {
 };
 
 const getBackendBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    return ""; // Client-side: use relative paths
+  }
+
   return (
     process.env.NEXT_PUBLIC_BACKEND_URL ||
     (process.env.NODE_ENV === "production"
@@ -46,12 +55,12 @@ backend.interceptors.request.use(
 
 // Second instance - for internal Next.js API routes
 const api = axios.create({
-  baseURL: getApiBaseUrl(),
+  baseURL: getApiBaseUrl(), // This is already /api
   headers: {
     "Content-Type": "application/json",
     "X-Environment": process.env.NODE_ENV || "development",
   },
-  timeout: 10000, // 10 second timeout
+  timeout: 10000,
 });
 
 api.interceptors.request.use(
@@ -104,7 +113,6 @@ export const handleRequest = async (request) => {
       environment: process.env.NODE_ENV,
     });
 
-    // Return user-friendly error message
     throw (
       error.response?.data || {
         message: "Something went wrong. Please try again.",
@@ -114,9 +122,10 @@ export const handleRequest = async (request) => {
   }
 };
 
-// Helper methods for internal API
+// BETTER: Keep slashes, remove the cleaning
 export const get = async (url, params = {}) => {
   try {
+    // Don't clean the URL - just use it as-is
     const res = await api.get(url, { params });
     return res.data;
   } catch (error) {
@@ -181,19 +190,18 @@ export const del = async (url, data = {}) => {
     );
   }
 };
-
 // Product API methods
 export const productAPI = {
-  getFeaturedProducts: async () => get("/products/featured"),
+  getFeaturedProducts: async () => get("/products/featured"), // ✅ Add leading slash
   getProductById: async (id) => get(`/products/${id}`),
-  getProducts: async (params) => get("/products", params),
+  getProducts: async (params) => get("/products", params), // ✅ Add leading slash
   getCategories: async () => {
     try {
-      return await get("/categories");
+      return await get("/category"); // ✅ Add leading slash
     } catch (error) {
-      // Fallback to extracting from products
-      const products = await get("/products");
-      if (products && Array.isArray(products)) {
+      const response = await get("/products");
+      const products = response.products || response || [];
+      if (Array.isArray(products)) {
         const categories = [
           ...new Set(products.map((p) => p.category).filter(Boolean)),
         ];

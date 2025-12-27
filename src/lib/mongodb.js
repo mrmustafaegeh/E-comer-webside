@@ -7,8 +7,6 @@ const options = {
   maxIdleTimeMS: 30000,
   serverSelectionTimeoutMS: 5000, // ✅ Fail fast if DB is down
   socketTimeoutMS: 45000,
-  useUnifiedTopology: true, // Fix deprecation warning
-  useNewUrlParser: true,
 };
 
 let client;

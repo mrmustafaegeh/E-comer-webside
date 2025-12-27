@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
@@ -112,11 +113,14 @@ export default function FeaturedProducts() {
         >
           {/* Product Image */}
           <div className="relative overflow-hidden bg-gray-50 aspect-square">
-            <img
+            <Image
+              width={528} // ← ADD: original size
+              height={528} // ← ADD: original size
+              quality={85} // ← ADD: compression quality
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               src={product.image || "/images/default-product.png"}
               alt={product.title}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              loading="lazy"
             />
 
             {/* Badges */}

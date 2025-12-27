@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 import withBundleAnalyzer from "@next/bundle-analyzer";
-import Critters from "critters";
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
@@ -37,6 +36,9 @@ const nextConfig = {
       },
     ],
     formats: ["image/webp", "image/avif"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    qualities: [75, 85], // ✅ Add this line
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
@@ -44,15 +46,24 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   experimental: {
-    optimizeCss: false,
+    optimizeCss: true,
+    workerThreads: true,
     optimizePackageImports: ["framer-motion", "lucide-react"],
   },
 
-  // ADD CSS OPTIMIZATION
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/image/:path*",
         headers: [
           {
             key: "Cache-Control",
@@ -64,20 +75,6 @@ const nextConfig = {
   },
 
   webpack: (config, { isServer, dev }) => {
-    // CSS optimization for production only
-    if (!isServer && !dev) {
-      const CrittersPlugin = new Critters({
-        preload: "swap",
-        pruneSource: true,
-        reduceInlineStyles: false,
-        logLevel: "warn",
-      });
-
-      config.plugins = config.plugins || [];
-      config.plugins.push(CrittersPlugin);
-    }
-
-    // Remove polyfills for modern browsers
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,

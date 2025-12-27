@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 
 const secretString = process.env.JWT_SECRET;
 if (!secretString) {
-  // This will show in Vercel logs if you forgot env var
   console.error("❌ Missing JWT_SECRET env var");
 }
 const secret = new TextEncoder().encode(
@@ -20,25 +19,37 @@ export const encrypt = async (payload) => {
 };
 
 export const createSession = async (userId, email, roles = []) => {
-  const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7; // 7 days
-  const token = await encrypt({ userId, email, roles, expiresAt });
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7); // 7 days from now
+  const token = await encrypt({
+    userId,
+    email,
+    roles,
+    expiresAt: expiresAt.getTime(),
+  });
 
-  cookies().set("session", token, {
+  // ✅ In Next.js 15+, cookies() is asynchronous and must be awaited
+  const cookieStore = await cookies();
+
+  cookieStore.set("session", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // ✅ good default when same domain (your vercel site)
+    sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    expires: expiresAt, // Set explicit browser expiration
   });
 };
 
 export const verifySession = async () => {
-  const token = cookies().get("session")?.value;
+  // ✅ Must await cookies() before using .get()
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+
   if (!token) return null;
 
   try {
     const { payload } = await jwtVerify(token, secret);
 
+    // Validate expiration manually if stored in payload
     if (payload?.expiresAt && payload.expiresAt < Date.now()) {
       return null;
     }
@@ -51,7 +62,9 @@ export const verifySession = async () => {
 };
 
 export const deleteSession = async () => {
-  cookies().delete("session");
+  // ✅ Must await cookies() before using .delete()
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
 };
 
 export const getCurrentUser = async () => {

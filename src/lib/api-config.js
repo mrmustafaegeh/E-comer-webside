@@ -32,8 +32,8 @@ export const apiConfig = {
     },
     admin: {
       base: "/admin",
-      products: "/admin/products",
-      users: "/admin/users",
+      products: "/admin/admin-products",
+      users: "/admin/admin-users",
     },
   },
 

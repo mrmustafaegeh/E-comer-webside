@@ -1,4 +1,3 @@
-// app/api/hero-products/route.js
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
@@ -20,10 +19,10 @@ function calcDiscount(price, oldPrice) {
 }
 
 export async function GET() {
+  const startTime = Date.now();
+
   try {
     const client = await clientPromise;
-
-    // if you already set your DB in MONGODB_URI you can do: client.db()
     const db = client.db(process.env.MONGODB_DB);
 
     const docs = await db
@@ -46,35 +45,48 @@ export async function GET() {
       })
       .toArray();
 
-    console.log("MONGODB_URI exists?", !!process.env.MONGODB_URI);
-
     const products = docs.map((p) => {
       const rawPrice = p.salePrice ?? p.price ?? 0;
       const rawOld = p.oldPrice ?? null;
 
       const price = formatMoney(rawPrice) ?? "$0.00";
-      const oldPrice = formatMoney(rawOld); // can be null
+      const oldPrice = formatMoney(rawOld);
 
       const discount =
         p.discount || (oldPrice ? calcDiscount(rawPrice, rawOld) : null) || "";
 
       return {
         id: p._id.toString(),
+        _id: p._id.toString(),
         title: p.title || p.name || "Untitled",
         price,
-        oldPrice, // null allowed
+        offerPrice: rawPrice, // ✅ Add for ProductCard compatibility
+        oldPrice,
         discount,
         rating: Number.isFinite(Number(p.rating)) ? Number(p.rating) : 4.5,
-
-        // card uses both: `imageUrl` (real image) and `emoji` fallback
+        image: p.thumbnail || p.image || null,
         imageUrl: p.thumbnail || p.image || null,
         emoji: p.emoji || null,
-
         gradient: p.gradient || "from-blue-500 to-purple-600",
       };
     });
 
-    return NextResponse.json({ success: true, products });
+    const ms = Date.now() - startTime;
+    if (process.env.NODE_ENV === "development") {
+      console.log(`🖼️ Hero products: ${products.length} in ${ms}ms`);
+    }
+
+    const response = NextResponse.json({ success: true, products });
+
+    // ✅ Hero products cache for 10 minutes
+    response.headers.set(
+      "Cache-Control",
+      process.env.NODE_ENV === "production"
+        ? "public, s-maxage=600, stale-while-revalidate=1200" // 10min cache, 20min stale
+        : "private, max-age=60"
+    );
+
+    return response;
   } catch (error) {
     console.error("Hero products API error:", error);
     return NextResponse.json(

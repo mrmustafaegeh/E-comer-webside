@@ -1,24 +1,13 @@
-import { handleRequest, get, productAPI } from "./api";
-
-// Helper function to get API base URL for debugging
-const getApiUrl = () => {
-  return (
-    process.env.NEXT_PUBLIC_API_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://e-comer-webside-1bo2.vercel.app/api"
-      : "http://localhost:3000/api")
-  );
-};
+import { get } from "./api";
 
 export const productService = {
   // Get all products
   getProducts: async (params = {}) => {
     try {
-      console.log(`🛒 Fetching products from: ${getApiUrl()}/products`);
-      return await get("/products", params);
+      console.log("🛒 Fetching products...");
+      return await get("products", params); // No leading slash, no /api prefix
     } catch (error) {
       console.error("Error fetching products:", error);
-      // Return empty data structure to prevent app crashes
       return {
         products: [],
         total: 0,
@@ -31,10 +20,8 @@ export const productService = {
   // Get single product
   getProduct: async (id) => {
     try {
-      console.log(
-        `📦 Fetching product ${id} from: ${getApiUrl()}/products/${id}`
-      );
-      return await get(`/products/${id}`);
+      console.log(`📦 Fetching product ${id}...`);
+      return await get(`products/${id}`);
     } catch (error) {
       console.error(`Error fetching product ${id}:`, error);
       throw error;
@@ -44,21 +31,20 @@ export const productService = {
   // Get categories
   getCategories: async () => {
     try {
-      console.log(`📂 Fetching categories from: ${getApiUrl()}/categories`);
+      console.log("📂 Fetching categories...");
+
       // Try dedicated categories endpoint first
       try {
-        const categories = await get("/categories");
+        const categories = await get("category"); // Your API uses /api/category
         if (categories && Array.isArray(categories)) {
           return categories;
         }
       } catch (categoriesError) {
-        console.log(
-          "Categories endpoint not available, extracting from products..."
-        );
+        console.log("Categories endpoint error, extracting from products...");
       }
 
       // Fallback: extract from products
-      const response = await get("/products");
+      const response = await get("products");
       const products = response.products || response || [];
 
       if (Array.isArray(products)) {
@@ -82,10 +68,8 @@ export const productService = {
   // Get products by category
   getProductsByCategory: async (category) => {
     try {
-      console.log(
-        `🏷️ Fetching products in category "${category}" from: ${getApiUrl()}/products`
-      );
-      const response = await get("/products", { category });
+      console.log(`🏷️ Fetching products in category "${category}"...`);
+      const response = await get("products", { category });
       const products = response.products || response || [];
 
       if (category && Array.isArray(products)) {
@@ -105,20 +89,20 @@ export const productService = {
   // Featured products
   async getFeaturedProducts() {
     try {
-      console.log(
-        `⭐ Fetching featured products from: ${getApiUrl()}/featured`
-      );
+      console.log("⭐ Fetching featured products...");
 
-      // Try featured endpoint first
-      const featured = await get("/featured");
-      if (featured && Array.isArray(featured)) {
-        return featured;
+      // Try hero-products endpoint first
+      try {
+        const response = await get("hero-products");
+        if (response.success && Array.isArray(response.products)) {
+          return response.products;
+        }
+      } catch (heroError) {
+        console.log("Hero products endpoint error, trying fallback...");
       }
 
       // Fallback: fetch all and filter
-      console.log(
-        "Featured endpoint not found, filtering from all products..."
-      );
+      console.log("Filtering from all products...");
       const response = await this.getProducts();
       const allProducts = response.products || response || [];
 
@@ -129,14 +113,12 @@ export const productService = {
 
       // Filter featured products
       const featuredProducts = allProducts
-        .filter((p) => p.featured === true || p.featured === "true")
+        .filter((p) => p.featured === true || p.isFeatured === true)
         .slice(0, 4);
 
       return featuredProducts;
     } catch (error) {
       console.error("Featured products error:", error);
-
-      // Ultimate fallback: return empty array
       return [];
     }
   },
@@ -144,8 +126,10 @@ export const productService = {
   // Search products
   searchProducts: async (query, params = {}) => {
     try {
-      const allParams = { ...params, q: query };
-      return await get("/products/search", allParams);
+      console.log(`🔍 Searching for "${query}"...`);
+      const allParams = { ...params, search: query }; // Your API uses "search" not "q"
+      const response = await get("products", allParams);
+      return response.products || response || [];
     } catch (error) {
       console.error("Search error:", error);
 
@@ -158,6 +142,7 @@ export const productService = {
         return products.filter(
           (p) =>
             (p.title && p.title.toLowerCase().includes(searchTerm)) ||
+            (p.name && p.name.toLowerCase().includes(searchTerm)) ||
             (p.description &&
               p.description.toLowerCase().includes(searchTerm)) ||
             (p.category && p.category.toLowerCase().includes(searchTerm))

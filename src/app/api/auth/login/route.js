@@ -1,36 +1,74 @@
+// app/api/auth/login/route.js
 import { NextResponse } from "next/server";
-import { loginAction } from "@/lib/auth";
+import clientPromise from "@/lib/mongodb";
+import bcrypt from "bcryptjs";
+import { createSession } from "@/lib/session";
 
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const { email, password } = await request.json();
 
-    // This matches your current loginAction signature expectation:
-    // loginAction(_, formDataLike)
-    const result = await loginAction(null, {
-      get: (key) => body?.[key],
-    });
-
-    if (!result?.success) {
+    if (!email || !password) {
       return NextResponse.json(
-        { error: result?.message || "Invalid email or password" },
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    const usersCollection = db.collection("users");
+
+    // Normalize email (case-insensitive)
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const user = await usersCollection.findOne({ email: normalizedEmail });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
 
-    // createSession should happen inside loginAction
+    // Check password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    // Create session cookie (NOT token cookie)
+    await createSession(
+      user._id.toString(),
+      user.email,
+      user.roles || ["user"]
+    );
+
+    // Prepare user response
+    const userResponse = {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      roles: user.roles || ["user"],
+      createdAt: user.createdAt,
+    };
+
     return NextResponse.json(
-      { success: true, user: result.user },
+      {
+        success: true,
+        message: "Login successful",
+        user: userResponse,
+      },
       { status: 200 }
     );
   } catch (error) {
-    // ✅ This is what you need to debug on Vercel
-    console.error("❌ Login API crashed:", error);
-
-    // Don't leak internal info to users in prod
+    console.error("❌ Login error:", error);
     return NextResponse.json(
       {
-        error: "An error occurred during login",
+        error: "Login failed. Please try again.",
         details:
           process.env.NODE_ENV === "development"
             ? String(error?.message || error)

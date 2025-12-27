@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useWishlist } from "../../hooks/useWishlist";
+import Image from "next/image";
 
 export default function WishlistPage() {
   const wishlist = useWishlist?.() || {};
@@ -22,10 +23,13 @@ export default function WishlistPage() {
         {items.map((p) => (
           <div key={p.id} className="border p-4 rounded">
             <Link href={`/products/${p.id}`}>
-              <img
+              <Image
                 src={p.image || "/placeholder.png"}
                 alt={p.title || "Product"}
-                loading="lazy"
+                width={528} // ← ADD: original size
+                height={528} // ← ADD: original size
+                quality={85} // ← ADD: compression quality
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="w-full h-40 object-contain mb-2"
               />
               <h3 className="font-semibold">{p.title}</h3>

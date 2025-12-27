@@ -1,10 +1,9 @@
 // src/components/admin/ProductForm.tsx
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Image from "next/image";
 import {
   X,
   Upload,
@@ -52,16 +51,16 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: initialValues.title || "",
-      price: initialValues.price || 0,
-      offerPrice: initialValues.offerPrice || 0,
-      description: initialValues.description || "",
-      category: initialValues.category || "",
-      image: initialValues.image || "",
-      stock: initialValues.stock || 0,
-      featured: initialValues.featured || false,
-      tags: initialValues.tags || "",
-      sku: initialValues.sku || `SKU-${Date.now()}`,
+      title: "",
+      price: 0,
+      offerPrice: 0,
+      description: "",
+      category: "",
+      image: "",
+      stock: 0,
+      featured: false,
+      tags: "",
+      sku: `SKU-${Date.now()}`,
     },
     mode: "onChange",
   });
@@ -70,6 +69,7 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
   const price = watch("price");
   const offerPrice = watch("offerPrice");
   const featured = watch("featured");
+  const description = watch("description");
 
   // Calculate discount percentage
   const discountPercentage =
@@ -79,18 +79,27 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
 
   // Update preview when image URL changes
   useEffect(() => {
-    if (imageUrl) {
+    if (imageUrl && imageUrl !== previewUrl) {
       setPreviewUrl(imageUrl);
     }
-  }, [imageUrl]);
+  }, [imageUrl, previewUrl]);
 
-  // Initialize form with values if editing
+  // Initialize form with values if editing - FIXED: Only run once when initialValues.id changes
   useEffect(() => {
     if (initialValues.id) {
       reset(initialValues);
       setOldImageUrl(initialValues.image || "");
     }
-  }, [initialValues, reset]);
+  }, [initialValues.id]); // Only depend on ID, not the entire initialValues object
+
+  // Generate SKU function
+  const generateSKU = useCallback(() => {
+    const sku = `PROD-${Date.now()}-${Math.random()
+      .toString(36)
+      .substr(2, 4)
+      .toUpperCase()}`;
+    setValue("sku", sku, { shouldValidate: true });
+  }, [setValue]);
 
   /**
    * Handle file selection and upload to Vercel Blob
@@ -115,7 +124,7 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
     setUploadError("");
 
     try {
-      // Create preview immediately
+      // Create preview immediately with cleanup
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result);
@@ -197,17 +206,6 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
     // Reset file input
     const fileInput = document.querySelector('input[type="file"]');
     if (fileInput) fileInput.value = "";
-  };
-
-  /**
-   * Generate SKU
-   */
-  const generateSKU = () => {
-    const sku = `PROD-${Date.now()}-${Math.random()
-      .toString(36)
-      .substr(2, 4)
-      .toUpperCase()}`;
-    setValue("sku", sku);
   };
 
   /**
@@ -375,7 +373,7 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
             </p>
           )}
           <span className="text-xs text-gray-500">
-            {watch("description")?.length || 0}/1000 characters
+            {description?.length || 0}/1000 characters
           </span>
         </div>
       </div>
@@ -392,7 +390,11 @@ export default function ProductForm({ initialValues = {}, onSaved }) {
           {previewUrl ? (
             <div className="relative w-full max-w-md group">
               <div className="relative w-full h-64 border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-50">
-                <img
+                <Image
+                  width={528} // ← ADD: original size
+                  height={528} // ← ADD: original size
+                  quality={85} // ← ADD: compression quality
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={previewUrl}
                   alt="Product preview"
                   className="w-full h-full object-contain"

@@ -5,6 +5,7 @@ import { useCart } from "../../hooks/useCart";
 import { useWishlist } from "../../hooks/useWishlist";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function ProductCard({ product }) {
   const router = useRouter();
@@ -15,18 +16,16 @@ export default function ProductCard({ product }) {
   const safeWishlist = wishlistItems ?? [];
   const isWishlisted = safeWishlist.some((item) => item._id === product._id);
 
-  // ProductCard.jsx - Update handleAddToCart
   const handleAddToCart = async (e) => {
     e.stopPropagation();
     setIsAdding(true);
 
-    // Transform product to match cart expectations
     const cartProduct = {
       ...product,
-      id: product._id, // Map _id to id
-      name: product.title, // Map title to name
-      price: product.offerPrice || product.price, // Use offer price if available
-      qty: 1, // Initial quantity
+      id: product._id,
+      name: product.title,
+      price: product.offerPrice || product.price,
+      qty: 1,
     };
 
     await addToCart(cartProduct);
@@ -49,13 +48,17 @@ export default function ProductCard({ product }) {
     >
       {/* Image Container */}
       <div className="relative overflow-hidden bg-gray-50 aspect-square">
-        <img
+        <Image
           src={product.image || "/images/default-product.png"}
           alt={product.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          quality={75} // ✅ Use 75 instead of 85
           loading="lazy"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2YzZjRmNiIvPjwvc3ZnPg=="
         />
-
         {/* Badges */}
         <div className="absolute top-3 left-3 right-3 flex justify-between items-start gap-2">
           {discount > 0 && (
@@ -70,7 +73,6 @@ export default function ProductCard({ product }) {
             </span>
           )}
         </div>
-
         {/* Wishlist Button */}
         <button
           onClick={handleToggleWishlist}
@@ -82,7 +84,6 @@ export default function ProductCard({ product }) {
         >
           <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
         </button>
-
         {/* Quick Add Overlay */}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
           <button

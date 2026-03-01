@@ -125,11 +125,12 @@ export const handleRequest = async (request) => {
   }
 };
 
-// BETTER: Keep slashes, remove the cleaning
+// Helper to clean URL for axios to ensure baseURL is always used
+const cleanUrl = (url) => (url.startsWith("/") ? url.substring(1) : url);
+
 export const get = async (url, params = {}) => {
   try {
-    // Don't clean the URL - just use it as-is
-    const res = await api.get(url, { params });
+    const res = await api.get(cleanUrl(url), { params });
     return res.data;
   } catch (error) {
     console.error(`GET ${url} error:`, {
@@ -149,7 +150,7 @@ export const get = async (url, params = {}) => {
 
 export const post = async (url, data = {}) => {
   try {
-    const res = await api.post(url, data);
+    const res = await api.post(cleanUrl(url), data);
     return res.data;
   } catch (error) {
     console.error(`POST ${url} error:`, error.response?.data || error.message);
@@ -164,7 +165,7 @@ export const post = async (url, data = {}) => {
 
 export const put = async (url, data = {}) => {
   try {
-    const res = await api.put(url, data);
+    const res = await api.put(cleanUrl(url), data);
     return res.data;
   } catch (error) {
     console.error(`PUT ${url} error:`, error.response?.data || error.message);
@@ -179,7 +180,7 @@ export const put = async (url, data = {}) => {
 
 export const del = async (url, data = {}) => {
   try {
-    const res = await api.delete(url, { data });
+    const res = await api.delete(cleanUrl(url), { data });
     return res.data;
   } catch (error) {
     console.error(

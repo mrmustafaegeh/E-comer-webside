@@ -34,40 +34,41 @@ const Footer = () => {
   };
 
   return (
-    <footer className="mt-auto bg-gray-50 border-t border-gray-100 text-gray-900">
-      {/* Top Decoration Line */}
-      <div className="h-1 w-full bg-black " />
+    <footer className="mt-auto bg-black border-t border-white/10 text-white relative overflow-hidden pb-12 pt-24">
+      {/* Background Noise Overlay */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
 
-      <div className="container mx-auto px-4 pt-16 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-24">
+          
           {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-5 space-y-12">
             <Link href="/" className="flex items-center group">
-              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center mr-3 text-white font-bold group-hover:bg-blue-600 transition-colors">
-                QC
+              <div className="w-14 h-14 bg-white rounded-none flex items-center justify-center mr-5 shadow-2xl transition-all duration-700 group-hover:bg-black group-hover:ring-1 group-hover:ring-white">
+                <span className="text-black font-heading font-black tracking-tighter text-2xl group-hover:text-white transition-colors duration-700 italic">QC</span>
               </div>
-              <span className="text-2xl font-bold text-gray-900 tracking-tight group-hover:text-blue-600 transition-colors">
-                {safeTranslate("common.siteTitle", "QuickCart")}
+              <span className="text-3xl font-heading font-black text-white tracking-tighter uppercase italic transition-transform duration-700 group-hover:translate-x-3">
+                {safeTranslate("common.siteTitle", "QUICKCART")}
               </span>
             </Link>
             
-            <p className="text-gray-500 leading-relaxed max-w-sm">
-              {safeTranslate(
+            <p className="text-gray-700 text-[11px] font-mono font-black tracking-[0.4em] uppercase leading-loose max-w-md italic">
+              // {safeTranslate(
                 "footer.brandDescription",
-                "Your premium destination for quality electronics and lifestyle essentials. Experience shopping reimagined."
+                "Your premium destination for quality electronics and lifestyle essentials. Experience shopping reimagined through the lens of monochromatic precision."
               )}
             </p>
 
-            <div className="flex space-x-4">
+            <div className="flex space-x-6">
               {[
                 { name: "Facebook", icon: "M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" },
                 { name: "Twitter", icon: "M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" },
-                { name: "Instagram", icon: "M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z M4 2a2 2 0 11-2 2 2 2 0 012-2z" } // Actually LinkedIn icon path reused for simplicity or replace
+                { name: "LinkedIn", icon: "M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z M4 2a2 2 0 11-2 2 2 2 0 012-2z" }
               ].map((social, i) => (
                 <a
                   key={i}
                   href="#"
-                  className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-900 hover:text-white transition-all duration-300 transform hover:-translate-y-1"
+                  className="w-12 h-12 rounded-none bg-black border border-white/10 flex items-center justify-center hover:bg-white hover:text-black hover:border-white transition-all duration-500 shadow-2xl text-gray-700"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d={social.icon} />
@@ -78,59 +79,59 @@ const Footer = () => {
           </div>
 
           {/* Links Columns */}
-          <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-bold text-gray-900 mb-6">Shop</h3>
-              <ul className="space-y-4">
-                {["New Arrivals", "Best Sellers", "Electronics", "Accessories"].map((item) => (
+          <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-12">
+            <div className="space-y-10">
+              <h3 className="text-[10px] font-mono font-black tracking-[0.6em] text-white uppercase italic border-b border-white/10 pb-4">OPERATIONS</h3>
+              <ul className="space-y-6">
+                {["NEW ARRIVALS", "BEST SELLERS", "ELECTRONICS", "ACCESSORIES"].map((item) => (
                   <li key={item}>
-                    <Link href="/products" className="text-gray-500 hover:text-blue-600 transition-colors">
+                    <Link href="/products" className="text-[10px] font-mono font-medium text-gray-700 hover:text-white transition-all duration-500 hover:translate-x-2 block tracking-widest uppercase italic font-black">
                       {item}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-            <div>
-              <h3 className="font-bold text-gray-900 mb-6">Company</h3>
-              <ul className="space-y-4">
-                {["About Us", "Careers", "Blog", "Contact"].map((item) => (
+            <div className="space-y-10">
+              <h3 className="text-[10px] font-mono font-black tracking-[0.6em] text-white uppercase italic border-b border-white/10 pb-4">DATABASE</h3>
+              <ul className="space-y-6">
+                {["ABOUT US", "CAREERS", "BLOG", "CONTACT"].map((item) => (
                   <li key={item}>
-                    <Link href={`/${item.toLowerCase().replace(" ", "-")}`} className="text-gray-500 hover:text-blue-600 transition-colors">
+                    <Link href={`/${item.toLowerCase().replace(" ", "-")}`} className="text-[10px] font-mono font-medium text-gray-700 hover:text-white transition-all duration-500 hover:translate-x-2 block tracking-widest uppercase italic font-black">
                       {item}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="col-span-2 md:col-span-1">
-              <h3 className="font-bold text-gray-900 mb-6">Stay in the loop</h3>
-              <form onSubmit={handleSubscribe} className="space-y-4">
-                <div className="relative">
+            <div className="space-y-10">
+              <h3 className="text-[10px] font-mono font-black tracking-[0.6em] text-white uppercase italic border-b border-white/10 pb-4">SYSTEM ALERTS</h3>
+              <form onSubmit={handleSubscribe} className="space-y-6">
+                <div className="relative group">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    placeholder="ENTER UPLINK ADDRESS..."
+                    className="w-full py-5 bg-black border border-white/10 text-white rounded-none focus:border-white outline-none transition-all text-[11px] font-mono font-black uppercase tracking-widest placeholder:text-gray-900 shadow-2xl"
                     required
                   />
                   <button 
                     type="submit"
-                    className="absolute right-2 top-2 p-1 bg-gray-900 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-white transition-all duration-500 hover:translate-x-2"
                   >
-                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                   <svg className="w-5 h-5 font-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                    </svg>
                   </button>
                 </div>
                 {isSubscribed && (
                   <motion.p 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-sm text-green-600 font-medium"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="text-[9px] font-mono font-black tracking-[0.4em] uppercase text-white italic underline underline-offset-8"
                   >
-                    Thanks for subscribing!
+                    // UPLINK ESTABLISHED.
                   </motion.p>
                 )}
               </form>
@@ -139,11 +140,11 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>© {currentYear} QuickCart. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-gray-900">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gray-900">Terms of Service</Link>
+        <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-800 italic">
+          <p>© {currentYear} QUICKCART CORE // ALL RIGHTS RESERVED.</p>
+          <div className="flex gap-10">
+            <Link href="/privacy" className="hover:text-white transition-all duration-500 hover:scale-110">PRIVACY PROTOCOL</Link>
+            <Link href="/terms" className="hover:text-white transition-all duration-500 hover:scale-110">TERMS OF MATRIX</Link>
           </div>
         </div>
       </div>

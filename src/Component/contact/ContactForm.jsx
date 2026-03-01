@@ -28,30 +28,34 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="text-center py-12">
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-green-50 rounded-full mb-8 border border-green-100">
-            <CheckCircle2 size={32} className="text-green-500" />
+      <div className="text-center py-12 space-y-12">
+        <div className="inline-flex items-center justify-center w-32 h-32 bg-white rounded-none mb-4 border border-white shadow-2xl transition-all duration-700">
+            <CheckCircle2 size={48} strokeWidth={1} className="text-black" />
         </div>
-        <h3 className="text-3xl font-black text-gray-900 tracking-tighter mb-4">Transmission Received.</h3>
-        <p className="text-gray-400 font-bold text-sm uppercase tracking-widest mb-10">We will respond within 24 cycles</p>
+        <div className="space-y-6">
+          <h3 className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter uppercase italic leading-none">Transmission Received.</h3>
+          <p className="text-gray-700 font-mono font-black text-[10px] uppercase tracking-[0.4em] italic leading-relaxed max-w-sm mx-auto">
+            // Encryption completed. Protocol synchronized. Expect response within 24 operational cycles.
+          </p>
+        </div>
         <button
           onClick={() => setStatus("idle")}
-          className="text-gray-900 border-b-2 border-gray-900 pb-1 font-black text-sm uppercase tracking-widest hover:text-blue-600 hover:border-blue-600 transition-all"
+          className="px-12 py-5 bg-black border border-white/20 hover:border-white text-gray-700 hover:text-white rounded-none font-mono font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-700 italic group"
         >
-          Send New Message
+          [ RELAUNCH Handshake ]
         </button>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-1">Identity</label>
+    <form onSubmit={handleSubmit} className="space-y-12">
+      <div className="space-y-10">
+        <div className="space-y-4">
+          <label className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.5em] ml-1 italic">// Identity</label>
           <input
-            className="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-4 focus:ring-gray-200 font-bold tracking-tight"
-            placeholder="Name or Organization"
+            className="w-full bg-black border border-white/10 rounded-none py-6 px-8 text-white placeholder:text-gray-900 outline-none transition-all duration-700 focus:border-white font-mono text-[11px] uppercase tracking-widest italic shadow-inner"
+            placeholder="Official Name / AUTH_ID"
             value={formData.name}
             onChange={(e) =>
               setFormData({ ...formData, name: e.target.value })
@@ -60,11 +64,11 @@ export default function ContactForm() {
           />
         </div>
         
-        <div className="space-y-2">
-          <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-1">Point of Return</label>
+        <div className="space-y-4">
+          <label className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.5em] ml-1 italic">// Point of Return</label>
           <input
-            className="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-4 focus:ring-gray-200 font-bold tracking-tight"
-            placeholder="Official Email Address"
+            className="w-full bg-black border border-white/10 rounded-none py-6 px-8 text-white placeholder:text-gray-900 outline-none transition-all duration-700 focus:border-white font-mono text-[11px] uppercase tracking-widest italic shadow-inner"
+            placeholder="Authorized E-Mail Address"
             type="email"
             value={formData.email}
             onChange={(e) =>
@@ -74,12 +78,12 @@ export default function ContactForm() {
           />
         </div>
 
-        <div className="space-y-2">
-          <label className="text-[10px] font-black text-gray-900 uppercase tracking-widest ml-1">Payload (Message)</label>
+        <div className="space-y-4">
+          <label className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.5em] ml-1 italic">// Payload (Data_Transfer)</label>
           <textarea
-            className="w-full bg-white border border-gray-100 rounded-2xl py-4 px-6 text-gray-900 placeholder:text-gray-300 outline-none transition-all focus:ring-4 focus:ring-gray-200 font-bold tracking-tight resize-none"
-            placeholder="Data to be transmitted..."
-            rows={4}
+            className="w-full bg-black border border-white/10 rounded-none py-6 px-8 text-white placeholder:text-gray-900 outline-none transition-all duration-700 focus:border-white font-mono text-[11px] uppercase tracking-widest italic shadow-inner resize-none min-h-[200px]"
+            placeholder="Describe the objective of this data transmission..."
+            rows={5}
             value={formData.message}
             onChange={(e) =>
               setFormData({ ...formData, message: e.target.value })
@@ -90,24 +94,26 @@ export default function ContactForm() {
       </div>
 
       {status === "error" && (
-        <div className="text-red-600 text-[10px] font-black uppercase tracking-widest bg-red-50 p-4 rounded-2xl border border-red-100 flex items-center">
-          Transmission Interrupted. Please retry.
+        <div className="text-white text-[10px] font-mono font-black uppercase tracking-[0.4em] bg-black p-6 rounded-none border border-white flex items-center gap-4 italic animate-pulse">
+          <div className="w-2 h-2 bg-white translate-y-[-1px]"></div>
+          TRANS_SYNC_ERROR: UNABLE TO ESTABLISH HANDSHAKE.
         </div>
       )}
 
       <button
         disabled={status === "loading"}
-        className="w-full bg-gray-900 hover:bg-black text-white py-5 rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-gray-200 active:scale-[0.98] transition-all disabled:opacity-50 group mt-4 px-8"
+        className="w-full bg-white text-black py-8 rounded-none flex items-center justify-center gap-6 shadow-2xl border border-white hover:bg-black hover:text-white transition-all duration-700 disabled:opacity-30 group relative overflow-hidden italic"
       >
+        <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-in-out"></div>
         {status === "loading" ? (
           <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            <span className="text-sm font-black uppercase tracking-widest">Transmitting...</span>
+            <Loader2 className="w-6 h-6 animate-spin relative z-10" />
+            <span className="text-[11px] font-mono font-black uppercase tracking-[0.6em] relative z-10">Transmitting...</span>
           </>
         ) : (
           <>
-            <span className="text-sm font-black uppercase tracking-widest">Execute Transmission</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <span className="text-[11px] font-mono font-black uppercase tracking-[0.6em] relative z-10">Execute Transmission</span>
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-4 transition-transform relative z-10" />
           </>
         )}
       </button>

@@ -2,6 +2,7 @@ import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import { transformOrder } from "@/lib/transformers";
 import { getCurrentUser } from "@/lib/session";
+import { calculatePoints, allocatePoints } from "@/services/loyaltyService";
 
 export async function GET(request) {
   try {
@@ -18,7 +19,7 @@ export async function GET(request) {
       );
     }
 
-    const query = { userId: user.id };
+    const query = { userId: user.userId };
 
     const params = Object.fromEntries(request.nextUrl.searchParams);
     const page = Math.max(1, Number(params.page || 1));
@@ -99,27 +100,17 @@ export async function POST(request) {
       );
     }
 
-    const doc = {
+    const { createOrder } = await import("@/services/orderService");
+    const order = await createOrder({
       userId,
       products,
       totalPrice,
       shippingAddress: body.shippingAddress,
       paymentMethod: body.paymentMethod,
       status: body.status || "processing",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    });
 
-    const result = await col.insertOne(doc);
-
-    return NextResponse.json(
-      {
-        ...doc,
-        _id: result.insertedId.toString(),
-        id: result.insertedId.toString(),
-      },
-      { status: 201 }
-    );
+    return NextResponse.json(order, { status: 201 });
   } catch (err) {
     console.error("ORDERS POST ERROR:", err);
     return NextResponse.json(

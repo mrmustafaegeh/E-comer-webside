@@ -31,56 +31,55 @@ const AboutUs = () => {
   ];
 
   return (
-    <section className="py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section className="py-24 md:py-48 bg-black relative">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
         <FadeInUp>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-transparent mb-4">
+          <div className="text-center mb-32">
+            <span className="text-[10px] font-mono font-black text-gray-700 uppercase tracking-[0.6em] mb-6 block italic animate-pulse group">
+               // Origin Protocol 01
+            </span>
+            <h2 className="text-6xl md:text-9xl font-heading font-black text-white tracking-tighter uppercase italic leading-none mb-10">
               {t("about.title")}
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed font-mono font-black uppercase tracking-widest italic border-t border-white/5 pt-10">
               {t("about.tagline")}
             </p>
           </div>
         </FadeInUp>
 
         <StaggerContainer staggerDelay={0.2}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 xl:gap-24 mb-40">
             {featureItems.map((item, index) => (
               <StaggerItem key={index}>
-                <ScaleIn scale={0.9} delay={index * 0.1}>
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group">
-                    {/* Image container with fallback background */}
-                    <div className="h-64 relative overflow-hidden bg-gradient-to-br from-blue-50 to-gray-100">
+                <ScaleIn scale={0.95} delay={index * 0.1}>
+                  <div className="bg-black rounded-none overflow-hidden border border-white/10 hover:border-white transition-all duration-[1500ms] group shadow-2xl relative">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[100px] pointer-events-none group-hover:bg-white/10 transition-all duration-1000"></div>
+                    
+                    {/* Image container with strict grayscale */}
+                    <div className="h-80 relative overflow-hidden bg-black border-b border-white/10">
                       <Image
-                        width={500}
-                        height={500}
+                        width={800}
+                        height={800}
                         src={item.img}
                         alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[2000ms] group-hover:scale-105 opacity-40 group-hover:opacity-100"
                         loading="lazy"
                         onError={(e) => {
-                          // Simple error handling - image will hide and background will show
                           e.target.style.opacity = "0";
                         }}
                       />
-                      {/* Fallback text that shows if image fails */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="text-blue-600 font-semibold bg-white/80 px-3 py-1 rounded-lg">
-                          {item.title}
-                        </span>
-                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10 pointer-events-none group-hover:opacity-40 transition-opacity"></div>
                     </div>
 
-                    <div className="p-6 text-center">
+                    <div className="p-12 text-center relative z-10">
                       <FadeInUp delay={0.3}>
-                        <h3 className="text-xl font-bold text-gray-800 mb-3">
+                        <h3 className="text-2xl md:text-3xl font-heading font-black text-white mb-6 tracking-tighter uppercase italic group-hover:scale-110 transition-transform duration-700">
                           {item.title}
                         </h3>
                       </FadeInUp>
                       <FadeInUp delay={0.4}>
-                        <p className="text-gray-600 leading-relaxed">
-                          {item.desc}
+                        <p className="text-gray-800 leading-relaxed text-[9px] font-mono font-black uppercase tracking-[0.4em] italic group-hover:text-gray-500 transition-colors duration-500">
+                          // {item.desc}
                         </p>
                       </FadeInUp>
                     </div>
@@ -93,25 +92,32 @@ const AboutUs = () => {
 
         {/* Mission Section */}
         <FadeInUp delay={0.5}>
-          <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl shadow-2xl p-8 md:p-12 max-w-4xl mx-auto text-center text-white">
-            <FadeInUp delay={0.2}>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {t("about.missionTitle")}
-              </h3>
-            </FadeInUp>
-            <FadeInUp delay={0.3}>
-              <p className="text-blue-100 text-lg mb-6 leading-relaxed">
-                {t("about.missionText")}
-              </p>
-            </FadeInUp>
-            <FadeInUp delay={0.4}>
-              <Link
-                href="/contact"
-                className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                {t("about.getInTouch")}
-              </Link>
-            </FadeInUp>
+          <div className="bg-black border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,1)] p-16 md:p-32 max-w-[1200px] mx-auto text-center relative overflow-hidden group">
+            <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-[-100px] left-[-100px] w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
+            
+            <div className="relative z-10 space-y-12">
+              <FadeInUp delay={0.2}>
+                <span className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.6em] mb-4 block italic">// The Directive</span>
+                <h3 className="text-4xl md:text-7xl font-heading font-black text-white mb-10 tracking-tighter uppercase italic leading-none">
+                  {t("about.missionTitle")}
+                </h3>
+              </FadeInUp>
+              <FadeInUp delay={0.3}>
+                <p className="text-gray-700 text-sm md:text-lg mb-16 leading-relaxed font-mono font-black uppercase tracking-widest italic max-w-4xl mx-auto border-l border-white/5 pl-10 md:pl-20 text-left">
+                  {t("about.missionText")}
+                </p>
+              </FadeInUp>
+              <FadeInUp delay={0.4}>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-10 px-16 py-6 bg-white border border-white text-black rounded-none font-mono text-[11px] font-black uppercase tracking-[0.6em] hover:bg-black hover:text-white transition-all duration-700 shadow-2xl active:scale-95 italic group/btn"
+                >
+                  {t("about.getInTouch")}
+                  <ArrowRight size={20} className="group-hover/btn:translate-x-4 transition-transform" />
+                </Link>
+              </FadeInUp>
+            </div>
           </div>
         </FadeInUp>
       </div>

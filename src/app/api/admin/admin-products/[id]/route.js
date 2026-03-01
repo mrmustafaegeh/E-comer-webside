@@ -61,8 +61,45 @@ export async function PUT(request) {
 
     const body = await request.json();
 
-    // ... rest of your PUT logic (same as before)
-    // (Copy the rest of your PUT function logic here)
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    const collection = db.collection("products");
+
+    // Prepare update data
+    const updateData = {
+      ...body,
+      updatedAt: new Date(),
+    };
+
+    // Sync name with title if title is provided
+    if (updateData.title) {
+      updateData.name = updateData.title;
+    }
+
+    // Ensure numeric fields are numbers
+    if (updateData.price !== undefined) updateData.price = Number(updateData.price);
+    if (updateData.offerPrice !== undefined) {
+      updateData.salePrice = Number(updateData.offerPrice);
+      updateData.offerPrice = Number(updateData.offerPrice);
+    }
+    if (updateData.stock !== undefined) updateData.stock = Number(updateData.stock);
+
+    // Remove _id from updateData to avoid MongoDB error
+    delete updateData._id;
+    delete updateData.id;
+
+
+    const result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) return notFound();
+
+    return NextResponse.json(
+      { success: true, message: "Product updated successfully", id },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("ADMIN PRODUCT PUT ERROR:", err);
     return NextResponse.json(
@@ -71,6 +108,7 @@ export async function PUT(request) {
     );
   }
 }
+
 
 // DELETE /api/admin/admin-products/[id]
 export async function DELETE(request) {

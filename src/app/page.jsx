@@ -25,30 +25,38 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="bg-white min-h-screen">
+    <main className="bg-black min-h-screen text-white selection:bg-white selection:text-black font-mono relative overflow-hidden">
+      {/* Background Dark Noise Overlay */}
+      <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay z-0"></div>
+      
       {/* 1. Hero Section */}
-      <section className="relative min-h-[500px] md:min-h-[600px]">
+      <section className="relative z-10 border-b border-white/10">
         <HeroSlider initialProducts={heroProducts} />
       </section>
 
-      {/* 2. Trust Section (Value Props) */}
-      <ValueProps />
+      {/* 2. Value Props Section */}
+      <div className="relative z-10 border-b border-white/10">
+         <ValueProps />
+      </div>
 
       {/* 3. Featured Products */}
-      <section className="max-w-7xl mx-auto px-6 py-20 md:py-32" id="features">
-        <div className="mb-16">
-          <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-400 mb-4 block">
-            The Collection
+      <section className="max-w-[1440px] mx-auto px-6 lg:px-12 py-24 md:py-40 relative z-10" id="features">
+        <div className="mb-20">
+          <span className="text-[10px] font-mono font-black tracking-[0.5em] uppercase text-gray-500 mb-6 block flex items-center gap-3 italic">
+            <span className="w-1.5 h-1.5 bg-white animate-pulse"></span>
+            Global Collection ID
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
-            Featured Designs.
+          <h2 className="text-5xl md:text-8xl font-heading font-black text-white tracking-tighter leading-none uppercase italic">
+            Asset Inventory. <br className="hidden md:block" /> Framework // BW.
           </h2>
         </div>
         <FeaturedProductsClient initialProducts={featuredProducts} />
       </section>
 
-      {/* 4. Editorial Categories Section */}
-      <CategorySection />
+      {/* 4. Categories Section */}
+      <div className="relative z-10 border-t border-white/10">
+         <CategorySection />
+      </div>
     </main>
   );
 }

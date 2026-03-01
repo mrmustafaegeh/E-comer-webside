@@ -32,7 +32,6 @@ function AnimatedHeroSection({ initialProducts = [] }) {
   const heroRef = useRef(null);
 
   // ✅ Normalize Data with Memoization
-  // Even though it comes from server, we ensure consistent shape
   const products = useMemo(() => {
     if (!initialProducts || initialProducts.length === 0) {
       // Demo fallback if server data fails
@@ -46,7 +45,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
           rating: 4.9,
           imageUrl: null,
           emoji: "🎧",
-          gradient: "from-blue-500 to-purple-600",
+          gradient: "from-gray-800 to-black",
         },
         {
           id: "demo-2",
@@ -57,7 +56,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
           rating: 4.8,
           imageUrl: null,
           emoji: "⌚",
-          gradient: "from-purple-500 to-pink-600",
+          gradient: "from-gray-900 to-black",
         },
         {
           id: "demo-3",
@@ -68,7 +67,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
           rating: 5.0,
           imageUrl: null,
           emoji: "📷",
-          gradient: "from-pink-500 to-orange-600",
+          gradient: "from-gray-700 to-black",
         },
       ];
     }
@@ -83,7 +82,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
         typeof p.rating === "number" ? p.rating : Number(p.rating) || 4.8,
       imageUrl: p.imageUrl || null,
       emoji: p.emoji || "🛍️",
-      gradient: p.gradient || "from-slate-700 to-slate-900",
+      gradient: p.gradient || "from-black to-black", // Force black
     }));
   }, [initialProducts]);
 
@@ -93,7 +92,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
 
     const interval = setInterval(() => {
       setActiveProduct((prev) => (prev + 1) % products.length);
-    }, 5000);
+    }, 6000); // Slower rotation for premium feel
 
     return () => clearInterval(interval);
   }, [products.length]);
@@ -104,71 +103,71 @@ function AnimatedHeroSection({ initialProducts = [] }) {
     <LazyMotion features={domAnimation}>
       <section
         ref={heroRef}
-        className="hero-section relative bg-[#F1F2F4] overflow-hidden" 
+        className="hero-section relative bg-black overflow-hidden border-b border-white/10" 
         style={{ minHeight: "90vh" }}
         aria-label="Hero section"
       >
-        {/* Subtle texture or noise if desired, but keeping it clean for now */}
+        {/* Subtle white radial glow from top left */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.03),transparent_60%)] pointer-events-none z-10"></div>
+        {/* Noise overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
         
-        <div className="relative z-10 max-w-[1600px] mx-auto px-6 lg:px-12 py-20 min-h-[90vh] flex items-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center w-full">
+        <div className="relative z-20 max-w-[1600px] mx-auto px-6 lg:px-12 py-24 min-h-[90vh] flex items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center w-full">
             {/* Left Column - Content */}
-            <div className="space-y-8 text-center lg:text-left order-2 lg:order-1">
-              <div className="min-h-[32px]">
-                {/* 
-                  Note: Suspense/Dynamic imports with ssr:false usually don't need Suspense on server, 
-                  but strictly adhering to React boundaries is good.
-                */}
+            <div className="space-y-12 text-center lg:text-left order-2 lg:order-1">
+              <div className="min-h-[40px]">
                 <Suspense fallback={<div className="h-8" />}>
                   <AnimatedBadge />
                 </Suspense>
               </div>
 
-              <div className="min-h-[200px]">
+              <div className="min-h-[250px]">
                 <HeroTitle />
               </div>
 
-              <div className="min-h-[64px]">
+              <div className="min-h-[80px]">
                 <CTAButtons />
               </div>
 
-              <div className="min-h-[96px]">
+              <div className="min-h-[120px] pt-12 border-t border-white/5">
                 <Suspense fallback={<div className="h-24" />}>
                   <StatsSection />
                 </Suspense>
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="relative" style={{ minHeight: "400px" }}>
-              <div className="product-card product-card-3d relative">
-                {/* 
-                  Optimize LCP: The first product should render immediately with opacity 1.
-                  Subsequent products will use the AnimatePresence transitions.
-                */}
+            {/* Right Column - Product Visualization */}
+            <div className="relative order-1 lg:order-2" style={{ minHeight: "500px" }}>
+              <div className="product-card group relative">
                 <AnimatePresence mode="wait" initial={false}>
                   <m.div
                     key={currentProduct?.id}
-                    initial={{ opacity: products.indexOf(currentProduct) === 0 ? 1 : 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative"
+                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 1.05, y: -20 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative z-10"
                   >
                     <HeroProductCard product={currentProduct} />
                   </m.div>
                 </AnimatePresence>
+                
+                {/* Visual shadow effect for 3D feel */}
+                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-white/5 blur-3xl rounded-full"></div>
               </div>
 
               <Suspense fallback={null}>
                 <FloatingBadges />
               </Suspense>
 
-              <ProductIndicators
-                products={products}
-                activeProduct={activeProduct}
-                setActiveProduct={setActiveProduct}
-              />
+              <div className="absolute -bottom-12 lg:-bottom-24 left-0 right-0 z-30">
+                <ProductIndicators
+                  products={products}
+                  activeProduct={activeProduct}
+                  setActiveProduct={setActiveProduct}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '@/store/cartSlice';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Send, Bot, ShoppingCart, Search, Package, 
@@ -8,10 +11,13 @@ import {
 } from 'lucide-react';
 
 export default function AIChatbot({ isOpen, onClose }) {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Hey there! 👋 I\'m your AI shopping assistant. I can help you find the perfect products, answer questions, or just chat about what you\'re looking for. What brings you here today?',
+      content: 'Hey there! 👋 I\'m QuickCart AI. I can help you find products, track your orders, or manage your cart. What can I do for you today?',
+      suggestions: ['Show me deals', 'Track my order', 'Browse categories'],
       timestamp: new Date(),
     }
   ]);
@@ -65,23 +71,70 @@ export default function AIChatbot({ isOpen, onClose }) {
       const data = await response.json();
 
       const assistantMessage = {
-        role: 'assistant',
-        content: data.response,
-        products: data.products,
-        action: data.action,
-        suggestedActions: data.suggestedActions || [],
-        timestamp: new Date(),
-      };
+      role: 'assistant',
+      content: data.response,
+      products: data.products,
+      action: data.action,
+      suggestions: data.suggestions || [],
+      timestamp: new Date(),
+    };
 
-      setMessages(prev => [...prev, assistantMessage]);
+    setMessages(prev => [...prev, assistantMessage]);
+    
+    // Handle Actions
+    if (data.action) {
+      const { type, destination, productId, productName, query, code } = data.action;
       
-      // Handle actions
-      if (data.action === 'cart') {
-        setTimeout(() => {
-          // Navigate to cart or open cart drawer
-          window.location.href = '/cart';
-        }, 1000);
-      }
+      setTimeout(() => {
+        switch (type) {
+          case 'NAVIGATE':
+            if (destination) router.push(destination);
+            break;
+          case 'ADD_TO_CART':
+            if (productId) {
+              dispatch(addToCart({ 
+                id: productId, 
+                name: productName || 'Product',
+                price: data.products?.find(p => p.id === productId)?.price || 0,
+                image: data.products?.find(p => p.id === productId)?.image || ''
+              }));
+            }
+            break;
+          case 'OPEN_PRODUCT':
+            if (productId) router.push(`/products/${productId}`);
+            break;
+          case 'SEARCH':
+            router.push(`/products?q=${encodeURIComponent(query || '')}`);
+            break;
+          case 'SHOW_ORDERS':
+          case 'START_RETURN':
+            router.push('/orders');
+            break;
+          case 'APPLY_COUPON':
+            // Logic for applying coupon could be added here if there's a global method
+            console.log('Applying coupon:', code);
+            break;
+          case 'APPLY_POINTS':
+            console.log('Applying loyalty points:', data.action.points);
+            // Typically this would dispatch an action or show a notification
+            break;
+          // Legacy support for fallback actions
+          case 'view_cart':
+          case 'cart':
+            router.push('/cart');
+            break;
+          case 'account_help':
+          case 'loyalty': // Added 'loyalty' case
+            router.push('/profile?tab=loyalty');
+            break;
+          case 'view_orders':
+            router.push('/orders');
+            break;
+          default:
+            console.log('Unhandled action type:', type);
+        }
+      }, 1000);
+    }
       
     } catch (error) {
       console.error('Chatbot error:', error);
@@ -150,10 +203,10 @@ export default function AIChatbot({ isOpen, onClose }) {
               </div>
               <div>
                 <h3 className="font-semibold flex items-center gap-2">
-                  AI Shopping Assistant
+                  QuickCart AI
                   <Sparkles className="w-4 h-4 text-yellow-400" />
                 </h3>
-                <p className="text-xs text-gray-300">Online • Powered by Claude</p>
+                <p className="text-xs text-gray-300">Online • Your Transactional Assistant</p>
               </div>
             </div>
             <button
@@ -222,15 +275,15 @@ export default function AIChatbot({ isOpen, onClose }) {
                   )}
                   
                   {/* Suggested Actions */}
-                  {message.suggestedActions && message.suggestedActions.length > 0 && (
+                  {message.suggestions && message.suggestions.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {message.suggestedActions.map((action, idx) => (
+                      {message.suggestions.map((suggestion, idx) => (
                         <button
                           key={idx}
-                          onClick={() => handleQuickAction(action)}
+                          onClick={() => handleQuickAction(suggestion)}
                           className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium hover:bg-blue-100 transition-colors border border-blue-200"
                         >
-                          {action}
+                          {suggestion}
                         </button>
                       ))}
                     </div>

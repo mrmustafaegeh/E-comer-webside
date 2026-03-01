@@ -31,23 +31,23 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
   };
 
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center justify-center gap-4">
       {/* Previous Button */}
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className="px-4 py-2 text-gray-500 hover:text-black disabled:opacity-20 disabled:hover:text-gray-500 transition"
+        className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"
       >
-        <ChevronLeft className="w-5 h-5" />
+        <ChevronLeft className="w-6 h-6 group-hover:scale-125 transition-transform" strokeWidth={1} />
       </button>
 
       {/* Page Numbers */}
-      <div className="hidden sm:flex items-center gap-2">
+      <div className="hidden sm:flex items-center gap-4">
         {getPageNumbers().map((pageNum, index) =>
           pageNum === "..." ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-3 py-2 text-gray-300"
+              className="w-12 h-12 flex items-center justify-center font-mono font-black text-gray-800 tracking-tighter"
             >
               ...
             </span>
@@ -55,20 +55,20 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
             <button
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`min-w-[40px] h-10 flex items-center justify-center text-sm font-medium transition-all ${
+              className={`w-16 h-16 flex items-center justify-center font-mono font-black text-[11px] uppercase tracking-widest transition-all duration-500 rounded-none shadow-2xl italic ${
                 page === pageNum
-                  ? "text-black border-b-2 border-black"
-                  : "text-gray-400 hover:text-black"
+                  ? "bg-white text-black border border-white"
+                  : "bg-black text-gray-800 border border-white/5 hover:border-white hover:text-white"
               }`}
             >
-              {pageNum}
+              {pageNum.toString().padStart(2, '0')}
             </button>
           )
         )}
       </div>
 
       {/* Mobile Page Indicator */}
-      <div className="sm:hidden text-sm font-medium text-gray-900 mx-4">
+      <div className="sm:hidden font-mono font-black text-[12px] text-white mx-8 uppercase tracking-[0.5em] italic animate-pulse">
         {page} / {totalPages}
       </div>
 
@@ -76,9 +76,9 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
-        className="px-4 py-2 text-gray-500 hover:text-black disabled:opacity-20 disabled:hover:text-gray-500 transition"
+        className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"
       >
-        <ChevronRight className="w-5 h-5" />
+        <ChevronRight className="w-6 h-6 group-hover:scale-125 transition-transform" strokeWidth={1} />
       </button>
     </div>
   );

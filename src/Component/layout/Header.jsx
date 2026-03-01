@@ -17,12 +17,12 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const LanguageSwitcher = dynamic(() => import("../features/LanguageSwitcher"), { 
   ssr: false,
-  loading: () => <div className="w-16 h-8 bg-gray-100 animate-pulse rounded-md" />
+  loading: () => <div className="w-16 h-8 bg-black border border-white/5 animate-pulse rounded-none" />
 });
 
 const UserProfile = dynamic(() => import("./UserProfile"), { 
   ssr: false,
-  loading: () => <div className="w-10 h-10 bg-gray-100 animate-pulse rounded-full" />
+  loading: () => <div className="w-10 h-10 bg-black border border-white/5 animate-pulse rounded-none" />
 });
 
 // Motion shorthands
@@ -30,16 +30,6 @@ const MotionNav = m.nav;
 const MotionDiv = m.div;
 const MotionButton = m.button;
 const MotionSpan = m.span;
-
-// === AUTH BUTTON COMPONENT ===
-const LoginButton = () => (
-  <Link
-    href="/auth/login"
-    className="px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition font-semibold text-sm"
-  >
-    Login
-  </Link>
-);
 
 // === HEADER COMPONENT ===
 export default function Header() {
@@ -66,7 +56,7 @@ export default function Header() {
 
   /** Scroll Listener */
   const handleScroll = useCallback(
-    () => setIsScrolled(window.scrollY > 10),
+    () => setIsScrolled(window.scrollY > 20),
     []
   );
   useEffect(() => {
@@ -93,16 +83,11 @@ export default function Header() {
 
   /** Navigation */
   const navItems = [
-    { href: "/", label: safeT("common.home", "Home") },
-    { href: "/products", label: safeT("common.products", "Products") },
-    { href: "/about", label: safeT("common.about", "About Us") },
-    { href: "/contact", label: safeT("common.contact", "Contact") },
+    { href: "/", label: safeT("common.home", "HOME") },
+    { href: "/products", label: safeT("common.products", "PRODUCTS") },
+    { href: "/about", label: safeT("common.about", "ABOUT") },
+    { href: "/contact", label: safeT("common.contact", "CONTACT") },
   ];
-
-  const isActive = (path) =>
-    pathname === path
-      ? "bg-blue-600 text-white shadow-lg"
-      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition";
 
   /** Mobile toggle overflow */
   useEffect(() => {
@@ -115,36 +100,36 @@ export default function Header() {
       <MotionNav
         initial={mounted ? { y: 0, opacity: 1 } : { y: -70, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.45 }}
-        className={`sticky top-0 z-50 transition-all ${
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`sticky top-0 z-50 transition-all duration-700 ${
           isScrolled
-            ? "bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm"
-            : "bg-white/80 backdrop-blur-sm border-b border-transparent"
+            ? "bg-black/90 backdrop-blur-3xl border-b border-white/20 shadow-2xl"
+            : "bg-black/40 backdrop-blur-sm border-b border-white/5"
         }`}
       >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+          <div className="flex items-center justify-between h-20 md:h-24">
             {/* LOGO */}
-            <MotionDiv whileHover={{ scale: 1.02 }}>
-              <Link href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                  <span className="text-white font-serif font-bold text-xl tracking-tighter">Q</span>
+            <MotionDiv whileHover={{ scale: 1.05 }} transition={{ duration: 0.5 }}>
+              <Link href="/" className="flex items-center gap-4 group">
+                <div className="w-12 h-12 bg-white rounded-none flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:bg-black group-hover:ring-1 group-hover:ring-white">
+                  <span className="text-black font-heading font-black text-2xl tracking-tighter group-hover:text-white transition-colors duration-700 italic">Q</span>
                 </div>
-                <span className="text-xl md:text-2xl font-bold text-gray-900 tracking-tight">
-                  {safeT("common.siteTitle", "QuickCart")}
+                <span className="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-700">
+                  {safeT("common.siteTitle", "QUICKCART")}
                 </span>
               </Link>
             </MotionDiv>
 
             {/* DESKTOP NAV */}
-            <div className="hidden md:flex flex-1 justify-between items-center">
-              <ul className="flex ml-10 space-x-1">
+            <div className="hidden md:flex flex-1 justify-between items-center ml-16">
+              <ul className="flex space-x-2">
                 {navItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`px-3 py-2 text-sm font-medium transition-colors ${
-                        isActive(item.href) ? "text-black" : "text-gray-500 hover:text-black"
+                      className={`px-6 py-2.5 text-[10px] font-mono font-black uppercase tracking-[0.4em] transition-all rounded-none border border-transparent italic ${
+                        pathname === item.href ? "text-white border-white/20 bg-white/5" : "text-gray-500 hover:text-white hover:border-white/10"
                       }`}
                     >
                       {item.label}
@@ -153,25 +138,30 @@ export default function Header() {
                 ))}
               </ul>
 
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-8">
                 <LanguageSwitcher />
-                {/* Show UserProfile if logged in, otherwise Login button */}
+                
                 {loading ? (
-                  <div className="w-20 h-10 bg-gray-200 rounded-xl animate-pulse"></div>
+                  <div className="w-24 h-12 bg-white/5 rounded-none animate-pulse"></div>
                 ) : user ? (
                   <UserProfile user={user} />
                 ) : (
-                  <LoginButton />
+                  <Link
+                    href="/auth/login"
+                    className="px-8 py-3 bg-white text-black text-[10px] font-mono font-black uppercase tracking-[0.4em] rounded-none hover:bg-black hover:text-white border border-white transition-all duration-500 italic active:scale-95 shadow-2xl"
+                  >
+                    AUTHENTICATE
+                  </Link>
                 )}
 
                 {/* CART */}
                 <Link
                   href="/cart"
-                  className="relative p-2.5 rounded-full hover:bg-gray-100 transition-colors"
+                  className="relative p-3 rounded-none bg-black border border-white/10 hover:bg-white hover:text-black hover:border-white transition-all duration-500 text-white group shadow-2xl"
                   aria-label="Cart"
                 >
                   <svg
-                    className="w-6 h-6 text-gray-900"
+                    className="w-5 h-5 transition-transform group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -179,7 +169,7 @@ export default function Header() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={1.5}
+                      strokeWidth={1}
                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                     />
                   </svg>
@@ -187,7 +177,7 @@ export default function Header() {
                     <MotionSpan
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 bg-black text-white rounded-full text-[10px] h-5 w-5 flex items-center justify-center font-bold"
+                      className="absolute -top-2 -right-2 bg-white text-black rounded-none text-[9px] font-mono h-6 w-6 flex items-center justify-center font-black shadow-2xl border border-white italic"
                     >
                       {cartCount > 99 ? "99+" : cartCount}
                     </MotionSpan>
@@ -196,29 +186,17 @@ export default function Header() {
               </div>
             </div>
 
-            {/* MOBILE NAV */}
-            <div className="md:hidden flex items-center space-x-3">
-              <LanguageSwitcher />
-
+            {/* MOBILE NAV TOGGLE */}
+            <div className="md:hidden flex items-center space-x-4">
               <Link
                 href="/cart"
-                className="relative p-2 rounded-lg hover:bg-gray-100 transition"
+                className="relative p-2.5 rounded-none bg-black border border-white/10 text-white"
               >
-                <svg
-                  className="w-6 h-6 text-gray-700"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4z"
-                  />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-white text-black rounded-none text-[9px] font-mono h-5 w-5 flex items-center justify-center font-black border border-white italic">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
@@ -226,36 +204,16 @@ export default function Header() {
 
               <MotionButton
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition"
+                className="p-2.5 rounded-none bg-black border border-white/10 text-white transition-all hover:border-white"
                 onClick={() => setIsMobileMenuOpen((p) => !p)}
               >
                 {isMobileMenuOpen ? (
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 ) : (
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeWidth={1} strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 )}
               </MotionButton>
@@ -266,33 +224,48 @@ export default function Header() {
           <AnimatePresence>
             {isMobileMenuOpen && (
               <MotionDiv
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="md:hidden mt-2 bg-white/95 backdrop-blur-lg rounded-xl shadow-xl border border-gray-200 overflow-hidden"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="fixed inset-0 z-40 bg-black pt-24 px-6 md:hidden overflow-y-auto"
               >
-                <div className="p-4 space-y-2">
-                  {navItems.map((item) => (
+                 {/* Decorative Background for Mobile Menu */}
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+
+                <div className="relative z-10 space-y-8 flex flex-col items-center justify-center min-h-[70vh]">
+                  {navItems.map((item, idx) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`block px-4 py-3 rounded-lg text-sm font-medium transition ${isActive(
-                        item.href
-                      )}`}
+                      className={`text-4xl font-heading font-black tracking-tighter uppercase italic transition-all duration-500 ${
+                        pathname === item.href ? "text-white scale-110" : "text-gray-800 hover:text-white"
+                      }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      {item.label}
+                      <motion.span
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 + 0.2 }}
+                        className="block"
+                      >
+                         {item.label}
+                      </motion.span>
                     </Link>
                   ))}
 
-                  {/* Show user profile or login button based on login status */}
-                  <div className="pt-2 border-t border-gray-200">
-                    {loading ? (
-                      <div className="w-full h-10 bg-gray-200 rounded-xl animate-pulse"></div>
-                    ) : user ? (
+                  <div className="pt-12 mt-8 border-t border-white/10 w-full flex flex-col items-center gap-10">
+                    <LanguageSwitcher />
+                    {user ? (
                       <UserProfile user={user} />
                     ) : (
-                      <LoginButton />
+                      <Link
+                        href="/auth/login"
+                        className="w-full text-center py-6 bg-white text-black font-mono font-black uppercase tracking-[0.5em] italic active:scale-95"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        AUTHENTICATE
+                      </Link>
                     )}
                   </div>
                 </div>

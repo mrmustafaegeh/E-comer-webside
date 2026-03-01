@@ -39,6 +39,7 @@ export async function POST(request) {
       response: result.response,
       products: result.products || [],
       action: result.action || null,
+      suggestions: result.suggestedActions || [],
       timestamp: new Date().toISOString()
     });
     

@@ -4,21 +4,21 @@ import { memo } from "react";
 const AnimatedBadge = () => {
   return (
     <m.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 backdrop-blur-sm"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+      className="inline-flex items-center gap-4 px-6 py-3 rounded-none bg-black border border-white/10 backdrop-blur-3xl group hover:border-white transition-all duration-700"
     >
       <m.span
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="relative flex h-2 w-2"
+        animate={{ opacity: [0.2, 1, 0.2] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="relative flex h-2 w-2 items-center justify-center"
       >
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+        <span className="absolute inline-flex h-full w-full bg-white opacity-20"></span>
+        <span className="relative inline-flex h-1.5 w-1.5 bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]"></span>
       </m.span>
-      <span className="text-sm font-medium text-blue-300">
-        Limited Time Offers • Up to 50% Off
+      <span className="text-[9px] font-mono font-black uppercase tracking-[0.5em] text-white italic group-hover:tracking-[0.6em] transition-all duration-700">
+        // System Sequence Active • v4.0.2
       </span>
     </m.div>
   );

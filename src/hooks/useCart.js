@@ -41,7 +41,18 @@ export const useCart = () => {
     getCartItem,
 
     // Actions
-    addToCart: (product) => dispatch(addToCart(product)),
+    addToCart: (product) => {
+      // Create a clean serializable object to avoid Redux non-serializable errors
+      const serializableProduct = {
+        id: product.id || product._id,
+        name: product.name || product.title,
+        price: Number(product.price || product.offerPrice),
+        image: product.image,
+        category: product.category,
+        slug: product.slug
+      };
+      dispatch(addToCart(serializableProduct));
+    },
     increaseQuantity: (id) => dispatch(increaseQuantity(id)),
     decreaseQuantity: (id) => dispatch(decreaseQuantity(id)),
     removeFromCart: (id) => dispatch(removeFromCart(id)),

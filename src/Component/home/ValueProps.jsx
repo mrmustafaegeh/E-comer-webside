@@ -4,32 +4,33 @@ import { m } from "framer-motion";
 import { Truck, ShieldCheck, Clock, CreditCard } from "lucide-react";
 
 const props = [
-  { icon: Truck, title: "Free Shipping", desc: "On all orders over $150" },
-  { icon: ShieldCheck, title: "Secure Payment", desc: "SSL encrypted checkout" },
-  { icon: Clock, title: "24/7 Support", desc: "Dedicated help center" },
-  { icon: CreditCard, title: "Easy Returns", desc: "30-day money back guarantee" },
+  { icon: Truck, title: "Global Logistics", desc: "Express structural dispatch" },
+  { icon: ShieldCheck, title: "Protocol Security", desc: "RSA-2048 encryption active" },
+  { icon: Clock, title: "Real-time Support", desc: "Dedicated node monitoring" },
+  { icon: CreditCard, title: "Asset Liquidity", desc: "30-day clearance guarantee" },
 ];
 
 export default function ValueProps() {
   return (
-    <section className="bg-white py-12 border-b border-gray-100">
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="bg-black py-20 border-t border-b border-white/10 relative z-20">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 xl:gap-20">
           {props.map((prop, i) => (
             <m.div
               key={i}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-4 group"
+              transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-8 group cursor-default"
             >
-              <div className="p-3 bg-gray-50 rounded-2xl group-hover:bg-blue-50 transition-colors duration-300">
-                <prop.icon size={24} className="text-gray-900 group-hover:text-blue-600 transition-colors" />
+              <div className="p-6 bg-black border border-white/5 shadow-2xl rounded-none group-hover:border-white transition-all duration-700 relative overflow-hidden">
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity"></div>
+                <prop.icon size={28} strokeWidth={1} className="text-gray-700 group-hover:text-white transition-all duration-500 transform group-hover:scale-110" />
               </div>
-              <div>
-                <h3 className="font-bold text-gray-900 text-sm">{prop.title}</h3>
-                <p className="text-gray-500 text-xs">{prop.desc}</p>
+              <div className="space-y-2">
+                <h3 className="font-heading font-black text-white text-base tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-500">{prop.title}</h3>
+                <p className="text-[9px] font-mono font-black tracking-[0.4em] uppercase text-gray-800 italic group-hover:text-gray-500 transition-colors duration-500">// {prop.desc}</p>
               </div>
             </m.div>
           ))}

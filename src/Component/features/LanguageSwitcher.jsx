@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Globe, ChevronDown } from "lucide-react";
+import { Globe, ChevronDown, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const languages = [
-  { code: "en", name: "English" },
+  { code: "en", name: "ENGLISH" },
   { code: "ar", name: "العربية" },
-  { code: "sm", name: "Soomaali" },
-  { code: "tr", name: "Türkçe" },
+  { code: "sm", name: "SOOMAALI" },
+  { code: "tr", name: "TÜRKÇE" },
 ];
 
 export default function LanguageSwitcher() {
@@ -23,9 +23,8 @@ export default function LanguageSwitcher() {
     languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   const handleLanguageChange = (newLocale) => {
-    const currentLocale = i18n.language;
-    const newPath = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
-    router.push(newPath);
+    // Basic i18n switching logic
+    i18n.changeLanguage(newLocale);
     setIsOpen(false);
   };
 
@@ -44,27 +43,31 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className="flex items-center gap-3 px-6 py-3 text-[10px] font-mono font-black text-white bg-black border border-white/10 rounded-none hover:border-white transition-all duration-500 focus:outline-none uppercase tracking-[0.4em] italic group shadow-2xl"
       >
-        <Globe size={18} />
-        <span>{currentLanguage.name}</span>
-        <ChevronDown size={16} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <Terminal size={14} strokeWidth={2.5} className="text-gray-700 group-hover:text-white transition-colors" />
+        <span>{currentLanguage.code}</span>
+        <ChevronDown size={14} className={`transition-all duration-500 text-gray-800 group-hover:text-white ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none">
-          <div className="py-1">
+        <div className="absolute right-0 w-52 mt-4 origin-top-right bg-black border border-white/20 rounded-none shadow-[0_20px_60px_rgba(0,0,0,1)] outline-none z-50 overflow-hidden divide-y divide-white/5">
+           {/* Decorative Background */}
+           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+          <div className="py-0 relative z-10">
             {languages.map((lang) => (
               <button
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`flex items-center w-full px-4 py-2 text-sm text-left ${
+                className={`flex items-center justify-between w-full px-8 py-5 text-[10px] font-mono font-black text-left uppercase tracking-[0.4em] italic transition-all duration-500 border-l-2 ${
                   i18n.language === lang.code
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? "bg-white text-black border-white"
+                    : "text-gray-700 hover:bg-white/5 hover:text-white border-transparent"
                 }`}
               >
-                {lang.name}
+                <span>{lang.name}</span>
+                <span className="text-[8px] opacity-40">[{lang.code}]</span>
               </button>
             ))}
           </div>

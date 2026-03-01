@@ -9,7 +9,8 @@ export async function POST(request) {
     const { success } = await rateLimit(ip, 3, "1 h");
     if (!success) return rateLimitResponse();
 
-    const { email, password, name } = await request.json();
+    const body = await request.json();
+    const { email, password, name, referredBy } = body;
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -25,33 +26,14 @@ export async function POST(request) {
       );
     }
 
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB); // ✅ always same DB
-    const usersCollection = db.collection("users");
-
-    const existingUser = await usersCollection.findOne({ email });
-    if (existingUser) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 }
-      );
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const result = await usersCollection.insertOne({
-      email,
-      password: hashedPassword,
-      name,
-      roles: ["user"],
-      createdAt: new Date(),
-    });
+    const { registerUser } = await import("@/services/authService");
+    const result = await registerUser({ name, email, password, referredBy });
 
     return NextResponse.json(
       {
         success: true,
         message: "User created successfully",
-        userId: result.insertedId.toString(),
+        userId: result.id,
       },
       { status: 201 }
     );

@@ -3,12 +3,21 @@
 @tailwind utilities;
 
 /* =========================
-   BASE (CRITICAL ONLY)
+   ELITE MONOCHROMATIC BASE
    ========================= */
 @layer base {
   :root {
     --font-heading: var(--font-outfit), system-ui, sans-serif;
-    --font-body: var(--font-inter), system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --bg-deep: #000000;
+    --bg-panel: #050505;
+    --bg-card: #080808;
+    --accent-main: #FFFFFF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #777777;
+    --text-muted: #333333;
+    --border-loud: rgba(255, 255, 255, 0.15);
+    --border-subtle: rgba(255, 255, 255, 0.05);
   }
 
   html {
@@ -16,36 +25,101 @@
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-deep);
+    color-scheme: dark;
   }
 
   body {
-    font-family: var(--font-body);
-    background-color: white;
-    color: #374151; /* gray-700 - classic readable text */
-    line-height: 1.6;
+    font-family: var(--font-mono);
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    font-weight: 600; /* Slightly lighter than bold looks more premium */
-    letter-spacing: -0.02em;
-    color: #111827;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: white;
+    text-transform: uppercase;
+    font-style: italic;
   }
 
+  /* Custom Monochrome Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1a1a1a;
+    border-radius: 0px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ffffff;
+  }
+
+  /* Selection style */
+  ::selection {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  /* Inputs */
+  input, select, textarea {
+    @apply bg-black border border-white/10 rounded-none py-4 px-6 text-white placeholder:text-gray-800 outline-none transition-all focus:border-white focus:ring-0 font-mono text-[11px] uppercase tracking-widest;
+  }
+
+  /* Image defaults */
   img {
-    display: block;
-    max-width: 100%;
-    height: auto;
+    @apply grayscale transition-all duration-700;
+  }
+  
+  .group:hover img {
+    @apply grayscale-0;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-10 py-5 bg-white text-black hover:bg-black hover:text-white rounded-none font-mono text-[11px] font-black uppercase tracking-[0.5em] transition-all border border-white active:scale-95 italic shadow-2xl;
   }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
+  .btn-outline {
+    @apply px-10 py-5 bg-transparent text-white hover:bg-white hover:text-black rounded-none font-mono text-[11px] font-black uppercase tracking-[0.5em] transition-all border border-white/20 hover:border-white active:scale-95 italic;
+  }
+
+  .section-label {
+    @apply text-[10px] font-mono font-black text-gray-700 uppercase tracking-[0.6em] mb-6 block italic;
+  }
+
+  .glass-panel {
+    @apply bg-black/80 backdrop-blur-3xl border border-white/10;
+  }
+
+  .noise-overlay {
+    @apply absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay z-0;
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  }
+}
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  
+  .border-glow {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
   }
 }

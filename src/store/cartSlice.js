@@ -36,10 +36,15 @@ const cartSlice = createSlice({
       if (existingItem) {
         existingItem.qty += 1;
       } else {
+        // Only store necessary serializable fields in the cart
         state.items.push({
-          ...product,
-          qty: 1,
-          price: Number(product.price),
+          id: product.id || product._id,
+          name: product.name || product.title,
+          price: Number(product.price || product.offerPrice),
+          image: product.image,
+          category: product.category,
+          slug: product.slug,
+          qty: 1
         });
       }
 

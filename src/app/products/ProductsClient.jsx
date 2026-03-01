@@ -82,9 +82,9 @@ export default function ProductsClient() {
   };
 
   if (error) return (
-    <div className="py-20 text-center">
-        <p className="text-red-500 font-bold uppercase tracking-widest text-xs">Error: Protocol Failure</p>
-        <p className="text-gray-400 mt-2">{error.message}</p>
+    <div className="py-32 text-center bg-black min-h-screen border-t border-white/10">
+        <p className="text-white font-mono font-black uppercase tracking-[0.5em] text-xs italic animate-pulse">ERROR: PROTOCOL_FAILURE</p>
+        <p className="text-gray-800 mt-6 font-mono text-[10px] uppercase tracking-widest italic">{error.message}</p>
     </div>
   );
 
@@ -93,8 +93,11 @@ export default function ProductsClient() {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="w-full">
+    <div className="min-h-screen bg-black text-white relative">
+       {/* Background Noise Overlay */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+
+      <div className="w-full relative z-10">
         <ProductFilters
           localFilters={localFilters}
           setLocalFilters={setLocalFilters}
@@ -103,22 +106,26 @@ export default function ProductsClient() {
         />
       </div>
 
-      <div className="max-w-[1600px] mx-auto px-6 lg:px-12 pb-24">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 pb-32 relative z-10">
         {/* Results Info */}
-        <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Displaying Archive: {products.length} of {totalItems}
-                </span>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-10 mb-16 pb-12 border-b border-white/10 relative z-10">
+            <div className="flex items-center gap-6">
+                <div className="w-1.5 h-10 bg-white"></div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.6em] italic animate-pulse">// INVENTORY_MATRIX</span>
+                  <span className="text-base font-heading font-black text-white tracking-widest uppercase italic">
+                      DISPLAYING {products.length} / {totalItems} SYNCHRONIZED ASSETS
+                  </span>
+                </div>
                 {isPlaceholderData && (
-                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest animate-pulse">
-                        Sychronizing...
+                    <span className="text-[10px] font-mono font-black text-white uppercase tracking-[0.4em] animate-pulse bg-white/5 px-4 py-2 border border-white/10 italic">
+                        SYNC_IN_PROGRESS...
                     </span>
                 )}
             </div>
             
-            <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Sort:</span>
+            <div className="flex items-center self-end md:self-auto gap-6 bg-black border border-white/10 px-8 py-4 shadow-2xl group hover:border-white transition-all duration-700">
+                <span className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.4em] italic group-hover:text-gray-500 transition-colors">SORT_PROTOCOL:</span>
                 <select 
                     value={localFilters.sort} 
                     onChange={(e) => {
@@ -126,12 +133,12 @@ export default function ProductsClient() {
                         setLocalFilters(p => ({ ...p, sort: newSort }));
                         updateUrl({ ...localFilters, sort: newSort });
                     }}
-                    className="text-[10px] font-black uppercase tracking-widest bg-transparent border-none focus:ring-0 cursor-pointer pointer-events-auto"
+                    className="text-[10px] font-mono font-black uppercase tracking-[0.3em] bg-transparent border-none text-white focus:ring-0 cursor-pointer p-0 italic"
                 >
-                    <option value="newest">Latest Assets</option>
-                    <option value="price-low">Value: Low to High</option>
-                    <option value="price-high">Value: High to Low</option>
-                    <option value="rating">Protocol Rating</option>
+                    <option value="newest" className="bg-black text-white">LATEST_ASSETS</option>
+                    <option value="price-low" className="bg-black text-white">VALUE: ASCENDING</option>
+                    <option value="price-high" className="bg-black text-white">VALUE: DESCENDING</option>
+                    <option value="rating" className="bg-black text-white">PROTOCOL_RATING</option>
                 </select>
             </div>
         </div>
@@ -143,7 +150,7 @@ export default function ProductsClient() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="py-32 flex justify-center"
+                        className="py-48 flex justify-center"
                     >
                         <LoadingSpinner />
                     </motion.div>
@@ -152,15 +159,22 @@ export default function ProductsClient() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="py-20 text-center"
+                        className="py-32 text-center space-y-8"
                     >
-                        <EmptyState message="No matching assets found in the identity grid." />
+                        <EmptyState message="0_MATCHING_ASSETS_FOUND_IN_GRID" />
+                        <button 
+                          onClick={handleClearFilters}
+                          className="px-12 py-5 bg-white text-black font-mono font-black text-[11px] uppercase tracking-[0.4em] italic hover:bg-black hover:text-white border border-white transition-all duration-700 shadow-2xl"
+                        >
+                          RESET_MATRIX
+                        </button>
                     </motion.div>
                 ) : (
                     <motion.div 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={isPlaceholderData ? "opacity-30 pointer-events-none transition-opacity duration-300" : "transition-opacity duration-300"}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className={isPlaceholderData ? "opacity-20 pointer-events-none transition-opacity duration-1000" : "transition-opacity duration-1000"}
                     >
                         <ProductList products={products} />
                     </motion.div>
@@ -170,7 +184,7 @@ export default function ProductsClient() {
 
         {/* Pagination Grid */}
         {totalPages > 1 && (
-            <div className="mt-20 border-t border-gray-100 pt-10">
+            <div className="mt-24 border-t border-white/10 pt-16">
                 <ProductPagination
                     page={page}
                     totalPages={totalPages}
@@ -181,4 +195,5 @@ export default function ProductsClient() {
       </div>
     </div>
   );
+
 }

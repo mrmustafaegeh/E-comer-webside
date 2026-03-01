@@ -3,7 +3,7 @@ import { memo } from "react";
 
 const ProductIndicators = ({ products, activeProduct, setActiveProduct }) => {
   return (
-    <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 flex gap-2">
+    <div className="flex gap-4 items-center justify-center lg:justify-start">
       {products.map((_, idx) => (
         <m.button
           key={idx}
@@ -11,11 +11,14 @@ const ProductIndicators = ({ products, activeProduct, setActiveProduct }) => {
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.9 }}
           aria-label={`Go to slide ${idx + 1}`}
-          className={`w-2 h-2 rounded-full transition-all ${
-            idx === activeProduct ? "bg-white w-8" : "bg-white/30"
+          className={`h-1 transition-all duration-700 rounded-none ${
+            idx === activeProduct ? "bg-white w-12 shadow-2xl" : "bg-white/10 hover:bg-white/30 w-6"
           }`}
         />
       ))}
+      <span className="ml-4 text-[9px] font-mono font-black text-gray-700 uppercase tracking-[0.5em] italic">
+        // Scan Sequence {activeProduct + 1}/{products.length}
+      </span>
     </div>
   );
 };

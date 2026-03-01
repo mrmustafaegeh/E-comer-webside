@@ -11,8 +11,10 @@ export function transformProduct(dbProduct) {
   const price = Number(dbProduct.price) || 0;
   const salePrice = dbProduct.salePrice ? Number(dbProduct.salePrice) : null;
   
+  const { _id, createdAt, updatedAt, ...rest } = dbProduct;
+  
   return {
-    ...dbProduct,
+    ...rest,
     id,
     _id: id,
     name,
@@ -26,8 +28,9 @@ export function transformProduct(dbProduct) {
     category: dbProduct.category?.toLowerCase() || "uncategorized",
     slug: dbProduct.slug || id,
     image: dbProduct.image || dbProduct.thumbnail || "/images/placeholder.png",
-    createdAt: dbProduct.createdAt ? new Date(dbProduct.createdAt).toISOString() : null,
-    formattedDate: dbProduct.createdAt ? formatDate(dbProduct.createdAt) : "",
+    createdAt: createdAt ? (createdAt instanceof Date ? createdAt.toISOString() : String(createdAt)) : null,
+    updatedAt: updatedAt ? (updatedAt instanceof Date ? updatedAt.toISOString() : String(updatedAt)) : null,
+    formattedDate: createdAt ? formatDate(createdAt) : "",
   };
 }
 
@@ -65,9 +68,11 @@ export function transformOrder(order) {
 export function transformUser(user) {
   if (!user) return null;
   
-  const id = user._id?.toString() || user.id;
+  const { _id, createdAt, updatedAt, ...rest } = user;
+  const id = _id?.toString() || user.id;
   
   return {
+    ...rest,
     id,
     _id: id,
     name: user.name || "Anonymous",
@@ -75,6 +80,15 @@ export function transformUser(user) {
     image: user.image || null,
     role: user.role || "user",
     isAdmin: user.role === "admin",
-    createdAt: user.createdAt ? new Date(user.createdAt).toISOString() : null,
+    loyaltyPoints: Number(user.loyaltyPoints || 0),
+    loyaltyHistory: Array.isArray(user.loyaltyHistory) ? user.loyaltyHistory.map(({ date, ...h }) => ({
+      ...h,
+      date: date ? (date instanceof Date ? date.toISOString() : String(date)) : null,
+      formattedDate: date ? formatDate(date) : ""
+    })) : [],
+    referralCode: user.referralCode || "",
+    referredBy: user.referredBy || null,
+    createdAt: createdAt ? (createdAt instanceof Date ? createdAt.toISOString() : String(createdAt)) : null,
+    updatedAt: updatedAt ? (updatedAt instanceof Date ? updatedAt.toISOString() : String(updatedAt)) : null,
   };
 }

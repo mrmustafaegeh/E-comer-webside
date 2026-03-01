@@ -10,15 +10,10 @@ const CTAButtons = () => {
       className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start"
     >
       <m.button
-        whileHover={{
-          scale: 1.05,
-        }}
-        whileTap={{ scale: 0.95 }}
-        className="group relative px-12 py-6 bg-white text-black font-mono text-[10px] uppercase tracking-[0.5em] font-black rounded-none overflow-hidden transition-all hover:bg-black hover:text-white border border-white shadow-2xl active:scale-95 duration-500"
+        className="btn-primary flex items-center justify-center gap-4 group"
       >
-        <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
         <span className="relative z-10 flex items-center justify-center gap-4">
-          Initialize Fetch
+          // EXECUTE ACQUISITION
           <m.svg
             className="w-4 h-4 group-hover:translate-x-3 transition-transform duration-500"
             fill="none"
@@ -33,9 +28,9 @@ const CTAButtons = () => {
       <m.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="px-12 py-6 bg-black text-gray-700 font-mono text-[10px] uppercase tracking-[0.5em] font-black rounded-none border border-white/10 hover:border-white hover:text-white transition-all duration-500 active:scale-95 italic"
+        className="px-12 py-6 bg-black text-white font-mono text-[10px] uppercase tracking-[0.5em] font-black rounded-none border border-white/10 hover:border-white transition-colors duration-500 active:scale-95 italic transform-gpu will-change-transform"
       >
-        [ Review Archive ]
+        [ REVIEW ARCHIVE ]
       </m.button>
     </m.div>
   );

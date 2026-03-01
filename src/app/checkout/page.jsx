@@ -153,34 +153,34 @@ function CheckoutContent() {
             {/* 01 Logistics */}
             <section className="space-y-12">
                 <div className="flex items-center justify-between border-b border-white/10 pb-6">
-                    <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">01 Logistic Destination</h2>
+                    <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">PHASE_01 / IDENTITY & LOGISTICS</h2>
                     <ShieldCheck size={20} strokeWidth={1} className="text-gray-800" />
                 </div>
                 
                 <form id="checkout-form" onSubmit={handleSubmit} className="space-y-8">
                     <div className="space-y-3">
-                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Consignee Name</label>
+                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">// CONSIGNEE NAME</label>
                         <input name="fullName" required value={formData.fullName} onChange={handleInputChange} className="w-full bg-black border border-white/10 rounded-none py-5 px-6 text-white placeholder:text-gray-800 outline-none transition-all focus:border-white font-mono text-[11px] uppercase" placeholder="NAME / IDENTIFIER" />
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Logistics Address</label>
+                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">// LOGISTICS ADDRESS</label>
                         <input name="address" required value={formData.address} onChange={handleInputChange} className="w-full bg-black border border-white/10 rounded-none py-5 px-6 text-white placeholder:text-gray-800 outline-none transition-all focus:border-white font-mono text-[11px] uppercase" placeholder="STREET / HUB" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                          <div className="space-y-3">
-                            <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Metropolis Hub</label>
+                            <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">// METROPOLIS HUB</label>
                             <input name="city" required value={formData.city} onChange={handleInputChange} className="w-full bg-black border border-white/10 rounded-none py-5 px-6 text-white placeholder:text-gray-800 outline-none transition-all focus:border-white font-mono text-[11px] uppercase" placeholder="CITY" />
                         </div>
                         <div className="space-y-3">
-                            <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Zip Mapping</label>
+                            <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">// ZIP MAPPING</label>
                             <input name="zipCode" required value={formData.zipCode} onChange={handleInputChange} className="w-full bg-black border border-white/10 rounded-none py-5 px-6 text-white placeholder:text-gray-800 outline-none transition-all focus:border-white font-mono text-[11px] uppercase" placeholder="0000" />
                         </div>
                     </div>
 
                     <div className="space-y-3">
-                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Sovereign Territory</label>
+                        <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">// SOVEREIGN TERRITORY</label>
                         <select name="country" required value={formData.country} onChange={handleInputChange} className="w-full bg-black border border-white/10 rounded-none py-5 px-6 text-white outline-none transition-all focus:border-white font-mono text-[11px] uppercase appearance-none shadow-xl">
                             <option value="">SELECT TARGET TERRITORY</option>
                             <option value="US">UNITED STATES</option>
@@ -195,7 +195,7 @@ function CheckoutContent() {
             {/* 02 Transaction */}
             <section className="space-y-12 pb-12">
                 <div className="flex items-center justify-between border-b border-white/10 pb-6">
-                    <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">02 Transaction Protocol</h2>
+                    <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">PHASE_02 / AUTHORIZATION</h2>
                     <CreditCard size={20} strokeWidth={1} className="text-gray-800" />
                 </div>
 
@@ -231,7 +231,7 @@ function CheckoutContent() {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[80px] rounded-full pointer-events-none"></div>
                 
                 <div className="flex items-center justify-between border-b border-white/10 pb-6 relative z-10">
-                    <h2 className="text-[10px] font-mono font-black text-gray-500 uppercase tracking-[0.4em] italic">Asset Inventory</h2>
+                    <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.4em] italic">PHASE_03 / SUMMARY</h2>
                     <span className="text-[10px] font-mono font-black text-white bg-white/5 px-4 py-1 rounded-none border border-white/10">{cartItems.length} IDs Loaded</span>
                 </div>
 

@@ -1,8 +1,6 @@
 /**
  * Loyalty Service - Handles points calculation and allocation
  */
-import clientPromise from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
 
 // Configuration for active boosters
 export const ACTIVE_BOOSTERS = [
@@ -56,6 +54,10 @@ export function calculatePoints(products, total, userPoints = 0) {
  * Adds points to a user's account
  */
 export async function allocatePoints(userId, points) {
+  if (typeof window !== "undefined") return; // Safety check
+  const clientPromise = (await import("@/lib/mongodb")).default;
+  const { ObjectId } = await import("mongodb");
+
   if (!points || points <= 0 || !userId) return;
 
   const client = await clientPromise;
@@ -115,6 +117,8 @@ export async function allocatePoints(userId, points) {
  * Get top referrers for the leaderboard
  */
 export async function getLeaderboard() {
+  if (typeof window !== "undefined") return []; // Safety check
+  const clientPromise = (await import("@/lib/mongodb")).default;
   const client = await clientPromise;
   const db = client.db(process.env.MONGODB_DB);
   

@@ -83,10 +83,10 @@ export default function Header() {
 
   /** Navigation */
   const navItems = [
-    { href: "/", label: safeT("common.home", "HOME") },
-    { href: "/products", label: safeT("common.products", "PRODUCTS") },
+    { href: "/", label: safeT("common.home", "SYSTEM ROOT") },
+    { href: "/products", label: safeT("common.products", "INVENTORY MATRIX") },
     { href: "/about", label: safeT("common.about", "ABOUT") },
-    { href: "/contact", label: safeT("common.contact", "CONTACT") },
+    { href: "/contact", label: safeT("common.contact", "COMMUNICATION PROTOCOL") },
   ];
 
   /** Mobile toggle overflow */
@@ -101,7 +101,7 @@ export default function Header() {
         initial={mounted ? { y: 0, opacity: 1 } : { y: -70, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`sticky top-0 z-50 transition-all duration-700 ${
+        className={`sticky top-0 z-50 transition-colors duration-700 ${
           isScrolled
             ? "bg-black/90 backdrop-blur-3xl border-b border-white/20 shadow-2xl"
             : "bg-black/40 backdrop-blur-sm border-b border-white/5"
@@ -112,11 +112,8 @@ export default function Header() {
             {/* LOGO */}
             <MotionDiv whileHover={{ scale: 1.05 }} transition={{ duration: 0.5 }}>
               <Link href="/" className="flex items-center gap-4 group">
-                <div className="w-12 h-12 bg-white rounded-none flex items-center justify-center shadow-2xl transition-all duration-700 group-hover:bg-black group-hover:ring-1 group-hover:ring-white">
-                  <span className="text-black font-heading font-black text-2xl tracking-tighter group-hover:text-white transition-colors duration-700 italic">Q</span>
-                </div>
-                <span className="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-700">
-                  {safeT("common.siteTitle", "QUICKCART")}
+                <span className="text-xl md:text-2xl font-mono font-black text-white tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-700">
+                  // {safeT("common.siteTitle", "QUICKCART")}
                 </span>
               </Link>
             </MotionDiv>
@@ -128,11 +125,12 @@ export default function Header() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`px-6 py-2.5 text-[10px] font-mono font-black uppercase tracking-[0.4em] transition-all rounded-none border border-transparent italic ${
-                        pathname === item.href ? "text-white border-white/20 bg-white/5" : "text-gray-500 hover:text-white hover:border-white/10"
+                      className={`relative px-6 py-2.5 text-[10px] font-mono font-black uppercase tracking-[0.4em] transition-colors rounded-none italic flex items-center group overflow-hidden ${
+                        pathname === item.href ? "text-white" : "text-gray-500 hover:text-white"
                       }`}
                     >
-                      {item.label}
+                      <span className="relative z-10">{item.label}</span>
+                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-white transform origin-left transition-transform duration-500 scale-x-0 group-hover:scale-x-100"></span>
                     </Link>
                   </li>
                 ))}
@@ -148,7 +146,7 @@ export default function Header() {
                 ) : (
                   <Link
                     href="/auth/login"
-                    className="px-8 py-3 bg-white text-black text-[10px] font-mono font-black uppercase tracking-[0.4em] rounded-none hover:bg-black hover:text-white border border-white transition-all duration-500 italic active:scale-95 shadow-2xl"
+                    className="px-8 py-3 bg-white text-black text-[10px] font-mono font-black uppercase tracking-[0.4em] rounded-none hover:bg-black hover:text-white border border-white transition-colors duration-500 italic active:scale-95 shadow-2xl transform-gpu"
                   >
                     AUTHENTICATE
                   </Link>
@@ -157,7 +155,7 @@ export default function Header() {
                 {/* CART */}
                 <Link
                   href="/cart"
-                  className="relative p-3 rounded-none bg-black border border-white/10 hover:bg-white hover:text-black hover:border-white transition-all duration-500 text-white group shadow-2xl"
+                  className="relative p-3 rounded-none bg-black border border-white/10 hover:bg-white hover:text-black hover:border-white transition-colors duration-500 text-white group shadow-2xl"
                   aria-label="Cart"
                 >
                   <svg
@@ -261,10 +259,10 @@ export default function Header() {
                     ) : (
                       <Link
                         href="/auth/login"
-                        className="w-full text-center py-6 bg-white text-black font-mono font-black uppercase tracking-[0.5em] italic active:scale-95"
+                        className="w-full text-center py-6 bg-white text-black font-mono font-black uppercase tracking-[0.5em] italic active:scale-95 text-[11px]"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        AUTHENTICATE
+                        // AUTHENTICATE
                       </Link>
                     )}
                   </div>

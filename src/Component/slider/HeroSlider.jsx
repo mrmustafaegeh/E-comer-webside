@@ -97,6 +97,36 @@ function AnimatedHeroSection({ initialProducts = [] }) {
     return () => clearInterval(interval);
   }, [products.length]);
 
+  useEffect(() => {
+    let animationFrameId;
+
+    const handleMouseMove = (e) => {
+      if (!heroRef.current) return;
+      
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      
+      animationFrameId = requestAnimationFrame(() => {
+        const { left, top, width, height } = heroRef.current.getBoundingClientRect();
+        const x = (e.clientX - left) / width - 0.5;
+        const y = (e.clientY - top) / height - 0.5;
+        
+        heroRef.current.style.setProperty('--mouse-x', x);
+        heroRef.current.style.setProperty('--mouse-y', y);
+      });
+    };
+
+    const heroEl = heroRef.current;
+    if (heroEl) {
+      heroEl.addEventListener('mousemove', handleMouseMove, { passive: true });
+    }
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (heroEl) {
+        heroEl.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
+  }, []);
+
   const currentProduct = products[activeProduct];
 
   return (
@@ -139,7 +169,12 @@ function AnimatedHeroSection({ initialProducts = [] }) {
 
             {/* Right Column - Product Visualization */}
             <div className="relative order-1 lg:order-2" style={{ minHeight: "500px" }}>
-              <div className="product-card group relative">
+              <div className="product-card group relative transform-gpu" style={{
+                transform: "rotateX(calc(var(--mouse-y, 0) * -16deg)) rotateY(calc(var(--mouse-x, 0) * 20deg))",
+                transformStyle: "preserve-3d",
+                transition: "transform 0.1s cubic-bezier(0.16, 1, 0.3, 1)",
+                willChange: "transform"
+              }}>
                 <AnimatePresence mode="wait" initial={false}>
                   <m.div
                     key={currentProduct?.id}
@@ -148,6 +183,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
                     exit={{ opacity: 0, scale: 1.05, y: -20 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="relative z-10"
+                    style={{ transform: "translateZ(30px)" }}
                   >
                     <HeroProductCard product={currentProduct} />
                   </m.div>

@@ -27,25 +27,25 @@ function HeroProductCard({ product }) {
       variants={cardVariants}
       initial="initial"
       animate="animate"
-      className="relative group w-full max-w-md mx-auto"
+      className="relative group w-full max-w-md mx-auto card-3d-tilt"
     >
-      {/* Subtle White Glow */}
-      <div className="absolute inset-0 bg-white/5 rounded-none blur-3xl transform translate-y-10 group-hover:bg-white/10 transition-colors duration-1000" />
+      {/* 3D Glowing Orb Behind Card */}
+      <div className="absolute -inset-10 bg-white-slow-orb group-hover:bg-white/10 transition-colors duration-1000 z-0 opacity-40"></div>
 
       {/* Card - Elite Brutalist Aesthetic */}
-      <div className="relative bg-black rounded-none p-10 shadow-2xl border border-white/10 overflow-hidden group-hover:border-white transition-all duration-700">
+      <div className="relative bg-black rounded-none p-10 shadow-2xl border border-white/10 overflow-hidden group-hover:border-white transition-colors duration-700 card-3d-tilt-inner z-10 transform-gpu">
         
         {/* Decorative corner accents */}
-        <div className="absolute top-0 left-0 w-10 h-10 border-t border-l border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:m-0"></div>
-        <div className="absolute bottom-0 right-0 w-10 h-10 border-b border-r border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:m-0"></div>
+        <div className="absolute top-0 left-0 w-10 h-10 border-t border-l border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-[opacity,margin] duration-700 group-hover:m-0"></div>
+        <div className="absolute bottom-0 right-0 w-10 h-10 border-b border-r border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-[opacity,margin] duration-700 group-hover:m-0"></div>
 
         {/* Image Area */}
-        <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-black mb-10 shadow-2xl border border-white/5 group-hover:border-white/20 transition-all duration-1000">
+        <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-black mb-10 shadow-2xl border border-white/5 group-hover:border-white/20 transition-colors duration-1000">
           {isImageUrl ? (
             <Image
               src={imageSrc}
               alt={product.title || "Product"}
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transform scale-100 group-hover:scale-110 transition-all duration-1000 ease-in-out"
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transform scale-100 group-hover:scale-110 transition-[filter,transform] duration-1000 ease-in-out transform-gpu will-change-transform"
               priority
               fetchPriority="high"
               width={600}
@@ -92,7 +92,7 @@ function HeroProductCard({ product }) {
             
             {/* Minimal Rating */}
             {product.rating > 0 && (
-                <div className="flex items-center gap-2 bg-black border border-white/20 px-4 py-2 rounded-none shadow-2xl group-hover:border-white transition-all duration-500">
+                <div className="flex items-center gap-2 bg-black border border-white/20 px-4 py-2 rounded-none shadow-2xl group-hover:border-white transition-colors duration-500">
                   <span className="text-[10px] font-mono font-black text-white tracking-[0.2em]">{product.rating}</span>
                   <svg className="w-3.5 h-3.5 text-white fill-current opacity-20 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>

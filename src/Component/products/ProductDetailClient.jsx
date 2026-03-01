@@ -71,10 +71,10 @@ export default function ProductDetailClient({ product }) {
         
         {/* Navigation / Breadcrumbs */}
         <nav className="flex flex-wrap items-center gap-5 text-[10px] font-mono font-black uppercase tracking-[0.5em] text-gray-700 mb-20 relative z-10 italic">
-          <Link href="/" className="hover:text-white transition-all underline underline-offset-8">System Root</Link>
-          <ChevronRight size={14} className="opacity-20 translate-y-[-1px]" />
-          <Link href="/products" className="hover:text-white transition-all underline underline-offset-8">Archive</Link>
-          <ChevronRight size={14} className="opacity-20 translate-y-[-1px]" />
+          <Link href="/" className="hover:text-white transition-colors">SYSTEM ROOT</Link>
+          <span className="opacity-50">/</span>
+          <Link href="/products" className="hover:text-white transition-colors">ARCHIVE</Link>
+          <span className="opacity-50">/</span>
           <span className="text-white">// {product.category}</span>
         </nav>
 
@@ -97,7 +97,7 @@ export default function ProductDetailClient({ product }) {
                     src={images[selectedImage]}
                     alt={product.title}
                     fill
-                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-[1500ms] group-hover:scale-105"
+                    className="object-cover grayscale group-hover:grayscale-0 transition-[filter,transform] duration-[1500ms] group-hover:scale-105 transform-gpu will-change-transform"
                     priority
                     unoptimized={true}
                     sizes="(max-width: 1024px) 100vw, 60vw"
@@ -125,9 +125,9 @@ export default function ProductDetailClient({ product }) {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative w-28 h-36 rounded-none overflow-hidden border-2 transition-all duration-700 bg-black ${
+                    className={`relative w-28 h-36 rounded-none overflow-hidden border-2 transition-[border-color,transform,opacity,filter] transform-gpu duration-700 bg-black ${
                       selectedImage === idx 
-                        ? "border-white scale-110 shadow-2xl opacity-100" 
+                        ? "border-white scale-110 shadow-2xl opacity-100 grayscale-0" 
                         : "border-white/5 opacity-20 hover:opacity-100 scale-95 hover:scale-100 hover:border-white/20 grayscale"
                     }`}
                   >
@@ -182,10 +182,10 @@ export default function ProductDetailClient({ product }) {
               <div className="space-y-12 pt-16 border-t border-white/10">
                   <div className="flex items-center justify-between group">
                      <span className="text-[10px] font-mono font-black tracking-[0.5em] uppercase text-gray-800 italic group-hover:text-white transition-colors">// QUANTITY_MODULE</span>
-                     <div className="flex items-center gap-4 bg-black p-2 rounded-none border border-white/10 shadow-2xl group-hover:border-white transition-all duration-700">
+                     <div className="flex items-center gap-4 bg-black p-2 rounded-none border border-white/10 shadow-2xl group-hover:border-white transition-colors duration-700">
                         <button
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                            className="w-12 h-12 flex items-center justify-center rounded-none text-gray-700 hover:text-white hover:bg-white/5 transition-all disabled:opacity-10"
+                            className="w-12 h-12 flex items-center justify-center rounded-none text-gray-700 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-10"
                             disabled={quantity <= 1}
                         >
                             <Minus size={20} strokeWidth={2} />
@@ -193,7 +193,7 @@ export default function ProductDetailClient({ product }) {
                         <span className="w-16 text-center font-mono font-black text-white tracking-[0.4em] text-lg italic">{quantity}</span>
                         <button
                             onClick={() => setQuantity(Math.min(product.stock || 99, quantity + 1))}
-                            className="w-12 h-12 flex items-center justify-center rounded-none text-gray-700 hover:text-white hover:bg-white/5 transition-all disabled:opacity-10"
+                            className="w-12 h-12 flex items-center justify-center rounded-none text-gray-700 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-10"
                             disabled={quantity >= product.stock}
                         >
                             <Plus size={20} strokeWidth={2} />
@@ -205,7 +205,7 @@ export default function ProductDetailClient({ product }) {
                     <button
                         onClick={handleAddToCart}
                         disabled={isAdding || product.stock === 0}
-                        className="flex-[3] h-24 bg-white text-black rounded-none font-mono font-black text-[12px] uppercase tracking-[0.6em] flex items-center justify-center gap-6 border border-white hover:bg-black hover:text-white shadow-2xl active:scale-[0.95] transition-all duration-700 disabled:opacity-30 group relative overflow-hidden italic"
+                        className="flex-[3] h-24 bg-white text-black rounded-none font-mono font-black text-[12px] uppercase tracking-[0.6em] flex items-center justify-center gap-6 border border-white hover:bg-black hover:text-white shadow-2xl active:scale-[0.95] transition-[transform,colors] duration-700 disabled:opacity-30 group relative overflow-hidden italic transform-gpu will-change-transform"
                     >
                         <div className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-700 ease-in-out"></div>
                         {isAdding ? (
@@ -218,14 +218,14 @@ export default function ProductDetailClient({ product }) {
                         ) : (
                             <>
                                 <ShoppingCart size={24} strokeWidth={1.5} className="relative z-10 group-hover:scale-110 transition-transform" />
-                                <span className="relative z-10">EXECUTE_ACQUISITION</span>
+                                <span className="relative z-10">// EXECUTE ACQUISITION</span>
                                 <ArrowRight size={20} className="group-hover:translate-x-4 transition-transform relative z-10" />
                             </>
                         )}
                     </button>
                     <button
                         onClick={() => toggleWishlist(product)}
-                        className={`flex-1 h-24 rounded-none flex items-center justify-center transition-all duration-700 active:scale-95 border group ${
+                        className={`flex-1 h-24 rounded-none flex items-center justify-center transition-[transform,colors] duration-700 active:scale-95 border group transform-gpu ${
                             isWishlisted 
                             ? "bg-white border-white text-black shadow-2xl" 
                             : "bg-black border-white/10 text-gray-800 hover:border-white hover:text-white shadow-2xl"
@@ -239,7 +239,7 @@ export default function ProductDetailClient({ product }) {
               {/* Protocol Details */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12 pt-16 border-t border-white/10">
                 <div className="flex items-center gap-8 group">
-                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-all duration-700 group-hover:border-white">
+                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-colors duration-700 group-hover:border-white">
                     <Zap size={24} strokeWidth={1} className="opacity-20 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <div className="space-y-2">
@@ -248,7 +248,7 @@ export default function ProductDetailClient({ product }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-8 group">
-                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-all duration-700 group-hover:border-white">
+                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-colors duration-700 group-hover:border-white">
                     <ShieldCheck size={24} strokeWidth={1} className="opacity-20 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <div className="space-y-2">
@@ -257,7 +257,7 @@ export default function ProductDetailClient({ product }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-8 group">
-                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-all duration-700 group-hover:border-white">
+                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-colors duration-700 group-hover:border-white">
                     <RefreshCcw size={24} strokeWidth={1} className="opacity-20 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <div className="space-y-2">
@@ -266,7 +266,7 @@ export default function ProductDetailClient({ product }) {
                   </div>
                 </div>
                 <div className="flex items-center gap-8 group">
-                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-all duration-700 group-hover:border-white">
+                  <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-colors duration-700 group-hover:border-white">
                     <Info size={24} strokeWidth={1} className="opacity-20 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <div className="space-y-2">

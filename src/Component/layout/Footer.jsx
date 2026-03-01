@@ -113,12 +113,12 @@ const Footer = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="ENTER UPLINK ADDRESS..."
-                    className="w-full py-5 bg-black border border-white/10 text-white rounded-none focus:border-white outline-none transition-all text-[11px] font-mono font-black uppercase tracking-widest placeholder:text-gray-900 shadow-2xl"
+                    className="w-full py-5 bg-transparent border-0 border-b border-white text-white rounded-none focus:border-white focus:ring-0 outline-none transition-all text-[11px] font-mono font-black uppercase tracking-widest placeholder:text-gray-600"
                     required
                   />
                   <button 
                     type="submit"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-700 hover:text-white transition-all duration-500 hover:translate-x-2"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-400 transition-all duration-500 hover:translate-x-2"
                   >
                    <svg className="w-5 h-5 font-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -140,8 +140,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-800 italic">
-          <p>© {currentYear} QUICKCART CORE // ALL RIGHTS RESERVED.</p>
+        <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-500 italic">
+          <p>// END TRANSMISSION. © {currentYear} QUICKCART CORE.</p>
           <div className="flex gap-10">
             <Link href="/privacy" className="hover:text-white transition-all duration-500 hover:scale-110">PRIVACY PROTOCOL</Link>
             <Link href="/terms" className="hover:text-white transition-all duration-500 hover:scale-110">TERMS OF MATRIX</Link>

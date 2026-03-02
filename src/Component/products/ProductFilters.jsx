@@ -39,13 +39,11 @@ export default function ProductFilters({
 
   return (
     <div className="w-full bg-black pt-24 pb-12 border-b border-white/10 relative overflow-hidden">
-      {/* Background Noise Component integrated via globals.css or direct class */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-white/20"></div>
+            <div className="absolute inset-x-0 bottom-0 h-px bg-white/20"></div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
         
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 relative">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 relative">
             <div className="relative z-10 space-y-6">
                 <span className="text-[10px] font-mono font-black text-gray-800 uppercase tracking-[0.6em] mb-4 block italic animate-pulse">
                   // Centralized Index Protocol
@@ -62,10 +60,8 @@ export default function ProductFilters({
             </div>
         </div>
 
-        {/* Filter Bar */}
-        <div className="flex flex-col lg:flex-row gap-0 items-stretch bg-black border border-white/10 shadow-2xl relative z-10 group/bar hover:border-white transition-all duration-1000 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
-            {/* Search */}
-            <div className="relative flex-[2] w-full group">
+                <div className="flex flex-col lg:flex-row gap-0 items-stretch bg-black border border-white/10 shadow-2xl relative z-10 group/bar hover:border-white transition-all duration-1000 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
+                        <div className="relative flex-[2] w-full group">
               <Terminal className="absolute left-8 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-800 transition-colors group-hover:text-white" strokeWidth={2.5} />
               <input
                 type="text"
@@ -98,8 +94,7 @@ export default function ProductFilters({
               )}
             </div>
 
-            {/* Category Select */}
-            <div className="relative w-full lg:w-80 group">
+                        <div className="relative w-full lg:w-80 group">
                 <Filter className="absolute left-8 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-800 transition-colors group-hover:text-white" strokeWidth={2.5} />
                 <select
                     className="w-full bg-transparent border-none py-8 pl-16 pr-12 text-white font-mono text-[11px] uppercase tracking-widest appearance-none outline-none cursor-pointer transition-all italic hover:bg-white/5"
@@ -125,8 +120,7 @@ export default function ProductFilters({
                 <ChevronDown className="absolute right-8 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-800 pointer-events-none group-hover:text-white transition-all" />
             </div>
 
-            {/* Price Range */}
-            <div className="flex items-stretch w-full lg:w-auto divide-x divide-white/10">
+                        <div className="flex items-stretch w-full lg:w-auto divide-x divide-white/10">
                <div className="relative w-full lg:w-36 group">
                   <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-800 font-mono text-[10px] font-black group-hover:text-white transition-colors">$</span>
                   <input
@@ -159,8 +153,7 @@ export default function ProductFilters({
                </div>
             </div>
 
-            {/* Execute Button */}
-            <button
+                        <button
                onClick={applyFilters}
                className="w-full lg:w-auto px-16 py-8 bg-white text-black font-mono font-black text-[12px] uppercase tracking-[0.5em] hover:bg-black hover:text-white transition-all duration-700 shadow-2xl italic group/btn relative overflow-hidden"
             >
@@ -169,8 +162,7 @@ export default function ProductFilters({
             </button>
         </div>
 
-        {/* Active States */}
-        <AnimatePresence>
+                <AnimatePresence>
             {(safe.search || safe.category || safe.minPrice || safe.maxPrice) && (
                 <motion.div 
                     initial={{ opacity: 0, y: 10 }}

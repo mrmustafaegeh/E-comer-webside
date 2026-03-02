@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getProducts } from "@/services/productService";
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 
 /**
  * GET /api/products/category/[slug]
@@ -20,11 +20,8 @@ export async function GET(request, { params }) {
     const search = searchParams.get("search");
 
     // Verify category exists
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const category = await db.collection("categories").findOne({ 
-      slug,
-      isActive: true 
+    const category = await prisma.category.findUnique({
+      where: { slug },
     });
 
     if (!category) {
@@ -51,10 +48,10 @@ export async function GET(request, { params }) {
         name: category.name,
         slug: category.slug,
         description: category.description,
-        icon: category.icon,
-        gradient: category.gradient
+        image: category.image,
       }
     }, {
+      status: 200,
       headers: {
         "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
       },
@@ -62,7 +59,7 @@ export async function GET(request, { params }) {
   } catch (err) {
     console.error("Category products API error:", err);
     return NextResponse.json(
-      { error: "Failed to load category products", details: err.message },
+      { error: "Failed to load category products" },
       { status: 500 }
     );
   }

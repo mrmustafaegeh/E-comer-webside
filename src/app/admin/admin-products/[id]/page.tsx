@@ -90,8 +90,7 @@ export default function AdminEditProductPage() {
   return (
     <ProtectedAdmin>
       <div className="w-full max-w-[2000px] mx-auto pb-10">
-        {/* Header with back button */}
-        <motion.div 
+                <motion.div 
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
            className="mb-8"
@@ -108,8 +107,7 @@ export default function AdminEditProductPage() {
           </Link>
         </motion.div>
 
-        {/* Error message */}
-        {error && (
+                {error && (
           <motion.div 
              initial={{ opacity: 0, y: -10 }}
              animate={{ opacity: 1, y: 0 }}
@@ -134,8 +132,7 @@ export default function AdminEditProductPage() {
           </motion.div>
         )}
 
-        {/* Product Form */}
-        {product && <ProductForm initialValues={product} onSaved={handleSave} />}
+                {product && <ProductForm initialValues={product} onSaved={handleSave} />}
       </div>
     </ProtectedAdmin>
   );

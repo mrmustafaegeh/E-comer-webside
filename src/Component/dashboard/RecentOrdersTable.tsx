@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   MoreVertical,
   ChevronLeft,
@@ -143,7 +144,7 @@ export default function RecentOrdersTable({ orders }: RecentOrdersTableProps) {
                   <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       {order.user?.avatar ? (
-                        <img src={order.user.avatar} alt="avatar" className="w-6 h-6 rounded-full border border-white/10" />
+                        <Image src={order.user.avatar} alt="avatar" width={24} height={24} className="rounded-full border border-white/10" />
                       ) : (
                         <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-white text-[10px] font-bold font-mono">
                           {avatarLetter}
@@ -176,8 +177,7 @@ export default function RecentOrdersTable({ orders }: RecentOrdersTableProps) {
                          <Edit2 size={14} />
                        </button>
                     </div>
-                    {/* Fallback standard view before hover */}
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 group-hover/row:opacity-0 transition-opacity">
+                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 group-hover/row:opacity-0 transition-opacity">
                       <MoreVertical size={14} className="text-gray-600" />
                     </div>
                   </td>

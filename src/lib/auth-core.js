@@ -1,32 +1,21 @@
 import "server-only";
 
 import bcrypt from "bcryptjs";
-import clientPromise from "./mongodb";
-import { validateEnv } from "./env-validator";
+import { prisma } from "./prisma";
 
 // ------------------------
 // Helpers
 // ------------------------
 
-async function getUsersCollection() {
-  const env = validateEnv(); // Ensure env is valid before connecting
-  const client = await clientPromise;
-  const db = client.db(env.MONGODB_DB);
-  return db.collection("users");
-}
-
 export async function findUserByEmail(email) {
-  const users = await getUsersCollection();
   const normalizedEmail = String(email || "")
     .trim()
     .toLowerCase();
   if (!normalizedEmail) return null;
-  return users.findOne({ email: normalizedEmail });
+  return prisma.user.findUnique({ where: { email: normalizedEmail } });
 }
 
 export async function createUser(name, email, password) {
-  const users = await getUsersCollection();
-
   const normalizedEmail = String(email || "")
     .trim()
     .toLowerCase();
@@ -34,20 +23,19 @@ export async function createUser(name, email, password) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = {
-    name: safeName,
-    email: normalizedEmail,
-    password: hashedPassword,
-    roles: ["user"],
-    createdAt: new Date(),
-  };
-
-  const result = await users.insertOne(newUser);
+  const newUser = await prisma.user.create({
+    data: {
+      name: safeName,
+      email: normalizedEmail,
+      password: hashedPassword,
+      role: "USER"
+    }
+  });
 
   return {
     ...newUser,
-    id: result.insertedId.toString(),
-    _id: result.insertedId.toString(),
+    id: newUser.id,
+    _id: newUser.id,
   };
 }
 

@@ -77,8 +77,7 @@ export default function RegisterForm() {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-black relative overflow-hidden">
-       {/* Decorative Border Layer */}
-       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
        <div className="fixed inset-0 border-[24px] border-white/5 pointer-events-none z-50 hidden lg:block" />
       
       <motion.div 
@@ -116,8 +115,7 @@ export default function RegisterForm() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Name Field */}
-                  <div className="space-y-3">
+                                    <div className="space-y-3">
                     <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Identity Name</label>
                     <input
                         {...register("name", { required: "Name is required" })}
@@ -128,8 +126,7 @@ export default function RegisterForm() {
                     {errors.name && <p className="text-white text-[9px] font-mono font-bold uppercase tracking-widest mt-2 ml-1 italic">// {errors.name.message}</p>}
                   </div>
 
-                  {/* Email Field */}
-                  <div className="space-y-3">
+                                    <div className="space-y-3">
                     <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Archive Email</label>
                     <input
                         {...register("email", { 
@@ -145,8 +142,7 @@ export default function RegisterForm() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                   {/* Password Field */}
-                <div className="space-y-3">
+                                   <div className="space-y-3">
                     <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Security Key</label>
                     <input
                         {...register("password", { 
@@ -160,8 +156,7 @@ export default function RegisterForm() {
                     {errors.password && <p className="text-white text-[9px] font-mono font-bold uppercase tracking-widest mt-2 ml-1 italic">// {errors.password.message}</p>}
                 </div>
 
-                {/* Confirm Password Field */}
-                <div className="space-y-3">
+                                <div className="space-y-3">
                     <label className="text-[9px] font-mono font-black text-gray-600 uppercase tracking-[0.3em] ml-1">Verify Key</label>
                     <input
                         {...register("confirmPassword", { 

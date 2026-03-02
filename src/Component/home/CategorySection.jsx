@@ -92,8 +92,7 @@ const CategorySection = () => {
                 href={category.href}
                 className="group relative flex flex-col justify-end p-10 md:p-16 h-[500px] md:h-[700px] rounded-none bg-black overflow-hidden transition-all duration-700 hover:shadow-2xl border border-white/10 hover:border-white"
               >
-                {/* Background Image - Strict Grayscale */}
-                <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-1000 grayscale group-hover:grayscale-0 contrast-150 group-hover:contrast-100">
+                                <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-all duration-1000 grayscale group-hover:grayscale-0 contrast-150 group-hover:contrast-100">
                   <Image
                     src={category.image}
                     alt={category.name}
@@ -103,12 +102,10 @@ const CategorySection = () => {
                   />
                 </div>
                 
-                {/* Harsh Overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black via-black/90 to-transparent z-0" />
+                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black via-black/90 to-transparent z-0" />
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-700 pointer-events-none"></div>
 
-                {/* Content */}
-                <div className="relative z-10 text-white space-y-8">
+                                <div className="relative z-10 text-white space-y-8">
                   <category.icon size={40} strokeWidth={1} className="text-white opacity-20 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110" />
                   <div>
                     <h3 className="text-4xl md:text-6xl font-heading font-black mb-4 tracking-tighter text-white uppercase italic transition-transform duration-700 group-hover:translate-x-3">

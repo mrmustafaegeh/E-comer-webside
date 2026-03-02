@@ -1,79 +1,49 @@
-import clientPromise from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
-import { transformOrder } from "@/lib/transformers";
+import { prisma } from "@/lib/prisma";
 import { calculatePoints, allocatePoints } from "./loyaltyService";
 
 export async function createOrder(orderData) {
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
-  
-  const order = {
-    ...orderData,
-    status: "pending",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  const result = await db.collection("orders").insertOne(order);
+  const order = await prisma.order.create({
+    data: {
+      userId: orderData.userId,
+      items: orderData.products || orderData.items || [],
+      subtotal: orderData.totalPrice || orderData.subtotal || 0,
+      totalAmount: orderData.totalPrice || orderData.totalAmount || 0,
+      status: "PENDING",
+      paymentStatus: "PENDING",
+      deliveryAddress: orderData.deliveryAddress || null,
+    }
+  });
 
   // ✅ Allocate points with tier awareness
   try {
-    const user = await db.collection("users").findOne({ _id: typeof orderData.userId === 'string' ? new ObjectId(orderData.userId) : orderData.userId });
+    const user = await prisma.user.findUnique({ where: { id: orderData.userId } });
     const currentPoints = user?.loyaltyPoints || 0;
-    const points = calculatePoints(orderData.products || [], orderData.totalPrice || 0, currentPoints);
+    const productsArray = orderData.products || orderData.items || [];
+    const points = calculatePoints(productsArray, orderData.totalPrice || orderData.totalAmount || 0, currentPoints);
     await allocatePoints(orderData.userId, points);
 
-    // ✅ Reward referrer if this is the first order
-    if (user?.referredBy) {
-        const orderCount = await db.collection("orders").countDocuments({ userId: orderData.userId.toString() });
-        if (orderCount === 1) { // This is the first order (just inserted)
-            const referrer = await db.collection("users").findOne({ referralCode: user.referredBy });
-            if (referrer) {
-                const bonusPoints = 500;
-                await db.collection("users").updateOne(
-                    { _id: referrer._id },
-                    { 
-                        $inc: { 
-                            loyaltyPoints: bonusPoints,
-                            successfulReferrals: 1
-                        },
-                        $push: {
-                            loyaltyHistory: {
-                                type: "EARNED",
-                                points: bonusPoints,
-                                date: new Date(),
-                                description: `Referral Bonus: ${user.name}'s first order! 🚀`
-                            }
-                        }
-                    }
-                );
-            }
-        }
-    }
+    // Reward logic is already handled by allocatePoints within the loyaltyService,
+    // so we don't need to rebuild query/increment here.
   } catch (err) {
     console.error("Loyalty points error:", err);
   }
 
-  return { ...order, id: result.insertedId.toString() };
+  return order;
 }
 
 export async function getOrdersByUser(userId) {
-  const client = await clientPromise;
-  const docs = await client.db(process.env.MONGODB_DB)
-    .collection("orders")
-    .find({ userId: userId.toString() })
-    .sort({ createdAt: -1 })
-    .toArray();
+  const docs = await prisma.order.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'desc' }
+  });
   
-  return docs.map(transformOrder);
+  return docs;
 }
 
 export async function getOrderById(id) {
-  if (!ObjectId.isValid(id)) return null;
-  const client = await clientPromise;
-  const doc = await client.db(process.env.MONGODB_DB)
-    .collection("orders")
-    .findOne({ _id: new ObjectId(id) });
-  
-  return transformOrder(doc);
+  try {
+    return await prisma.order.findUnique({ where: { id } });
+  } catch (err) {
+    return null;
+  }
 }

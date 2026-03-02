@@ -1,6 +1,7 @@
 /**
  * Loyalty Service - Handles points calculation and allocation
  */
+import { prisma } from "@/lib/prisma";
 
 // Configuration for active boosters
 export const ACTIVE_BOOSTERS = [
@@ -26,9 +27,6 @@ export function getUserTier(points) {
 
 /**
  * Calculates points earned for an order
- * @param {Array} products - List of products in the order
- * @param {number} total - Total order amount
- * @param {number} userPoints - Current points of the user to determine tier
  */
 export function calculatePoints(products, total, userPoints = 0) {
   const tier = getUserTier(userPoints);
@@ -55,59 +53,47 @@ export function calculatePoints(products, total, userPoints = 0) {
  */
 export async function allocatePoints(userId, points) {
   if (typeof window !== "undefined") return; // Safety check
-  const clientPromise = (await import("@/lib/mongodb")).default;
-  const { ObjectId } = await import("mongodb");
-
   if (!points || points <= 0 || !userId) return;
 
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
-  
-  await db.collection("users").updateOne(
-    { _id: typeof userId === 'string' ? new ObjectId(userId) : userId },
-    { 
-      $inc: { loyaltyPoints: points },
-      $push: { 
-        loyaltyHistory: {
-          type: "EARNED",
-          points,
-          date: new Date(),
-          description: "Order completed"
-        }
-      }
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      loyaltyPoints: { increment: points },
+      loyaltyHistory: { push: {
+        type: "EARNED",
+        points,
+        date: new Date().toISOString(),
+        description: "Order completed"
+      }}
     }
-  );
+  });
 
   // Check for Referral Reward (First Order only)
-  const user = await db.collection("users").findOne({ _id: typeof userId === 'string' ? new ObjectId(userId) : userId });
   if (user?.referredBy && !user?.awardedReferrer) {
-    const orderCount = await db.collection("orders").countDocuments({ userId: userId.toString() });
+    const orderCount = await prisma.order.count({ where: { userId } });
     if (orderCount === 1) {
       // Award 500 points to the referrer
-      const referrer = await db.collection("users").findOne({ referralCode: user.referredBy });
+      const referrer = await prisma.user.findUnique({ where: { referralCode: user.referredBy } });
       if (referrer) {
-        await db.collection("users").updateOne(
-          { _id: referrer._id },
-          { 
-            $inc: { 
-              loyaltyPoints: 500,
-              successfulReferrals: 1
-            },
-            $push: { 
-              loyaltyHistory: {
-                type: "REFERRAL_BONUS",
-                points: 500,
-                date: new Date(),
-                description: `Successfully referred ${user.name}!`
-              }
-            }
+        await prisma.user.update({
+          where: { id: referrer.id },
+          data: {
+            loyaltyPoints: { increment: 500 },
+            successfulReferrals: { increment: 1 },
+            loyaltyHistory: { push: {
+              type: "REFERRAL_BONUS",
+              points: 500,
+              date: new Date().toISOString(),
+              description: `Successfully referred ${user.name}!`
+            }}
           }
-        );
+        });
+        
         // Mark as awarded to prevent double awarding
-        await db.collection("users").updateOne(
-          { _id: user._id },
-          { $set: { awardedReferrer: true } }
-        );
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { awardedReferrer: true }
+        });
       }
     }
   }
@@ -118,27 +104,21 @@ export async function allocatePoints(userId, points) {
  */
 export async function getLeaderboard() {
   if (typeof window !== "undefined") return []; // Safety check
-  const clientPromise = (await import("@/lib/mongodb")).default;
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
   
-  const topUsers = await db.collection("users")
-    .find({}, { 
-      projection: { 
-        name: 1, 
-        loyaltyPoints: 1, 
-        successfulReferrals: 1,
-        image: 1
-      } 
-    })
-    .sort({ successfulReferrals: -1, loyaltyPoints: -1 })
-    .limit(5)
-    .toArray();
+  const topUsers = await prisma.user.findMany({
+    orderBy: [
+      { successfulReferrals: 'desc' },
+      { loyaltyPoints: 'desc' }
+    ],
+    take: 5,
+    select: {
+      id: true,
+      name: true,
+      loyaltyPoints: true,
+      successfulReferrals: true,
+      image: true
+    }
+  });
     
-  return topUsers.map(u => ({
-    ...u,
-    id: u._id.toString(),
-    successfulReferrals: u.successfulReferrals || 0,
-    loyaltyPoints: u.loyaltyPoints || 0
-  }));
+  return topUsers;
 }

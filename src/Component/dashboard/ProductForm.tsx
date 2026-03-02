@@ -152,8 +152,7 @@ export default function ProductForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full text-white mx-auto pb-24 max-w-[2000px]">
       
-      {/* Top Protocol Bar */}
-      <motion.header 
+            <motion.header 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8"
@@ -194,18 +193,15 @@ export default function ProductForm({
         </div>
       </motion.header>
 
-      {/* Split Pane Editor */}
-      <div className="flex xl:flex-row flex-col gap-8 h-full items-start">
+            <div className="flex xl:flex-row flex-col gap-8 h-full items-start">
         
-        {/* Left Side: Input Modules */}
-        <motion.div 
+                <motion.div 
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
            transition={{ delay: 0.1 }}
            className="w-full xl:w-[60%] space-y-8 flex-shrink-0"
         >
-            {/* Essential Data */}
-            <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none group-hover/panel:bg-blue-500/10 transition-colors"></div>
                 
                 <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
@@ -273,8 +269,7 @@ export default function ProductForm({
                 </div>
             </div>
 
-            {/* Logistics & Taxonomy */}
-            <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
                  <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
                     Logistic Parameters
@@ -312,8 +307,7 @@ export default function ProductForm({
                 </div>
             </div>
 
-            {/* Visual Attachment Logic */}
-            <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
                  <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     Visual Data Block
@@ -358,8 +352,7 @@ export default function ProductForm({
         </motion.div>
 
 
-        {/* Right Side: LIVE UI PREVIEW */}
-        <motion.div 
+                <motion.div 
            initial={{ opacity: 0, x: 20 }}
            animate={{ opacity: 1, x: 0 }}
            transition={{ delay: 0.2 }}
@@ -377,22 +370,17 @@ export default function ProductForm({
                     </div>
                 </div>
 
-                {/* Simulated Front-End App UI Frame */}
-                <div className="w-[340px] h-[650px] bg-white rounded-[3rem] border-8 border-[#0f1117] relative shadow-2xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] scale-95 origin-top transform transition-all hover:scale-100 flex flex-col">
-                    {/* Dynamic Island / Notch Mock */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#0f1117] rounded-b-xl z-50"></div>
+                                <div className="w-[340px] h-[650px] bg-white rounded-[3rem] border-8 border-[#0f1117] relative shadow-2xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] scale-95 origin-top transform transition-all hover:scale-100 flex flex-col">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#0f1117] rounded-b-xl z-50"></div>
                     
-                    {/* Simulated App Header */}
-                    <div className="h-20 bg-gray-50 border-b border-gray-100 flex items-end justify-between px-6 pb-4 shrink-0">
+                                        <div className="h-20 bg-gray-50 border-b border-gray-100 flex items-end justify-between px-6 pb-4 shrink-0">
                         <ArrowRight size={20} className="text-gray-900 rotate-180" />
                         <span className="font-sora font-semibold text-sm text-gray-900 truncate max-w-[150px]">{category || "Category"}</span>
                         <div className="w-6 h-6 rounded-full bg-gray-200"></div>
                     </div>
 
-                    {/* App Content Body */}
-                    <div className="flex-1 overflow-y-auto bg-gray-50 pb-10">
-                         {/* Image View */}
-                         <div className="w-full aspect-square bg-white relative">
+                                        <div className="flex-1 overflow-y-auto bg-gray-50 pb-10">
+                                                  <div className="w-full aspect-square bg-white relative">
                             {previewUrl ? (
                                 <NextImage src={previewUrl} fill className="object-cover" alt="Preview Frame" />
                             ) : (
@@ -409,8 +397,7 @@ export default function ProductForm({
                             )}
                          </div>
 
-                         {/* Details Area */}
-                         <div className="p-6 bg-white -mt-6 relative rounded-t-[2rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+                                                  <div className="p-6 bg-white -mt-6 relative rounded-t-[2rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
                              <div className="flex items-start justify-between gap-4 mb-4">
                                 <h1 className="text-xl font-sora font-black text-gray-900 leading-tight">
                                     {title || "Asset Placeholder Title"}

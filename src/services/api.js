@@ -32,14 +32,6 @@ const getBackendBaseUrl = () => {
   );
 };
 
-// Log API configuration for debugging
-if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-  console.log("🔧 API Configuration:");
-  console.log("Environment:", process.env.NODE_ENV);
-  console.log("API Base URL:", getApiBaseUrl());
-  console.log("Backend URL:", getBackendBaseUrl());
-}
-
 // First instance - for external APIs if needed
 export const backend = axios.create({
   baseURL: getBackendBaseUrl(),
@@ -71,15 +63,6 @@ api.interceptors.request.use(
     const token =
       typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (token) config.headers.Authorization = `Bearer ${token}`;
-
-    // Log API calls in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        `📡 API Call: ${config.method?.toUpperCase()} ${config.baseURL}${
-          config.url
-        }`
-      );
-    }
 
     return config;
   },

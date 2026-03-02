@@ -43,12 +43,10 @@ export default function AdminSidebar({ onClose, desktopCollapsed, setDesktopColl
 
   return (
     <div className="flex flex-col h-full bg-[#0f1117] lg:bg-transparent relative text-gray-400 font-sora">
-      {/* Brand Header */}
-      <div className={`px-4 py-8 flex items-center ${desktopCollapsed ? "justify-center" : "gap-3"} relative`}>
+            <div className={`px-4 py-8 flex items-center ${desktopCollapsed ? "justify-center" : "gap-3"} relative`}>
         <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] shrink-0">
           <Zap size={16} strokeWidth={3} />
-          {/* Live pulse dot */}
-          <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                    <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
@@ -60,8 +58,7 @@ export default function AdminSidebar({ onClose, desktopCollapsed, setDesktopColl
           </motion.div>
         )}
 
-        {/* Desktop Collapse Toggle */}
-        <button
+                <button
           onClick={() => setDesktopCollapsed(!desktopCollapsed)}
           className="hidden lg:flex absolute -right-3 top-10 w-6 h-6 items-center justify-center bg-[#1e2333] border border-white/10 rounded-full text-gray-400 hover:text-white hover:border-white/20 transition-all z-50 shadow-lg"
         >
@@ -69,8 +66,7 @@ export default function AdminSidebar({ onClose, desktopCollapsed, setDesktopColl
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1.5 overflow-y-auto no-scrollbar pb-6 mt-4">
+            <nav className="flex-1 px-3 space-y-1.5 overflow-y-auto no-scrollbar pb-6 mt-4">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || (item.href !== "/admin/dashboard" && pathname?.startsWith(item.href));
@@ -103,8 +99,7 @@ export default function AdminSidebar({ onClose, desktopCollapsed, setDesktopColl
         })}
       </nav>
 
-      {/* Footer / User Profile */}
-      <div className={`p-4 border-t border-white/5 bg-[#0f1117]/50 ${desktopCollapsed ? "items-center" : ""}`}>
+            <div className={`p-4 border-t border-white/5 bg-[#0f1117]/50 ${desktopCollapsed ? "items-center" : ""}`}>
         <div className={`flex items-center gap-3 mb-4 ${desktopCollapsed ? "justify-center" : "px-2"}`}>
           <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold font-mono ring-2 ring-white/10 shrink-0">
              {user?.name?.[0] || "A"}

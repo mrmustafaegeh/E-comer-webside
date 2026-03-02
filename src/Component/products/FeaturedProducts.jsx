@@ -75,11 +75,9 @@ function FeaturedProducts({ products = [], addToCart }) {
     return (
         <div className="text-center py-24 bg-black border border-white/10 rounded-none mix-blend-screen shadow-2xl relative overflow-hidden group">
         
-        {/* Animated background lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_99%,rgba(255,255,255,0.05)_100%)] bg-[size:20px_100%]"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_99%,rgba(255,255,255,0.05)_100%)] bg-[size:20px_100%]"></div>
         
-        {/* Glitchy Icon */}
-        <div className="relative inline-block isolate z-10 mb-8 px-6 py-4 bg-black border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:scale-105 group-hover:border-white transition-[transform,border-color] duration-500 transform-gpu will-change-transform">
+                <div className="relative inline-block isolate z-10 mb-8 px-6 py-4 bg-black border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:scale-105 group-hover:border-white transition-[transform,border-color] duration-500 transform-gpu will-change-transform">
           <svg
              className="w-12 h-12 text-white/50 group-hover:text-white transition-colors duration-500 relative z-10 isolate mix-blend-screen"
              fill="none"

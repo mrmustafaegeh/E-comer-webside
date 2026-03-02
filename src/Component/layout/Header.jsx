@@ -109,8 +109,7 @@ export default function Header() {
       >
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-20 md:h-24">
-            {/* LOGO */}
-            <MotionDiv whileHover={{ scale: 1.05 }} transition={{ duration: 0.5 }}>
+                        <MotionDiv whileHover={{ scale: 1.05 }} transition={{ duration: 0.5 }}>
               <Link href="/" className="flex items-center gap-4 group">
                 <span className="text-xl md:text-2xl font-mono font-black text-white tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-700">
                   // {safeT("common.siteTitle", "QUICKCART")}
@@ -118,8 +117,7 @@ export default function Header() {
               </Link>
             </MotionDiv>
 
-            {/* DESKTOP NAV */}
-            <div className="hidden md:flex flex-1 justify-between items-center ml-16">
+                        <div className="hidden md:flex flex-1 justify-between items-center ml-16">
               <ul className="flex space-x-2">
                 {navItems.map((item) => (
                   <li key={item.href}>
@@ -152,8 +150,7 @@ export default function Header() {
                   </Link>
                 )}
 
-                {/* CART */}
-                <Link
+                                <Link
                   href="/cart"
                   className="relative p-3 rounded-none bg-black border border-white/10 hover:bg-white hover:text-black hover:border-white transition-colors duration-500 text-white group shadow-2xl"
                   aria-label="Cart"
@@ -184,8 +181,7 @@ export default function Header() {
               </div>
             </div>
 
-            {/* MOBILE NAV TOGGLE */}
-            <div className="md:hidden flex items-center space-x-4">
+                        <div className="md:hidden flex items-center space-x-4">
               <Link
                 href="/cart"
                 className="relative p-2.5 rounded-none bg-black border border-white/10 text-white"
@@ -218,8 +214,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* MOBILE MENU CONTENT */}
-          <AnimatePresence>
+                    <AnimatePresence>
             {isMobileMenuOpen && (
               <MotionDiv
                 initial={{ opacity: 0, x: 100 }}
@@ -228,8 +223,7 @@ export default function Header() {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="fixed inset-0 z-40 bg-black pt-24 px-6 md:hidden overflow-y-auto"
               >
-                 {/* Decorative Background for Mobile Menu */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
 
                 <div className="relative z-10 space-y-8 flex flex-col items-center justify-center min-h-[70vh]">
                   {navItems.map((item, idx) => (

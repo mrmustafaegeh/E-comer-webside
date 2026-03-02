@@ -112,10 +112,10 @@ export default function AIChatbot({ isOpen, onClose }) {
             break;
           case 'APPLY_COUPON':
             // Logic for applying coupon could be added here if there's a global method
-            console.log('Applying coupon:', code);
+
             break;
           case 'APPLY_POINTS':
-            console.log('Applying loyalty points:', data.action.points);
+
             // Typically this would dispatch an action or show a notification
             break;
           // Legacy support for fallback actions
@@ -131,7 +131,7 @@ export default function AIChatbot({ isOpen, onClose }) {
             router.push('/orders');
             break;
           default:
-            console.log('Unhandled action type:', type);
+
         }
       }, 1000);
     }
@@ -192,8 +192,7 @@ export default function AIChatbot({ isOpen, onClose }) {
           transition={{ duration: 0.2, ease: "easeOut" }}
           className="fixed inset-x-0 bottom-0 md:bottom-6 md:right-6 md:left-auto md:inset-initial md:w-[440px] h-[100dvh] md:h-[700px] bg-white md:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 border-t md:border border-gray-200"
         >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-4 flex items-center justify-between">
+                    <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
@@ -217,8 +216,7 @@ export default function AIChatbot({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
             {messages.map((message, index) => (
               <motion.div
                 key={index}
@@ -238,8 +236,7 @@ export default function AIChatbot({ isOpen, onClose }) {
                     {message.content}
                   </p>
                   
-                  {/* Product Cards */}
-                  {message.products && message.products.length > 0 && (
+                                    {message.products && message.products.length > 0 && (
                     <div className="mt-3 space-y-2">
                       {message.products.map((product, idx) => (
                         <a
@@ -274,8 +271,7 @@ export default function AIChatbot({ isOpen, onClose }) {
                     </div>
                   )}
                   
-                  {/* Suggested Actions */}
-                  {message.suggestions && message.suggestions.length > 0 && (
+                                    {message.suggestions && message.suggestions.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {message.suggestions.map((suggestion, idx) => (
                         <button
@@ -302,8 +298,7 @@ export default function AIChatbot({ isOpen, onClose }) {
               </motion.div>
             ))}
 
-            {/* Loading Indicator */}
-            {isLoading && (
+                        {isLoading && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -334,8 +329,7 @@ export default function AIChatbot({ isOpen, onClose }) {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Actions (show only at start) */}
-          {messages.length <= 2 && !isLoading && (
+                    {messages.length <= 2 && !isLoading && (
             <div className="px-4 py-3 bg-white border-t border-gray-100">
               <p className="text-xs text-gray-500 mb-2 font-medium">Quick actions:</p>
               <div className="grid grid-cols-3 gap-2">
@@ -353,8 +347,7 @@ export default function AIChatbot({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* Input Area */}
-          <div className="p-4 bg-white border-t border-gray-200">
+                    <div className="p-4 bg-white border-t border-gray-200">
             <div className="flex gap-2">
               <div className="flex-1 relative">
                 <input

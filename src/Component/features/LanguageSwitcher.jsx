@@ -52,8 +52,7 @@ export default function LanguageSwitcher() {
 
       {isOpen && (
         <div className="absolute right-0 w-52 mt-4 origin-top-right bg-black border border-white/20 rounded-none shadow-[0_20px_60px_rgba(0,0,0,1)] outline-none z-50 overflow-hidden divide-y divide-white/5">
-           {/* Decorative Background */}
-           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none"></div>
 
           <div className="py-0 relative z-10">
             {languages.map((lang) => (

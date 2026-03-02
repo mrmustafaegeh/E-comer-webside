@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session";
-import clientPromise from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -18,45 +17,30 @@ export async function GET() {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    // Fetch fresh user data from database
-    let client;
-    try {
-      client = await clientPromise;
-    } catch (dbError) {
-      console.error("❌ MongoDB connection error:", dbError);
-      return NextResponse.json({ user: null }, { status: 200 });
-    }
+    const userId = session.userId;
 
-    const db = client.db(process.env.MONGODB_DB || "quickcart");
-    const usersCollection = db.collection("users");
-
-    // Convert userId to ObjectId if it's a string
-    let userId;
-    try {
-      userId =
-        typeof session.userId === "string"
-          ? new ObjectId(session.userId)
-          : session.userId;
-    } catch (idError) {
-      console.error("❌ Invalid userId format:", session.userId);
-      return NextResponse.json({ user: null }, { status: 200 });
-    }
-
-    const user = await usersCollection.findOne(
-      { _id: userId },
-      { projection: { password: 0 } }
-    );
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+        isAdmin: true
+      }
+    });
 
     if (!user) {
-      console.log("⚠️ User not found in database:", userId);
+
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
     const userResponse = {
-      id: user._id.toString(),
+      id: user.id,
       email: user.email,
       name: user.name,
-      roles: user.roles || ["user"],
+      roles: user.isAdmin ? ["ADMIN", "USER"] : [(user.role || "USER").toUpperCase()],
       createdAt: user.createdAt,
     };
 

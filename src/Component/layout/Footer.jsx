@@ -35,14 +35,12 @@ const Footer = () => {
 
   return (
     <footer className="mt-auto bg-black border-t border-white/10 text-white relative overflow-hidden pb-12 pt-24">
-      {/* Background Noise Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-24">
           
-          {/* Brand Column */}
-          <div className="lg:col-span-5 space-y-12">
+                    <div className="lg:col-span-5 space-y-12">
             <Link href="/" className="flex items-center group">
               <div className="w-14 h-14 bg-white rounded-none flex items-center justify-center mr-5 shadow-2xl transition-all duration-700 group-hover:bg-black group-hover:ring-1 group-hover:ring-white">
                 <span className="text-black font-heading font-black tracking-tighter text-2xl group-hover:text-white transition-colors duration-700 italic">QC</span>
@@ -78,8 +76,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Links Columns */}
-          <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-12">
+                    <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-12">
             <div className="space-y-10">
               <h3 className="text-[10px] font-mono font-black tracking-[0.6em] text-white uppercase italic border-b border-white/10 pb-4">OPERATIONS</h3>
               <ul className="space-y-6">
@@ -139,8 +136,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-500 italic">
+                <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-500 italic">
           <p>// END TRANSMISSION. © {currentYear} QUICKCART CORE.</p>
           <div className="flex gap-10">
             <Link href="/privacy" className="hover:text-white transition-all duration-500 hover:scale-110">PRIVACY PROTOCOL</Link>

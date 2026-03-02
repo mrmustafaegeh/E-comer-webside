@@ -1,31 +1,19 @@
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { getCurrentUser } from "@/lib/session";
 
-export async function GET(request) {
+export const dynamic = "force-dynamic";
+
+export async function GET() {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const categories = await prisma.category.findMany({
+      orderBy: { createdAt: "desc" },
+    });
 
-    const categories = await db
-      .collection("categories")
-      .find({ isActive: true })
-      .sort({ displayOrder: 1 })
-      .limit(10)
-      .toArray();
-
-    // Transform _id to string
-    const transformedCategories = categories.map((cat) => ({
-      ...cat,
-      _id: cat._id.toString(),
-      id: cat._id.toString(),
-    }));
-
-    return NextResponse.json(transformedCategories, {
+    return NextResponse.json(categories, {
+      status: 200,
       headers: {
-        "Cache-Control":
-          process.env.NODE_ENV === "production"
-            ? "public, s-maxage=3600, stale-while-revalidate=7200" // 1 hour cache
-            : "private, max-age=10",
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=7200",
       },
     });
   } catch (error) {
@@ -39,48 +27,39 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    // Create slug from name
-    const slug = (body.slug || body.name)
+    const body = await request.json();
+    const { name, description, image, slug: providedSlug } = body;
+
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+
+    const slug = (providedSlug || name)
       .toLowerCase()
+      .trim()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
-    // Check if slug exists
-    const existing = await db.collection("categories").findOne({ slug });
+    const existing = await prisma.category.findUnique({ where: { slug } });
     if (existing) {
-      return NextResponse.json(
-        { error: "A category with this slug already exists" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: "Category slug already exists" }, { status: 409 });
     }
 
-    const doc = {
-      name: body.name,
-      slug,
-      icon: body.icon || null,
-      gradient: body.gradient || null,
-      description: body.description || null,
-      productCount: 0,
-      isActive: body.isActive != null ? Boolean(body.isActive) : true,
-      displayOrder: body.displayOrder || 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const result = await db.collection("categories").insertOne(doc);
-
-    return NextResponse.json(
-      {
-        ...doc,
-        _id: result.insertedId.toString(),
-        id: result.insertedId.toString(),
+    const category = await prisma.category.create({
+      data: {
+        name,
+        slug,
+        description,
+        image,
       },
-      { status: 201 }
-    );
+    });
+
+    return NextResponse.json(category, { status: 201 });
   } catch (error) {
     console.error("Create category error:", error);
     return NextResponse.json(

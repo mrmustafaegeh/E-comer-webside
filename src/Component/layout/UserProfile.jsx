@@ -95,11 +95,9 @@ export default function UserProfile() {
             role="menu"
             aria-orientation="vertical"
           >
-             {/* Decorative Background */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none"></div>
+                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none"></div>
 
-            {/* User info */}
-            <div className="px-8 py-10 border-b border-white/10 relative z-10 bg-white/5">
+                        <div className="px-8 py-10 border-b border-white/10 relative z-10 bg-white/5">
               <p className="text-xl font-heading font-black text-white italic tracking-tighter uppercase leading-none mb-4">{user.name}</p>
               <p className="text-[9px] font-mono font-black text-gray-700 uppercase tracking-[0.3em] overflow-hidden text-ellipsis mb-6 group-hover:text-gray-500 transition-colors">// {user.email}</p>
               <div className="inline-block px-4 py-1.5 bg-white text-black text-[8px] font-mono font-black uppercase tracking-[0.5em] italic">
@@ -107,8 +105,7 @@ export default function UserProfile() {
               </div>
             </div>
 
-            {/* Menu items */}
-            <div className="relative z-10 divide-y divide-white/5">
+                        <div className="relative z-10 divide-y divide-white/5">
               {[
                 { label: "PROFILE", path: "/profile", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
                 { label: "OPERATIONS", path: "/orders", icon: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" },
@@ -131,8 +128,7 @@ export default function UserProfile() {
                 </button>
               ))}
 
-              {/* Admin Section */}
-              {((user.role === 'admin' || user.role === 'ADMIN') || 
+                            {((user.role === 'admin' || user.role === 'ADMIN') || 
                 (Array.isArray(user.role) && (user.role.includes('admin') || user.role.includes('ADMIN'))) ||
                 (Array.isArray(user.roles) && (user.roles.includes('admin') || user.roles.includes('ADMIN')))) && (
                 <div className="bg-white/5">

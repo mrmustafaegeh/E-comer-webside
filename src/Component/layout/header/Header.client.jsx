@@ -60,9 +60,7 @@ export default function HeaderClient() {
           scrolled ? "bg-white shadow-lg border-b" : "bg-white/80 backdrop-blur"
         }`}
       >
-        {/* CONTENT — unchanged logic */}
-        {/* Your JSX continues here */}
-      </MotionNav>
+                      </MotionNav>
     </LazyMotion>
   );
 }

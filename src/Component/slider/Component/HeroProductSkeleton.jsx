@@ -27,8 +27,7 @@ export default function HeroProductSkeleton() {
         </div>
       </div>
 
-      {/* Skeleton floating badges */}
-      <div className="absolute -top-3 -left-3">
+            <div className="absolute -top-3 -left-3">
         <div className="h-16 w-16 bg-gray-700 rounded-full"></div>
       </div>
       <div className="absolute -bottom-3 -right-3">

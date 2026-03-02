@@ -1,27 +1,17 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const client = await clientPromise;
-    const db = client.db();
-
-    // Test database connection
-    await db.admin().ping();
-
-    // Get collection stats
-    const products = db.collection("products");
-    const productCount = await products.countDocuments();
-    const featuredCount = await products.countDocuments({ featured: true });
-
-    // Test featured query performance
     const start = Date.now();
-    await products
-      .find({ $or: [{ featured: true }, { rating: { $gte: 4.5 } }] })
-      .sort({ rating: -1 })
-      .limit(4)
-      .toArray();
+    // Ping database
+    await prisma.$queryRaw`SELECT 1`;
     const queryTime = Date.now() - start;
+
+    const [productCount, featuredCount] = await Promise.all([
+      prisma.product.count(),
+      prisma.product.count({ where: { isFeatured: true } }),
+    ]);
 
     return NextResponse.json({
       status: "ok",
@@ -32,12 +22,12 @@ export async function GET() {
       },
       performance: {
         queryTime: `${queryTime}ms`,
-        status:
-          queryTime < 100 ? "excellent" : queryTime < 200 ? "good" : "slow",
+        status: queryTime < 100 ? "excellent" : queryTime < 200 ? "good" : "slow",
       },
       timestamp: new Date().toISOString(),
     });
   } catch (err) {
+    console.error("Health check error:", err);
     return NextResponse.json(
       {
         status: "error",

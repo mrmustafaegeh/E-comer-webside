@@ -12,8 +12,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="md:flex md:gap-6">
-          {/* Sidebar */}
-          <div className="w-full md:w-64 mb-6 md:mb-0">
+                    <div className="w-full md:w-64 mb-6 md:mb-0">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-4 border-b border-gray-100">
                 <h2 className="font-semibold text-gray-900">Settings</h2>
@@ -53,8 +52,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1">
+                    <div className="flex-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
               {activeTab === "account" && (
                 <div className="space-y-6">

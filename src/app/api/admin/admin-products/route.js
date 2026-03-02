@@ -1,71 +1,59 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/session";
+import { z } from "zod";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request) {
-  const startTime = Date.now();
+const productSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
+  price: z.number().min(0),
+  salePrice: z.number().min(0).optional().nullable(),
+  category: z.string().min(1, "Category is required"),
+  stock: z.number().int().min(0).default(0),
+  image: z.string().url().optional().nullable(),
+  featured: z.boolean().default(false),
+});
 
+export async function GET(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const collection = db.collection("products");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
     const { search = "", category, page = "1", limit = "50" } =
       Object.fromEntries(request.nextUrl.searchParams);
-
-    const filters = {};
-    if (category) filters.category = category;
-    if (search) {
-      filters.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { title: { $regex: search, $options: "i" } },
-      ];
-    }
 
     const pageNum = Math.max(1, Number(page));
     const limitNum = Math.min(100, Math.max(1, Number(limit)));
     const skip = (pageNum - 1) * limitNum;
 
-    const [products, total] = await Promise.all([
-      collection
-        .find(filters)
-        .project({
-          name: 1,
-          title: 1,
-          price: 1,
-          salePrice: 1,
-          image: 1,
-          thumbnail: 1,
-          category: 1,
-          stock: 1,
-          featured: 1,
-          rating: 1,
-          createdAt: 1,
-        })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limitNum)
-        .toArray(),
-      collection.countDocuments(filters),
-    ]);
-
-    const transformedProducts = products.map((product) => ({
-      ...product,
-      id: product._id.toString(),
-      _id: product._id.toString(),
-      name: product.name ?? product.title,
-    }));
-
-    if (process.env.NODE_ENV === "development") {
-      console.log(
-        `✅ Admin products loaded: ${products.length} in ${Date.now() - startTime}ms`
-      );
+    const where = {};
+    if (category) {
+      where.category = { equals: category, mode: 'insensitive' };
     }
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        take: limitNum,
+        skip,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.product.count({ where }),
+    ]);
 
     return NextResponse.json(
       {
-        products: transformedProducts,
+        products,
         total,
         page: pageNum,
         limit: limitNum,
@@ -74,10 +62,7 @@ export async function GET(request) {
       {
         status: 200,
         headers: {
-          "Cache-Control":
-            process.env.NODE_ENV === "production"
-              ? "private, s-maxage=60, stale-while-revalidate=120"
-              : "no-store",
+          "Cache-Control": "no-store, max-age=0",
         },
       }
     );
@@ -92,46 +77,32 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const collection = db.collection("products");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    const data = await request.json();
+    const body = await request.json();
+    const validation = productSchema.safeParse(body);
 
-    // Basic validation
-    if (!data.title || !data.price) {
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "Title and price are required" },
+        { error: "Invalid input", details: validation.error.format() },
         { status: 400 }
       );
     }
 
-    const newProduct = {
-      ...data,
-      name: data.title, // Ensure name is populated
-      price: Number(data.price),
-      salePrice: data.offerPrice ? Number(data.offerPrice) : 0,
-      stock: Number(data.stock || 0),
-      rating: { rate: 0, count: 0 },
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const data = validation.data;
+    const product = await prisma.product.create({
+      data: {
+        ...data,
+        name: data.title, // Keep name for compatibility
+      },
+    });
 
-    // Remove undefined fields
-    Object.keys(newProduct).forEach(key => 
-      newProduct[key] === undefined && delete newProduct[key]
-    );
-
-    const result = await collection.insertOne(newProduct);
-
-    return NextResponse.json({
-      ...newProduct,
-      _id: result.insertedId.toString(),
-      id: result.insertedId.toString()
-    }, { status: 201 });
-
-  } catch (error) {
-    console.error("ADMIN PRODUCTS POST ERROR:", error);
+    return NextResponse.json(product, { status: 201 });
+  } catch (err) {
+    console.error("ADMIN PRODUCTS POST ERROR:", err);
     return NextResponse.json(
       { error: "Failed to create product" },
       { status: 500 }

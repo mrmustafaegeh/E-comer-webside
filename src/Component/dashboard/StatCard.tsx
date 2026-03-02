@@ -84,8 +84,7 @@ export default function StatCard({
         </div>
         <div className="p-3 bg-[#0f1117] border border-white/5 rounded-xl text-gray-400 group-hover:text-white transition-colors duration-300 relative shadow-inner">
            <Icon size={18} style={{ color: "inherit" }} />
-           {/* small glow behind icon on hover */}
-           <div className="absolute inset-0 bg-current blur-md opacity-0 group-hover:opacity-20 transition-opacity" style={{ color }}></div>
+                      <div className="absolute inset-0 bg-current blur-md opacity-0 group-hover:opacity-20 transition-opacity" style={{ color }}></div>
         </div>
       </div>
 
@@ -126,8 +125,7 @@ export default function StatCard({
          </div>
       </div>
 
-      {/* Hover CTA Slide Up */}
-      <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-t from-[#161b27] via-[#161b27]/90 to-transparent flex justify-end z-20">
+            <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-t from-[#161b27] via-[#161b27]/90 to-transparent flex justify-end z-20">
          <button className="flex items-center gap-1 text-[10px] font-mono tracking-widest uppercase text-blue-400 hover:text-blue-300 drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]">
            View Details <ChevronRight size={12} strokeWidth={3} />
          </button>

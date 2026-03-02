@@ -33,8 +33,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className={`${sora.variable} ${jbMono.variable} font-sora flex h-screen bg-[#0f1117] text-gray-100 overflow-hidden selection:bg-blue-500/30`}>
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
+            {sidebarOpen && (
         <div
           className="fixed inset-0 bg-[#0f1117]/80 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
@@ -42,8 +41,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* Sidebar */}
-      <aside
+            <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-50 
           bg-[#161b27] border-r border-white/5
@@ -57,21 +55,17 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
         <AdminSidebar onClose={() => setSidebarOpen(false)} desktopCollapsed={desktopCollapsed} setDesktopCollapsed={setDesktopCollapsed} />
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Subtle noise/grid overlay */}
-        <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay z-0"></div>
+            <div className="flex-1 flex flex-col overflow-hidden relative">
+                <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay z-0"></div>
 
-        {/* Header */}
-        <header className="flex-shrink-0 sticky top-0 z-30 layout-header">
+                <header className="flex-shrink-0 sticky top-0 z-30 layout-header">
           <AdminHeader
             onMenuClick={() => setSidebarOpen(true)}
             sidebarOpen={sidebarOpen}
           />
         </header>
 
-        {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative z-10" id="admin-main-content">
+                <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 relative z-10" id="admin-main-content">
           {children}
         </main>
 

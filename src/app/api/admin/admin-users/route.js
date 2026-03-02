@@ -1,79 +1,69 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { getCurrentUser } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request) {
-  const startTime = Date.now();
-
   try {
-    const client = await clientPromise;
-    const db = client.db();
-    const col = db.collection("users");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    const params = Object.fromEntries(request.nextUrl.searchParams);
-    const page = Math.max(1, Number(params.page || 1));
-    const limit = Math.min(100, Math.max(1, Number(params.limit || 10)));
-    const search = (params.search || "").trim();
+    const { search = "", page = "1", limit = "10" } =
+      Object.fromEntries(request.nextUrl.searchParams);
 
-    const filter = {};
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.min(100, Math.max(1, Number(limit)));
+    const skip = (pageNum - 1) * limitNum;
+
+    const where = {};
     if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
       ];
     }
 
-    const skip = (page - 1) * limit;
-
-    // ✅ Use INCLUDE projection only (no password field included)
-    const projection = {
-      name: 1,
-      email: 1,
-      role: 1,
-      createdAt: 1,
-    };
-
     const [users, total] = await Promise.all([
-      col
-        .find(filter, { projection })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .toArray(),
-      col.countDocuments(filter),
+      prisma.user.findMany({
+        where,
+        take: limitNum,
+        skip,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isAdmin: true,
+          createdAt: true,
+        },
+      }),
+      prisma.user.count({ where }),
     ]);
-
-    const ms = Date.now() - startTime;
-    if (process.env.NODE_ENV === "development") {
-      console.log(`✅ Admin users: ${users.length} in ${ms}ms`);
-    }
 
     return NextResponse.json(
       {
-        users: users.map((u) => ({
-          ...u,
-          _id: u._id.toString(),
-          id: u._id.toString(),
-        })),
+        users,
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
       },
       {
         status: 200,
         headers: {
-          "Cache-Control":
-            process.env.NODE_ENV === "production"
-              ? "private, max-age=60"
-              : "private, max-age=10",
+          "Cache-Control": "no-store",
         },
       }
     );
   } catch (err) {
     console.error("ADMIN USERS GET ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to load users", details: err.message },
+      { error: "Failed to load users" },
       { status: 500 }
     );
   }
@@ -81,62 +71,51 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db();
-    const col = db.collection("users");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
     const body = await request.json();
+    const { name, email, password, role, isAdmin } = body;
 
-    const name = (body.name || "").trim();
-    const email = (body.email || "").trim().toLowerCase();
-    const password = body.password || "";
-
-    if (!name)
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
-    if (!email)
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
-    if (!password || password.length < 6) {
+    if (!name || !email || !password || password.length < 6) {
       return NextResponse.json(
-        { error: "Password must be at least 6 characters" },
+        { error: "Invalid input. Name, email and password (min 6 chars) are required." },
         { status: 400 }
       );
     }
 
-    const exists = await col.findOne({ email }, { projection: { _id: 1 } });
-    if (exists)
-      return NextResponse.json(
-        { error: "Email already exists" },
-        { status: 409 }
-      );
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return NextResponse.json({ error: "Email already exists" }, { status: 409 });
+    }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 12);
 
-    const doc = {
-      name,
-      email,
-      password: passwordHash,
-      role: body.role || "user",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    const result = await col.insertOne(doc);
-
-    return NextResponse.json(
-      {
-        _id: result.insertedId.toString(),
-        id: result.insertedId.toString(),
+    const newUser = await prisma.user.create({
+      data: {
         name,
         email,
-        role: doc.role,
-        createdAt: doc.createdAt,
+        password: passwordHash,
+        role: role || "user",
+        isAdmin: isAdmin || role === "admin" || false,
       },
-      { status: 201 }
-    );
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isAdmin: true,
+        createdAt: true,
+      },
+    });
+
+    return NextResponse.json(newUser, { status: 201 });
   } catch (err) {
     console.error("ADMIN USERS POST ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to create user", details: err.message },
+      { error: "Failed to create user" },
       { status: 500 }
     );
   }

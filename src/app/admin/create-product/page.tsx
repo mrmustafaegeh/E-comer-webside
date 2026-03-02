@@ -47,8 +47,7 @@ export default function AdminCreateProduct() {
   return (
     <ProtectedAdmin>
       <div className="w-full max-w-[2000px] mx-auto pb-10">
-        {/* Header with back button */}
-        <motion.div 
+                <motion.div 
            initial={{ opacity: 0, x: -20 }}
            animate={{ opacity: 1, x: 0 }}
            className="mb-8"
@@ -65,8 +64,7 @@ export default function AdminCreateProduct() {
           </Link>
         </motion.div>
 
-        {/* Error message */}
-        {error && (
+                {error && (
           <motion.div 
              initial={{ opacity: 0, y: -10 }}
              animate={{ opacity: 1, y: 0 }}
@@ -91,11 +89,9 @@ export default function AdminCreateProduct() {
           </motion.div>
         )}
 
-        {/* Product Form */}
-        <ProductForm initialValues={{}} onSaved={handleSave} />
+                <ProductForm initialValues={{}} onSaved={handleSave} />
 
-        {/* Loading overlay */}
-        {loading && (
+                {loading && (
           <div className="fixed inset-0 bg-[#0f1117]/80 backdrop-blur-xl flex items-center justify-center z-[100]">
             <div className="bg-[#161b27] border border-white/10 rounded-[2rem] shadow-[0_0_50px_rgba(59,130,246,0.1)] p-12 max-w-sm mx-4 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>

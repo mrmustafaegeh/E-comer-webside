@@ -137,15 +137,12 @@ function AnimatedHeroSection({ initialProducts = [] }) {
         style={{ minHeight: "90vh" }}
         aria-label="Hero section"
       >
-        {/* Subtle white radial glow from top left */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.03),transparent_60%)] pointer-events-none z-10"></div>
-        {/* Noise overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.03),transparent_60%)] pointer-events-none z-10"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
         
         <div className="relative z-20 max-w-[1600px] mx-auto px-6 lg:px-12 py-24 min-h-[90vh] flex items-center">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center w-full">
-            {/* Left Column - Content */}
-            <div className="space-y-12 text-center lg:text-left order-2 lg:order-1">
+                        <div className="space-y-12 text-center lg:text-left order-2 lg:order-1">
               <div className="min-h-[40px]">
                 <Suspense fallback={<div className="h-8" />}>
                   <AnimatedBadge />
@@ -167,8 +164,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
               </div>
             </div>
 
-            {/* Right Column - Product Visualization */}
-            <div className="relative order-1 lg:order-2" style={{ minHeight: "500px" }}>
+                        <div className="relative order-1 lg:order-2" style={{ minHeight: "500px" }}>
               <div className="product-card group relative transform-gpu" style={{
                 transform: "rotateX(calc(var(--mouse-y, 0) * -16deg)) rotateY(calc(var(--mouse-x, 0) * 20deg))",
                 transformStyle: "preserve-3d",
@@ -189,8 +185,7 @@ function AnimatedHeroSection({ initialProducts = [] }) {
                   </m.div>
                 </AnimatePresence>
                 
-                {/* Visual shadow effect for 3D feel */}
-                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-white/5 blur-3xl rounded-full"></div>
+                                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-3/4 h-12 bg-white/5 blur-3xl rounded-full"></div>
               </div>
 
               <Suspense fallback={null}>

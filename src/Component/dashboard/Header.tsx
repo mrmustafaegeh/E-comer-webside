@@ -71,8 +71,7 @@ export default function AdminHeader({
   return (
     <header className="sticky top-0 z-30 bg-[#0f1117]/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 transition-all w-full">
       <div className="flex items-center justify-between">
-        {/* Left: Section Title / Breadcrumbs */}
-        <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
             className="p-2 hover:bg-white/5 rounded-lg lg:hidden text-gray-400"
@@ -87,8 +86,7 @@ export default function AdminHeader({
           </div>
         </div>
 
-        {/* Center: Command Palette Search */}
-        <div className="flex-1 max-w-md mx-8 hidden lg:block relative group">
+                <div className="flex-1 max-w-md mx-8 hidden lg:block relative group">
           <Search
             className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-blue-500 transition-colors pointer-events-none"
             size={16}
@@ -104,18 +102,14 @@ export default function AdminHeader({
           </div>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-3">
-          {/* Live Clock Drop */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#161b27] border border-white/5 rounded-lg mr-2">
+                <div className="flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#161b27] border border-white/5 rounded-lg mr-2">
             <ClockIcon size={14} className="text-blue-400" />
             <span className="text-xs font-mono text-gray-300 w-[60px] text-right tracking-wider">{time}</span>
           </div>
 
-          {/* Removed Theme Toggle - System is locked to Cyber Dark Mode */}
-
-          {/* Notifications */}
-          <button
+          
+                    <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg relative transition-all"
           >
@@ -123,8 +117,7 @@ export default function AdminHeader({
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.8)] border border-[#0f1117]"></span>
           </button>
 
-          {/* User Profile */}
-          <div className="relative ml-2">
+                    <div className="relative ml-2">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center gap-2 p-1 pl-3 border border-white/5 bg-[#161b27] hover:border-white/10 rounded-full shadow-sm transition-all"

@@ -147,12 +147,10 @@ export default function Floating3DGlobe({
 
   return (
     <div className="relative w-full h-full">
-      {/* Canvas Container */}
-      <div className="w-[500px] h-[500px] rounded-3xl overflow-hidden border border-cyan-500/20 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm">
+            <div className="w-[500px] h-[500px] rounded-3xl overflow-hidden border border-cyan-500/20 bg-gradient-to-br from-gray-900/50 to-gray-800/30 backdrop-blur-sm">
         <canvas ref={canvasRef} className="w-full h-full" />
 
-        {/* Loading State */}
-        {!threeLoaded && (
+                {!threeLoaded && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50">
             <div className="text-center">
               <div className="w-10 h-10 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4"></div>
@@ -161,8 +159,7 @@ export default function Floating3DGlobe({
           </div>
         )}
 
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent pointer-events-none" />
       </div>
     </div>
   );

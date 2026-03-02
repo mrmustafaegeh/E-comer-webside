@@ -1,15 +1,10 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { transformOrder } from "@/lib/transformers";
 import { getCurrentUser } from "@/lib/session";
-import { calculatePoints, allocatePoints } from "@/services/loyaltyService";
+import { createOrder } from "@/services/orderService";
 
 export async function GET(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("orders");
-
     const user = await getCurrentUser();
 
     if (!user) {
@@ -27,34 +22,23 @@ export async function GET(request) {
     const skip = (page - 1) * limit;
 
     const [orders, total] = await Promise.all([
-      col
-        .find(query, {
-          projection: {
-            userId: 1,
-            products: 1,
-            totalPrice: 1,
-            status: 1,
-            createdAt: 1,
-            shippingAddress: 1,
-            paymentMethod: 1,
-          },
-        })
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
-        .toArray(),
-      col.countDocuments(query),
+      prisma.order.findMany({
+        where: query,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.order.count({ where: query }),
     ]);
 
     const response = NextResponse.json({
-      orders: orders.map(transformOrder),
+      orders: orders,
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit),
     });
 
-    // ✅ User-specific → short private cache (bfcache-safe)
     response.headers.set(
       "Cache-Control",
       "private, max-age=30, stale-while-revalidate=60"
@@ -72,10 +56,6 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("orders");
-
     const body = await request.json();
 
     const userId = body.userId;
@@ -100,14 +80,13 @@ export async function POST(request) {
       );
     }
 
-    const { createOrder } = await import("@/services/orderService");
     const order = await createOrder({
       userId,
       products,
       totalPrice,
-      shippingAddress: body.shippingAddress,
+      deliveryAddress: body.shippingAddress || body.deliveryAddress,
       paymentMethod: body.paymentMethod,
-      status: body.status || "processing",
+      status: body.status || "PROCESSING",
     });
 
     return NextResponse.json(order, { status: 201 });

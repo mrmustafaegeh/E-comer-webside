@@ -43,7 +43,6 @@ export default async function ProductDetailPage({ params }) {
       
       <ProductDetailClient product={product} />
 
-      {/* Recommended Products or Reviews could go here */}
-    </main>
+          </main>
   );
 }

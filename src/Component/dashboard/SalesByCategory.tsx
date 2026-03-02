@@ -82,8 +82,7 @@ export default function SalesByCategory({ data }: SalesByCategoryProps) {
           </PieChart>
         </ResponsiveContainer>
         
-        {/* Center Total */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="text-[10px] font-mono text-gray-500 tracking-widest uppercase mb-1">Total Sales</span>
           <span className="text-2xl font-mono text-white font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
             ${(total / 1000).toFixed(1)}K

@@ -8,14 +8,12 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background Decorative */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
       
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-24 md:py-48 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 xl:gap-32">
-            {/* Left Col: Info */}
-            <div className="space-y-16">
+                        <div className="space-y-16">
                 <div>
                     <span className="text-[10px] font-mono font-black text-gray-700 uppercase tracking-[0.6em] mb-8 block italic animate-pulse">
                         // Communication Protocol 09
@@ -40,8 +38,7 @@ export default function ContactPage() {
                 </div>
             </div>
 
-            {/* Right Col: Form */}
-            <div className="bg-black p-10 md:p-16 xl:p-24 rounded-none border border-white/10 shadow-2xl relative group hover:border-white transition-all duration-1000">
+                        <div className="bg-black p-10 md:p-16 xl:p-24 rounded-none border border-white/10 shadow-2xl relative group hover:border-white transition-all duration-1000">
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.02] transition-opacity duration-1000 pointer-events-none"></div>
                 <div className="relative z-10">
                     <ContactForm />

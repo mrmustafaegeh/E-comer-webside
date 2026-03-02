@@ -19,8 +19,7 @@ export default function OrderSuccessPage() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Monochrome Noise Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
       
       <div className="fixed inset-0 border-[32px] border-white/5 pointer-events-none z-50 hidden lg:block" />
       

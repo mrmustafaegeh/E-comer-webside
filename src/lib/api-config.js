@@ -46,10 +46,10 @@ export const apiConfig = {
   logConfig() {
     if (process.env.NODE_ENV === "development") {
       console.group("🔧 API Configuration");
-      console.log("Base URL:", this.baseUrl);
-      console.log("Backend URL:", this.backendUrl);
-      console.log("Environment:", process.env.NODE_ENV);
-      console.log("Public API URL:", process.env.NEXT_PUBLIC_API_URL);
+
+
+
+
       console.groupEnd();
     }
   },

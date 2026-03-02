@@ -92,8 +92,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </p>
         </div>
 
-        {/* Range Selector */}
-        <div className="flex items-center p-1 bg-[#0f1117] border border-white/10 rounded-lg">
+                <div className="flex items-center p-1 bg-[#0f1117] border border-white/10 rounded-lg">
           {["7D", "30D", "90D", "6M", "12M"].map((tab) => (
             <button
               key={tab}

@@ -29,18 +29,14 @@ function HeroProductCard({ product }) {
       animate="animate"
       className="relative group w-full max-w-md mx-auto card-3d-tilt"
     >
-      {/* 3D Glowing Orb Behind Card */}
-      <div className="absolute -inset-10 bg-white-slow-orb group-hover:bg-white/10 transition-colors duration-1000 z-0 opacity-40"></div>
+            <div className="absolute -inset-10 bg-white-slow-orb group-hover:bg-white/10 transition-colors duration-1000 z-0 opacity-40"></div>
 
-      {/* Card - Elite Brutalist Aesthetic */}
-      <div className="relative bg-black rounded-none p-10 shadow-2xl border border-white/10 overflow-hidden group-hover:border-white transition-colors duration-700 card-3d-tilt-inner z-10 transform-gpu">
+            <div className="relative bg-black rounded-none p-10 shadow-2xl border border-white/10 overflow-hidden group-hover:border-white transition-colors duration-700 card-3d-tilt-inner z-10 transform-gpu">
         
-        {/* Decorative corner accents */}
-        <div className="absolute top-0 left-0 w-10 h-10 border-t border-l border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-[opacity,margin] duration-700 group-hover:m-0"></div>
+                <div className="absolute top-0 left-0 w-10 h-10 border-t border-l border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-[opacity,margin] duration-700 group-hover:m-0"></div>
         <div className="absolute bottom-0 right-0 w-10 h-10 border-b border-r border-white m-4 pointer-events-none opacity-0 group-hover:opacity-100 transition-[opacity,margin] duration-700 group-hover:m-0"></div>
 
-        {/* Image Area */}
-        <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-black mb-10 shadow-2xl border border-white/5 group-hover:border-white/20 transition-colors duration-1000">
+                <div className="relative aspect-[4/5] rounded-none overflow-hidden bg-black mb-10 shadow-2xl border border-white/5 group-hover:border-white/20 transition-colors duration-1000">
           {isImageUrl ? (
             <Image
               src={imageSrc}
@@ -61,12 +57,10 @@ function HeroProductCard({ product }) {
             </div>
           )}
           
-          {/* Subtle Overlay on Image */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
         </div>
 
-        {/* Info Area - Clean Brutalist Typography */}
-        <div className="space-y-6 px-2 relative z-10">
+                <div className="space-y-6 px-2 relative z-10">
           <div className="flex justify-between items-start gap-4">
              <h3 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter leading-none uppercase italic group-hover:translate-x-2 transition-transform duration-500">
               {product.title || "Untitled Product"}
@@ -90,8 +84,7 @@ function HeroProductCard({ product }) {
               </span>
             </div>
             
-            {/* Minimal Rating */}
-            {product.rating > 0 && (
+                        {product.rating > 0 && (
                 <div className="flex items-center gap-2 bg-black border border-white/20 px-4 py-2 rounded-none shadow-2xl group-hover:border-white transition-colors duration-500">
                   <span className="text-[10px] font-mono font-black text-white tracking-[0.2em]">{product.rating}</span>
                   <svg className="w-3.5 h-3.5 text-white fill-current opacity-20 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>

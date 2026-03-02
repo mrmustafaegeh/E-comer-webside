@@ -107,17 +107,13 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
 
   return (
     <div className="bg-[#0f1117] border-4 border-[#161b27] rounded-[2rem] p-6 lg:p-8 flex flex-col h-full relative overflow-hidden shadow-2xl group min-h-[400px]">
-      {/* Terminal Grid Background Layer */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-20"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none opacity-20"></div>
       
-      {/* Internal Shadow fading out top/bottom edge */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117] via-transparent to-[#0f1117] pointer-events-none z-10 opacity-60"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0f1117] via-transparent to-[#0f1117] pointer-events-none z-10 opacity-60"></div>
       
-      {/* Top Window UI Bar */}
-      <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5 relative z-20">
+            <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5 relative z-20">
          <div className="flex items-center gap-4">
-             {/* MacOS style window controls */}
-             <div className="flex gap-2">
+                          <div className="flex gap-2">
                  <span className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.5)] transition-all hover:bg-red-400 cursor-pointer"></span>
                  <span className="w-3 h-3 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.5)] transition-all hover:bg-amber-400 cursor-pointer"></span>
                  <span className="w-3 h-3 rounded-full bg-emerald-500/80 shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-all hover:bg-emerald-400 cursor-pointer"></span>
@@ -133,8 +129,7 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
          </div>
       </div>
 
-      {/* Terminal Screen Stream Data */}
-      <div 
+            <div 
         ref={scrollRef}
         className="flex-1 overflow-y-auto no-scrollbar font-mono text-[11px] leading-relaxed relative z-20 pr-2 scroll-smooth flex flex-col justify-end"
       >
@@ -153,8 +148,7 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
                 ))}
             </AnimatePresence>
             
-            {/* Blinking CLI Cursor */}
-            <div className="flex items-center text-emerald-500 mt-2 select-none">
+                        <div className="flex items-center text-emerald-500 mt-2 select-none">
                 <span className="opacity-30 mr-3 text-gray-500">{'~'}</span>
                 <span className="mr-2 text-green-500 font-bold">root#</span>
                 <motion.span 
@@ -166,8 +160,7 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
           </div>
       </div>
 
-      {/* Bottom Metrics HUD */}
-      <div className="mt-4 pt-4 border-t border-white/5 relative z-20 flex justify-between items-center text-[10px] font-mono text-gray-500 tracking-widest uppercase select-none">
+            <div className="mt-4 pt-4 border-t border-white/5 relative z-20 flex justify-between items-center text-[10px] font-mono text-gray-500 tracking-widest uppercase select-none">
           <div className="flex items-center gap-5">
               <span className="flex items-center gap-2 hover:text-blue-400 transition-colors group cursor-default">
                   <Cpu size={12} className="group-hover:animate-spin transition-colors" /> CPU: 12.4%
@@ -185,11 +178,9 @@ export default function ActivityFeed({ activities }: ActivityFeedProps) {
           </motion.div>
       </div>
 
-      {/* Retro CRT Scanline Overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-30 pointer-events-none opacity-[0.15]"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-30 pointer-events-none opacity-[0.15]"></div>
       
-      {/* Light glow from bottom */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none z-10"></div>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none z-10"></div>
     </div>
   );
 }

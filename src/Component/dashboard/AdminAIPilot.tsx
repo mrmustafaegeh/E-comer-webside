@@ -117,8 +117,7 @@ export default function AdminAIPilot() {
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      <motion.button
+            <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         whileHover={{ scale: 1.05 }}
@@ -129,8 +128,7 @@ export default function AdminAIPilot() {
         <Sparkles className="text-white" size={24} />
       </motion.button>
 
-      {/* Flyout Drawer Pane */}
-      <AnimatePresence>
+            <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, x: 20, y: 20, scale: 0.95 }}
@@ -139,8 +137,7 @@ export default function AdminAIPilot() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed bottom-6 right-6 z-[70] w-[380px] sm:w-[420px] h-[600px] max-h-[85vh] bg-[#161b27]/95 backdrop-blur-3xl border border-white/10 rounded-[2rem] shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
           >
-            {/* Header */}
-            <div className="px-6 py-4 border-b border-white/5 bg-[#0f1117]/80 flex items-center justify-between shrink-0 relative overflow-hidden">
+                        <div className="px-6 py-4 border-b border-white/5 bg-[#0f1117]/80 flex items-center justify-between shrink-0 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 blur-[60px] pointer-events-none rounded-full translate-x-1/2 -translate-y-1/2"></div>
               <div className="flex items-center gap-3 relative z-10">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-inner border border-white/20">
@@ -161,8 +158,7 @@ export default function AdminAIPilot() {
               </button>
             </div>
 
-            {/* Chat Stream Area */}
-            <div 
+                        <div 
               ref={scrollRef}
               className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6"
             >
@@ -212,8 +208,7 @@ export default function AdminAIPilot() {
                )}
             </div>
 
-            {/* Suggested Queries */}
-            {messages.length < 4 && !isTyping && (
+                        {messages.length < 4 && !isTyping && (
                <motion.div 
                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
                  className="px-6 pb-4 flex flex-col gap-2 shrink-0"
@@ -240,8 +235,7 @@ export default function AdminAIPilot() {
                </motion.div>
             )}
 
-            {/* Input Area */}
-            <div className="p-4 bg-[#0f1117]/80 border-t border-white/5 shrink-0 relative">
+                        <div className="p-4 bg-[#0f1117]/80 border-t border-white/5 shrink-0 relative">
                <div className="relative flex items-center bg-[#161b27] border border-white/10 rounded-2xl p-1.5 focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all shadow-inner">
                   <button className="w-8 h-8 flex items-center justify-center shrink-0 rounded-xl bg-white/5 text-gray-500 hover:text-white hover:bg-white/10 transition-colors ml-1">
                       <Command size={14} />

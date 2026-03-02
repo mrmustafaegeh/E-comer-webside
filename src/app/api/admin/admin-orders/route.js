@@ -1,61 +1,65 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/session";
 
-function parseSort(sortStr) {
-  if (!sortStr) return { createdAt: -1 };
-  const dir = sortStr.startsWith("-") ? -1 : 1;
-  const field = sortStr.startsWith("-") ? sortStr.slice(1) : sortStr;
-  return { [field]: dir };
-}
+export const dynamic = "force-dynamic";
 
 export async function GET(request) {
-  const startTime = Date.now();
-
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("orders");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    const params = Object.fromEntries(request.nextUrl.searchParams);
-    const page = Math.max(1, Number(params.page || 1));
-    const limit = Math.min(100, Math.max(1, Number(params.limit || 10)));
-    const sort = params.sort || "-createdAt";
-    const status = (params.status || "").trim();
+    const { status, page = "1", limit = "10", sort = "createdAt", order = "desc" } =
+      Object.fromEntries(request.nextUrl.searchParams);
 
-    const filter = {};
-    if (status) filter.status = status;
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.min(100, Math.max(1, Number(limit)));
+    const skip = (pageNum - 1) * limitNum;
 
-    const skip = (page - 1) * limit;
+    const where = {};
+    if (status) {
+      where.status = status;
+    }
 
     const [orders, total] = await Promise.all([
-      col.find(filter).sort(parseSort(sort)).skip(skip).limit(limit).toArray(),
-      col.countDocuments(filter),
+      prisma.order.findMany({
+        where,
+        take: limitNum,
+        skip,
+        orderBy: { [sort]: order },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+      }),
+      prisma.order.count({ where }),
     ]);
 
-    const ms = Date.now() - startTime;
-    if (process.env.NODE_ENV === "development") {
-      console.log(`✅ Admin orders: ${orders.length} in ${ms}ms`);
-    }
+    // Format for legacy frontend expectation if necessary
+    const formattedOrders = orders.map(o => ({
+      ...o,
+      itemsCount: Array.isArray(o.items) ? o.items.length : 0,
+    }));
 
     return NextResponse.json(
       {
-        orders: orders.map((o) => ({
-          ...o,
-          _id: o._id.toString(),
-          id: o._id.toString(),
-        })),
+        orders: formattedOrders,
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
       },
       {
         status: 200,
         headers: {
-          "Cache-Control":
-            process.env.NODE_ENV === "production"
-              ? "private, max-age=30, stale-while-revalidate=60"
-              : "no-store",
+          "Cache-Control": "no-store",
         },
       }
     );
@@ -70,39 +74,28 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("orders");
-
-    const body = await request.json();
-
-    const userId = body.userId;
-    const products = body.products;
-    const totalPrice = Number(body.totalPrice);
-
-    if (!userId || !products || !Number.isFinite(totalPrice)) {
-      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const doc = {
-      userId,
-      products,
-      totalPrice,
-      status: body.status || "processing",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const body = await request.json();
+    const { userId, items, totalPrice, status } = body;
 
-    const result = await col.insertOne(doc);
+    if (!userId || !items || !totalPrice) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
 
-    return NextResponse.json(
-      {
-        ...doc,
-        _id: result.insertedId.toString(),
-        id: result.insertedId.toString(),
+    const newOrder = await prisma.order.create({
+      data: {
+        userId,
+        items: items, // Note: JSON field in schema
+        totalPrice: Number(totalPrice),
+        status: status || "processing",
       },
-      { status: 201 }
-    );
+    });
+
+    return NextResponse.json(newOrder, { status: 201 });
   } catch (err) {
     console.error("ADMIN ORDERS POST ERROR:", err);
     return NextResponse.json(

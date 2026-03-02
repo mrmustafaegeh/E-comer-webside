@@ -1,137 +1,133 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
+import { getCurrentUser } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
     // 1. Total Revenue & Orders
-    const statsQuery = db
-        .collection("orders")
-        .aggregate([
-          {
-            $group: {
-              _id: null,
-              totalRevenue: { $sum: "$totalPrice" },
-              totalOrders: { $count: {} },
-            },
-          },
-        ])
-        .toArray();
-
-    // 2. Top Products (Get IDs and sales first)
-    const topProductsQuery = db.collection("orders").aggregate([
-        { $unwind: "$products" },
-        {
-          $group: {
-            _id: "$products.productId",
-            name: { $first: "$products.name" },
-            image: { $first: "$products.image" },
-            sales: { $sum: "$products.quantity" },
-            revenue: { $sum: { $multiply: ["$products.price", "$products.quantity"] } },
-          }
-        },
-        { $sort: { sales: -1 } },
-        { $limit: 5 }
-    ]).toArray();
-
-    // 3. Recent Activity
-    const recentActivityQuery = db.collection("orders")
-        .find({})
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .toArray();
-
-    // Run parallel
-    const [statsResult, topProductsBasic, recentActivityData] = await Promise.all([
-        statsQuery,
-        topProductsQuery,
-        recentActivityQuery
-    ]);
-
-    // 4. Manual Lookup for Top Products Stock
-    const productIds = topProductsBasic.map(p => {
-        try { return new ObjectId(p._id); } catch(e) { return null; }
-    }).filter(id => id);
-
-    const productsDetails = await db.collection("products")
-        .find({ _id: { $in: productIds } })
-        .project({ _id: 1, stock: 1 })
-        .toArray();
-    
-    // Merge details
-    const topProductsData = topProductsBasic.map(p => {
-        const details = productsDetails.find(d => d._id.toString() === p._id.toString());
-        return {
-            id: p._id,
-            name: p.name,
-            image: p.image,
-            sales: p.sales,
-            revenue: p.revenue,
-            stock: details ? details.stock : 0
-        };
+    const stats = await prisma.order.aggregate({
+      _sum: {
+        totalPrice: true,
+      },
+      _count: {
+        id: true,
+      },
     });
 
-    const formattedActivities = recentActivityData.map(order => ({
-        id: order._id.toString(),
-        type: "order",
-        user: order.user?.email || order.shippingAddress?.fullName || "Guest",
-        action: "placed an order",
-        amount: "$" + (order.totalPrice || 0).toFixed(2),
-        time: order.createdAt
+    // 2. Entity Counts
+    const [productsCount, usersCount, pendingOrders, processingOrders] = await Promise.all([
+      prisma.product.count(),
+      prisma.user.count(),
+      prisma.order.count({ where: { status: "pending" } }),
+      prisma.order.count({ where: { status: "processing" } }),
+    ]);
+
+    // 3. Recent Activity (Orders)
+    const recentOrders = await prisma.order.findMany({
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    });
+
+    const formattedActivities = recentOrders.map((order) => ({
+      id: order.id,
+      type: "order",
+      user: order.user?.email || "Guest",
+      action: "placed an order",
+      amount: "$" + (order.totalPrice || 0).toFixed(2),
+      time: order.createdAt,
     }));
 
-    // 2. Count other entities
-    const [productsCount, usersCount, pendingOrders, processingOrders] =
-      await Promise.all([
-        db.collection("products").countDocuments(),
-        db.collection("users").countDocuments(),
-        db.collection("orders").countDocuments({ status: "pending" }),
-        db.collection("orders").countDocuments({ status: "processing" }),
-      ]);
-
-    // 3. Monthly Revenue (Last 6 months)
+    // 4. Monthly Revenue (Simplified for Prisma)
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const monthlyRevenue = await db
-      .collection("orders")
-      .aggregate([
-        {
-          $match: {
-            createdAt: { $gte: sixMonthsAgo },
-          },
-        },
-        {
-          $group: {
-            _id: {
-              month: { $month: "$createdAt" },
-              year: { $year: "$createdAt" },
-            },
-            revenue: { $sum: "$totalPrice" },
-            orders: { $count: {} },
-          },
-        },
-        { $sort: { "_id.year": 1, "_id.month": 1 } },
-      ])
-      .toArray();
+    const ordersLast6Months = await prisma.order.findMany({
+      where: {
+        createdAt: { gte: sixMonthsAgo },
+      },
+      select: {
+        totalPrice: true,
+        createdAt: true,
+      },
+    });
 
-    // 4. Format Monthly Data
-    const formattedMonthlyData = monthlyRevenue.map((item) => {
-      const date = new Date();
-      date.setMonth(item._id.month - 1);
+    const monthlyMap = {};
+    ordersLast6Months.forEach((order) => {
+      const date = new Date(order.createdAt);
+      const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+      if (!monthlyMap[key]) {
+        monthlyMap[key] = {
+          month: date.toLocaleString("default", { month: "short" }),
+          revenue: 0,
+          orders: 0,
+          sortKey: date.getTime(),
+        };
+      }
+      monthlyMap[key].revenue += order.totalPrice;
+      monthlyMap[key].orders += 1;
+    });
+
+    const formattedMonthlyData = Object.values(monthlyMap).sort((a, b) => a.sortKey - b.sortKey);
+
+    // 5. Top Products (Simplified - fetching from the last 100 orders)
+    // Note: Items is a JSON field, so we process in memory for now
+    const recentItemsOrders = await prisma.order.findMany({
+      take: 100,
+      orderBy: { createdAt: "desc" },
+      select: { items: true },
+    });
+
+    const productSales = {};
+    recentItemsOrders.forEach(order => {
+      const items = Array.isArray(order.items) ? order.items : [];
+      items.forEach(item => {
+        const id = item.productId || item.id;
+        if (!id) return;
+        if (!productSales[id]) {
+          productSales[id] = { id, name: item.name, sales: 0, revenue: 0 };
+        }
+        productSales[id].sales += item.quantity || item.qty || 1;
+        productSales[id].revenue += (item.price || 0) * (item.quantity || item.qty || 1);
+      });
+    });
+
+    const topProductsIds = Object.values(productSales)
+      .sort((a, b) => b.sales - a.sales)
+      .slice(0, 5)
+      .map(p => p.id);
+
+    const dbProducts = await prisma.product.findMany({
+      where: { id: { in: topProductsIds } },
+      select: { id: true, image: true, stock: true },
+    });
+
+    const topProductsData = topProductsIds.map(id => {
+      const sale = productSales[id];
+      const dbP = dbProducts.find(p => p.id === id);
       return {
-        month: date.toLocaleString("default", { month: "short" }),
-        revenue: item.revenue,
-        orders: item.orders,
+        ...sale,
+        image: dbP?.image || null,
+        stock: dbP?.stock || 0,
       };
     });
 
     const response = {
-      revenue: statsResult[0]?.totalRevenue || 0,
-      orders: statsResult[0]?.totalOrders || 0,
+      revenue: stats._sum.totalPrice || 0,
+      orders: stats._count.id || 0,
       products: productsCount,
       users: usersCount,
       monthlyData: formattedMonthlyData,
@@ -144,14 +140,11 @@ export async function GET() {
     };
 
     return NextResponse.json(response, {
-  status: 200,
-  headers: {
-    "Cache-Control":
-      process.env.NODE_ENV === "production"
-        ? "private, s-maxage=60, stale-while-revalidate=120"
-        : "no-store",
-  },
-})
+      status: 200,
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
   } catch (err) {
     console.error("ADMIN STATS ERROR:", err);
     return NextResponse.json(

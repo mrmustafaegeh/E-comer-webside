@@ -55,8 +55,7 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-6 bg-black relative overflow-hidden">
-      {/* Decorative Layer */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
       <div className="fixed inset-0 border-[24px] border-white/5 pointer-events-none z-50 hidden lg:block" />
       
       <motion.div 
@@ -65,8 +64,7 @@ export default function LoginForm() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-[480px] relative z-10"
       >
-        {/* Glow behind form */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
 
         <div className="text-center mb-12 relative z-10">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-black border border-white/20 rounded-none text-white mb-8 transition-transform hover:rotate-90 duration-500">
@@ -77,8 +75,7 @@ export default function LoginForm() {
         </div>
 
         <div className="bg-black p-6 md:p-12 rounded-none border border-white/10 md:shadow-2xl relative z-10 overflow-hidden">
-            {/* Inner top gradient glare */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
 
             <AnimatePresence mode="wait">
               {loginError && (

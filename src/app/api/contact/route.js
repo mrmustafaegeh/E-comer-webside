@@ -1,38 +1,47 @@
-import { validateRequest, forbiddenResponse } from "@/lib/security";
+import { validateRequest, forbiddenResponse, rateLimit, rateLimitResponse, getClientIp } from "@/lib/security";
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
+import { z } from "zod";
+import { getCurrentUser } from "@/lib/session";
+
+const contactSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email(),
+  message: z.string().min(10).max(1000),
+});
 
 export async function POST(request) {
   try {
     const isValidRequest = await validateRequest(request);
     if (!isValidRequest) return forbiddenResponse();
 
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("messages");
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 3, "1 h"); 
+    if (!success) return rateLimitResponse();
 
     const body = await request.json();
-    const { name, email, message } = body;
-
-    if (!name || !email || !message) {
+    const validation = contactSchema.safeParse(body);
+    
+    if (!validation.success) {
       return NextResponse.json(
-        { error: "Name, email, and message are required" },
+        { error: "Invalid input", details: validation.error.format() },
         { status: 400 }
       );
     }
 
-    const doc = {
-      name,
-      email,
-      message,
-      read: false,
-      createdAt: new Date(),
-    };
+    const { name, email, message } = validation.data;
 
-    const result = await col.insertOne(doc);
+    const contact = await prisma.contact.create({
+      data: {
+        name,
+        email,
+        message,
+        read: false,
+      }
+    });
 
     return NextResponse.json(
-      { message: "Message sent successfully", id: result.insertedId },
+      { message: "Message sent successfully", id: contact.id },
       { status: 201 }
     );
   } catch (err) {
@@ -46,11 +55,14 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const col = db.collection("messages");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    const messages = await col.find({}).sort({ createdAt: -1 }).toArray();
+    const messages = await prisma.contact.findMany({
+        orderBy: { createdAt: 'desc' }
+    });
 
     return NextResponse.json({ messages }, { status: 200 });
   } catch (err) {

@@ -1,13 +1,16 @@
 // src/app/layout.jsx
 import Header from "../Component/layout/Header.jsx";
-import Footer from "../Component/layout/Footer.jsx";
-import ScrollToTop from "../Component/ui/ScrollToTop.jsx";
 import ClientTranslationProvider from "../Component/ClientTranslationProvider.jsx";
 import ReduxProvider from "../providers/ReduxProvider.jsx";
 import ReactQueryProvider from "../providers/ReactQueryProvider.jsx";
 import { AuthProvider } from "../contexts/AuthContext.js";
-import ChatbotTrigger from "../chatbot/ChatbotTrigger.jsx";
 import { JetBrains_Mono, Bebas_Neue } from "next/font/google";
+import dynamic from 'next/dynamic';
+
+const ChatbotTrigger = dynamic(() => import("../chatbot/ChatbotTrigger.jsx"));
+const Footer = dynamic(() => import("../Component/layout/Footer.jsx"));
+const ScrollToTop = dynamic(() => import("../Component/ui/ScrollToTop.jsx"));
+import "@/lib/env";
 import "./globals.css";
 import "./i18n.js";
 
@@ -30,13 +33,46 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://example.com"),
   title: {
-    template: "%s | SYSTEM ROOT",
-    default: "// QUICKCART MODULE",
+    template: "%s | TERMINAL MODULE",
+    default: "QUICKCART // SYSTEM ROOT",
   },
-  description:
-    "// EXECUTIVE TERMINAL PROTOCOL INITIATED.",
-  keywords: "executive, terminal, ecommerce, modular",
+  description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL. // MULTI-SHIPPING MODULES LOADED.",
+  keywords: ["e-commerce", "terminal", "modular", "executive", "future tech"],
+  authors: [{ name: "SYSTEM OPERATOR" }],
+  creator: "QUICKCART ROOT",
+  publisher: "QUICKCART NETWORK",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    title: "QUICKCART // SYSTEM ROOT",
+    description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL.",
+    siteName: "QUICKCART",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QUICKCART // SYSTEM ROOT",
+    description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL.",
+    creator: "@quickcart",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
-import sharp from "sharp"; // ✅ Install: npm install sharp
+import sharp from "sharp"; 
+import { getCurrentUser } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file");
 
@@ -45,7 +53,10 @@ export async function POST(request) {
       .webp({ quality: 80 }) // ✅ Convert to WebP with 80% quality
       .toBuffer();
 
-    const filepath = path.join(process.cwd(), "public/uploads/" + filename);
+    const uploadsDir = path.join(process.cwd(), "public/uploads");
+    await mkdir(uploadsDir, { recursive: true });
+
+    const filepath = path.join(uploadsDir, filename);
     await writeFile(filepath, optimizedBuffer);
 
     // ✅ Also create thumbnail

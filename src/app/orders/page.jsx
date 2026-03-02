@@ -121,8 +121,7 @@ export default function OrdersPage() {
                 key={order.id}
                 className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300"
               >
-                {/* Header */}
-                <div className="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center">
+                                <div className="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex flex-wrap gap-4 justify-between items-center">
                   <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                     <div>
                       <span className="text-gray-500 block text-xs uppercase tracking-wide font-semibold mb-1">
@@ -159,8 +158,7 @@ export default function OrdersPage() {
                   </div>
                 </div>
 
-                {/* Body */}
-                <div className="p-6">
+                                <div className="p-6">
                   <div className="space-y-4">
                     {order.products?.map((item, idx) => (
                       <div key={idx} className="flex gap-4 items-center">
@@ -192,8 +190,7 @@ export default function OrdersPage() {
                     ))}
                   </div>
 
-                  {/* Footer / Shipping Info */}
-                  <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-600">
+                                    <div className="mt-6 pt-6 border-t border-gray-100 flex flex-col sm:flex-row justify-between gap-4 text-sm text-gray-600">
                     <div>
                       <span className="font-semibold text-gray-900 block mb-1">
                         Shipping Address

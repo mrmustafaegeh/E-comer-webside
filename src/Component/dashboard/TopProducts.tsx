@@ -107,13 +107,11 @@ export default function TopProducts({ products }: TopProductsProps) {
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   className="flex items-center gap-4 py-3 group/row relative border-b border-white/5 last:border-0"
                 >
-                  {/* Rank */}
-                  <div className="w-8 shrink-0 flex justify-center">
+                                    <div className="w-8 shrink-0 flex justify-center">
                     {getRankMedal(index)}
                   </div>
 
-                  {/* Thumbnail / Title */}
-                  <div className="flex items-center gap-3 w-1/3 min-w-[150px]">
+                                    <div className="flex items-center gap-3 w-1/3 min-w-[150px]">
                     <div className="relative w-10 h-10 bg-[#0f1117] rounded-xl overflow-hidden border border-white/5 shadow-inner shrink-0 group-hover/row:border-blue-500/30 group-hover/row:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all">
                       {product.image ? (
                         <Image
@@ -139,8 +137,7 @@ export default function TopProducts({ products }: TopProductsProps) {
                     </div>
                   </div>
 
-                  {/* Revenue Bar */}
-                  <div className="flex-1 px-4">
+                                    <div className="flex-1 px-4">
                      <div className="flex justify-between items-end mb-1">
                         <span className="text-xs font-mono font-medium text-gray-300">
                           ${product.revenue.toLocaleString()}
@@ -159,8 +156,7 @@ export default function TopProducts({ products }: TopProductsProps) {
                      </div>
                   </div>
 
-                  {/* Stock Indicator */}
-                  <div className="w-24 shrink-0 flex flex-col items-end gap-1">
+                                    <div className="w-24 shrink-0 flex flex-col items-end gap-1">
                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded border ${stockStatus.bg}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${stockStatus.dot}`}></span>
                         <span className={`text-[9px] font-mono uppercase tracking-widest ${stockStatus.color}`}>

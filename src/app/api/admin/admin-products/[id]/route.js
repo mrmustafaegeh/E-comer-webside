@@ -1,142 +1,94 @@
-// app/api/admin/admin-products/[id]/route.js
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
-
-/** helper */
-function badRequest(message) {
-  return NextResponse.json({ error: message }, { status: 400 });
-}
-
-function notFound(message = "Product not found") {
-  return NextResponse.json({ error: message }, { status: 404 });
-}
+import { getCurrentUser } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/admin-products/[id]
-export async function GET(request) {
+async function checkAdmin() {
+  const user = await getCurrentUser();
+  if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+    return false;
+  }
+  return true;
+}
+
+export async function GET(request, { params }) {
   try {
-    // Extract id from URL
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split("/");
-    const id = pathSegments[pathSegments.length - 1];
+    if (!(await checkAdmin())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    if (!id || !ObjectId.isValid(id)) return badRequest("Invalid product ID");
+    const { id } = await params;
+    if (!id) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
 
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const collection = db.collection("products");
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
 
-    const product = await collection.findOne({ _id: new ObjectId(id) });
-    if (!product) return notFound();
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
 
-    return NextResponse.json(
-      {
-        ...product,
-        id: product._id.toString(),
-        _id: product._id.toString(),
-        name: product.name ?? product.title ?? "",
-      },
-      { status: 200 }
-    );
+    return NextResponse.json(product, { status: 200 });
   } catch (err) {
     console.error("ADMIN PRODUCT GET ERROR:", err);
-    return NextResponse.json(
-      { error: "Failed to fetch product", details: err.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-// PUT /api/admin/admin-products/[id]
-export async function PUT(request) {
+export async function PUT(request, { params }) {
   try {
-    // Extract id from URL
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split("/");
-    const id = pathSegments[pathSegments.length - 1];
+    if (!(await checkAdmin())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    if (!id || !ObjectId.isValid(id)) return badRequest("Invalid product ID");
-
+    const { id } = await params;
     const body = await request.json();
 
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    const collection = db.collection("products");
+    const updateData = { ...body };
+    delete updateData.id;
+    delete updateData._id;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
 
-    // Prepare update data
-    const updateData = {
-      ...body,
-      updatedAt: new Date(),
-    };
-
-    // Sync name with title if title is provided
-    if (updateData.title) {
-      updateData.name = updateData.title;
-    }
-
-    // Ensure numeric fields are numbers
+    // Ensure numeric types
     if (updateData.price !== undefined) updateData.price = Number(updateData.price);
-    if (updateData.offerPrice !== undefined) {
-      updateData.salePrice = Number(updateData.offerPrice);
-      updateData.offerPrice = Number(updateData.offerPrice);
-    }
+    if (updateData.salePrice !== undefined) updateData.salePrice = Number(updateData.salePrice);
     if (updateData.stock !== undefined) updateData.stock = Number(updateData.stock);
 
-    // Remove _id from updateData to avoid MongoDB error
-    delete updateData._id;
-    delete updateData.id;
+    const product = await prisma.product.update({
+      where: { id },
+      data: updateData,
+    });
 
-
-    const result = await collection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updateData }
-    );
-
-    if (result.matchedCount === 0) return notFound();
-
-    return NextResponse.json(
-      { success: true, message: "Product updated successfully", id },
-      { status: 200 }
-    );
+    return NextResponse.json(product, { status: 200 });
   } catch (err) {
     console.error("ADMIN PRODUCT PUT ERROR:", err);
-    return NextResponse.json(
-      { error: "Failed to update product", details: err.message },
-      { status: 500 }
-    );
+    if (err.code === 'P2025') {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-
-// DELETE /api/admin/admin-products/[id]
-export async function DELETE(request) {
+export async function DELETE(request, { params }) {
   try {
-    // Extract id from URL
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split("/");
-    const id = pathSegments[pathSegments.length - 1];
+    if (!(await checkAdmin())) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    if (!id || !ObjectId.isValid(id)) return badRequest("Invalid product ID");
+    const { id } = await params;
 
-    const client = await clientPromise;
-    const db = client.db();
-    const collection = db.collection("products");
+    await prisma.product.delete({
+      where: { id },
+    });
 
-    const result = await collection.deleteOne({ _id: new ObjectId(id) });
-
-    if (result.deletedCount === 0) return notFound();
-
-    return NextResponse.json(
-      { success: true, message: "Product deleted successfully", id },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, message: "Product deleted" }, { status: 200 });
   } catch (err) {
     console.error("ADMIN PRODUCT DELETE ERROR:", err);
-    return NextResponse.json(
-      { error: "Failed to delete product", details: err.message },
-      { status: 500 }
-    );
+    if (err.code === 'P2025') {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

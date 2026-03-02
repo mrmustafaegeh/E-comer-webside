@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server';
 import { processMessage, getUserContext } from '@/lib/chatbotLogic';
 import { getCurrentUser } from '@/lib/session';
+import { validateRequest, forbiddenResponse, rateLimit, rateLimitResponse, getClientIp } from "@/lib/security";
 
 export async function POST(request) {
   try {
+    const isValidRequest = await validateRequest(request);
+    if (!isValidRequest) return forbiddenResponse();
+
+    const ip = getClientIp(request);
+    const { success } = await rateLimit(ip, 5, "1 m"); 
+    if (!success) return rateLimitResponse();
+
     const { message, history } = await request.json();
     
     // Validation

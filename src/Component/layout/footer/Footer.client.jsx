@@ -38,10 +38,8 @@ export default function Footer() {
   return (
     <footer className="mt-auto bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-14">
-        {/* TOP */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-          {/* BRAND */}
-          <div className="lg:col-span-2 space-y-5">
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                    <div className="lg:col-span-2 space-y-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white">
                 QC
@@ -58,8 +56,7 @@ export default function Footer() {
               )}
             </p>
 
-            {/* NEWSLETTER */}
-            <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-5">
+                        <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-5">
               <h4 className="text-white font-semibold mb-3">
                 {safeT("footer.stayUpdated", "Stay Updated")}
               </h4>
@@ -93,8 +90,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* LINKS */}
-          {Object.entries(links).map(([group, items]) => (
+                    {Object.entries(links).map(([group, items]) => (
             <div key={group}>
               <h3 className="text-white font-semibold mb-4">
                 {safeT(`footer.${group}`, group)}
@@ -115,11 +111,9 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* DIVIDER */}
-        <div className="border-t border-gray-700 my-10" />
+                <div className="border-t border-gray-700 my-10" />
 
-        {/* BOTTOM */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
           <span className="text-gray-400">
             © {year} {safeT("common.siteTitle", "QuickCart")}.{" "}
             {safeT("footer.allRightsReserved", "All rights reserved.")}

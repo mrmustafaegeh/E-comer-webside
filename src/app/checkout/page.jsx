@@ -132,8 +132,7 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Monochrome Noise Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
       
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 md:py-40 relative z-10">
         <header className="mb-20">
@@ -147,11 +146,9 @@ function CheckoutContent() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24">
-          {/* Left: Input Segments */}
-          <div className="lg:col-span-7 space-y-24">
+                    <div className="lg:col-span-7 space-y-24">
             
-            {/* 01 Logistics */}
-            <section className="space-y-12">
+                        <section className="space-y-12">
                 <div className="flex items-center justify-between border-b border-white/10 pb-6">
                     <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">PHASE_01 / IDENTITY & LOGISTICS</h2>
                     <ShieldCheck size={20} strokeWidth={1} className="text-gray-800" />
@@ -192,8 +189,7 @@ function CheckoutContent() {
                 </form>
             </section>
 
-            {/* 02 Transaction */}
-            <section className="space-y-12 pb-12">
+                        <section className="space-y-12 pb-12">
                 <div className="flex items-center justify-between border-b border-white/10 pb-6">
                     <h2 className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] italic">PHASE_02 / AUTHORIZATION</h2>
                     <CreditCard size={20} strokeWidth={1} className="text-gray-800" />
@@ -225,8 +221,7 @@ function CheckoutContent() {
             </section>
           </div>
 
-          {/* Right: Summary */}
-          <div className="lg:col-span-5">
+                    <div className="lg:col-span-5">
             <div className="sticky top-32 space-y-10 bg-black p-10 md:p-14 rounded-none border border-white/10 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[80px] rounded-full pointer-events-none"></div>
                 
@@ -239,7 +234,7 @@ function CheckoutContent() {
                     {cartItems.map((item) => (
                         <div key={item.id} className="flex gap-8 items-center group/item">
                             <div className="relative w-20 h-24 bg-black rounded-none overflow-hidden border border-white/10 flex-shrink-0 transition-all duration-700 group-hover/item:border-white">
-                                <img src={item.imgSrc || item.image || "/images/placeholder.png"} alt={item.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
+                                <Image src={item.imgSrc || item.image || "/images/placeholder.png"} alt={item.name} fill className="object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
                                 <div className="absolute inset-x-0 bottom-0 bg-black/90 backdrop-blur-sm text-white border-t border-white/10 text-[9px] font-mono font-black uppercase tracking-widest text-center py-1.5 transition-all group-hover/item:bg-white group-hover/item:text-black">Q: {item.qty}</div>
                             </div>
                             <div className="flex-1 min-w-0">

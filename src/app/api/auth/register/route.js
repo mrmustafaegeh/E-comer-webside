@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { rateLimit, rateLimitResponse, getClientIp } from "@/lib/security";
 

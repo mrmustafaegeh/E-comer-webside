@@ -65,7 +65,7 @@ export default function ImageUploader() {
       }
 
       setUploadedData(data);
-      console.log("✅ Upload successful:", data);
+
     } catch (err) {
       console.error("❌ Upload error:", err);
       setError(err instanceof Error ? err.message : "Upload failed");
@@ -102,7 +102,7 @@ export default function ImageUploader() {
       }
 
       handleClear();
-      console.log("✅ Image deleted successfully");
+
     } catch (err) {
       console.error("❌ Delete error:", err);
       setError("Failed to delete image");
@@ -121,15 +121,13 @@ export default function ImageUploader() {
         <Upload className="h-6 w-6 text-gray-400" />
       </div>
 
-      {/* Error Message */}
-      {error && (
+            {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
           <p className="text-sm text-red-600">{error}</p>
         </div>
       )}
 
-      {/* Success Message */}
-      {uploadedData && (
+            {uploadedData && (
         <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-md">
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-600" />
@@ -141,8 +139,7 @@ export default function ImageUploader() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* File Input */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition">
           <input
             ref={inputFileRef}
             type="file"
@@ -185,8 +182,7 @@ export default function ImageUploader() {
           )}
         </div>
 
-        {/* Upload Button */}
-        {preview && !uploadedData && (
+                {preview && !uploadedData && (
           <button
             type="submit"
             disabled={uploading}
@@ -203,8 +199,7 @@ export default function ImageUploader() {
           </button>
         )}
 
-        {/* Uploaded Info & Delete Button */}
-        {uploadedData && (
+                {uploadedData && (
           <div className="space-y-4">
             <div className="p-4 bg-gray-50 rounded-md">
               <h3 className="text-sm font-medium text-gray-700 mb-2">

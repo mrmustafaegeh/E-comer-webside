@@ -58,11 +58,9 @@ function ProductCard({ product }) {
       onClick={() => router.push(`/products/${product.slug || product._id}`)}
       style={{ minHeight: "450px" }}
     >
-      {/* Subtle White Glow */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl pointer-events-none group-hover:bg-white/10 transition-colors duration-1000"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl pointer-events-none group-hover:bg-white/10 transition-colors duration-1000"></div>
 
-      {/* Image Container */}
-      <div className="relative overflow-hidden w-full aspect-[4/5] bg-black border border-white/5 group-hover:border-white/20 transition-colors duration-700 card-3d-tilt">
+            <div className="relative overflow-hidden w-full aspect-[4/5] bg-black border border-white/5 group-hover:border-white/20 transition-colors duration-700 card-3d-tilt">
         <div className="w-full h-full card-3d-tilt-inner relative">
           {!imageError ? (
             <Image
@@ -84,8 +82,7 @@ function ProductCard({ product }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 mix-blend-multiply pointer-events-none group-hover:opacity-60 transition-opacity"></div>
         </div>
 
-        {/* Badges - Top Left */}
-        <div className="absolute top-0 left-0 p-4 flex flex-col gap-3 pointer-events-none z-10 w-full">
+                <div className="absolute top-0 left-0 p-4 flex flex-col gap-3 pointer-events-none z-10 w-full">
           {discount > 0 && (
             <span className="bg-white text-black text-[9px] font-mono font-black uppercase tracking-[0.3em] px-3 py-1.5 rounded-none shadow-xl italic w-max">
               -{discount}% DELTA
@@ -98,8 +95,7 @@ function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Wishlist Button */}
-        <button
+                <button
           onClick={handleToggleWishlist}
           className={`absolute top-4 right-4 p-3 rounded-none transition-[opacity,transform,colors] duration-700 z-20 backdrop-blur-3xl border transform-gpu ${
             isWishlisted
@@ -111,8 +107,7 @@ function ProductCard({ product }) {
           <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} strokeWidth={1.5} />
         </button>
 
-        {/* Quick Add - Slide Up */}
-        <div className="absolute inset-x-0 bottom-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 shadow-2xl">
+                <div className="absolute inset-x-0 bottom-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 shadow-2xl">
           <button
             onClick={handleAddToCart}
             disabled={isAdding}
@@ -124,21 +119,17 @@ function ProductCard({ product }) {
         </div>
       </div>
 
-      {/* Product Info - Clean & Brutalist */}
-      <div className="pt-8 relative z-10 flex flex-col flex-grow justify-between">
+            <div className="pt-8 relative z-10 flex flex-col flex-grow justify-between">
         
-        {/* Title */}
-        <h3 className="font-heading font-black text-white mb-6 text-2xl leading-[1.1] uppercase italic group-hover:translate-x-2 transition-transform duration-700">
+                <h3 className="font-heading font-black text-white mb-6 text-2xl leading-[1.1] uppercase italic group-hover:translate-x-2 transition-transform duration-700">
           {product.title}
         </h3>
 
-        {/* Category Label */}
-        <p className="text-[9px] text-gray-600 font-mono font-black uppercase tracking-[0.5em] mb-6 border-b border-white/5 pb-6 truncate italic transition-colors duration-700">
+                <p className="text-[9px] text-gray-600 font-mono font-black uppercase tracking-[0.5em] mb-6 border-b border-white/5 pb-6 truncate italic transition-colors duration-700">
           // {product.category}
         </p>
 
-        {/* Price & Rating Row */}
-        <div className="flex items-end justify-between mt-auto">
+                <div className="flex items-end justify-between mt-auto">
             <div className="flex flex-col gap-2">
                 {product.offerPrice && (
                     <span className="text-[10px] font-mono text-gray-700 line-through uppercase tracking-widest italic font-black">
@@ -150,8 +141,7 @@ function ProductCard({ product }) {
                 </span>
             </div>
 
-            {/* Minimal Stock Indicator */}
-            {product.stock !== undefined && (
+                        {product.stock !== undefined && (
                 <div className="flex flex-col items-end gap-2">
                    <div className={`w-2 h-2 ${product.stock > 0 ? "bg-white shadow-[0_0_10px_white]" : "bg-gray-800"}`} />
                    <span className="text-[8px] font-mono font-black text-gray-600 uppercase tracking-[0.4em] italic">{product.stock > 0 ? "AVAILABLE" : "NULL ASSET"}</span>

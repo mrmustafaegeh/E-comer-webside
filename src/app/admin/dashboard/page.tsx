@@ -206,14 +206,11 @@ export default function EliteAdminDashboard() {
 
   return (
     <div className="w-full">
-      {/* 12-Column Main Grid */}
-      <div className="flex flex-col gap-6 w-full max-w-[2000px] mx-auto pb-10">
+            <div className="flex flex-col gap-6 w-full max-w-[2000px] mx-auto pb-10">
         
-        {/* ROW 1: 4x KPI Stat Cards */}
-        <StatGrid stats={statCards} />
+                <StatGrid stats={statCards} />
 
-        {/* ROW 2: Revenue Line Chart (8) + Donut (4) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 h-full">
             <ChartSection data={data.revenueData} />
           </div>
@@ -222,8 +219,7 @@ export default function EliteAdminDashboard() {
           </div>
         </div>
 
-        {/* ROW 3: Orders (7) + Quick Actions (5) */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
           <div className="xl:col-span-7 h-full">
             <RecentOrdersTable orders={data.recentOrders} />
           </div>
@@ -232,8 +228,7 @@ export default function EliteAdminDashboard() {
           </div>
         </div>
 
-        {/* ROW 4: Leaderboard (6) + Activity Feed (6) */}
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
           <div className="xl:col-span-6 h-full">
             <TopProducts products={data.topProducts} />
           </div>

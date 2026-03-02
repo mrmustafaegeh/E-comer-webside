@@ -37,7 +37,7 @@ export const adminService = {
       }
 
       const data = await response.json();
-      console.log("✅ Image uploaded:", data.url);
+
       return data; // { url, pathname, size, contentType }
     } catch (error) {
       console.error("❌ Upload error:", error);
@@ -54,7 +54,7 @@ export const adminService = {
     try {
       // Skip if not a Vercel Blob URL
       if (!imageUrl || !imageUrl.includes("blob.vercel-storage.com")) {
-        console.log("⚠️ Skipping delete - not a Vercel Blob URL:", imageUrl);
+
         return;
       }
 
@@ -69,7 +69,7 @@ export const adminService = {
         throw new Error(error.error || "Delete failed");
       }
 
-      console.log("✅ Image deleted:", imageUrl);
+
     } catch (error) {
       console.error("❌ Failed to delete image:", error);
       // Don't throw - we don't want to block product deletion if image delete fails

@@ -45,8 +45,7 @@ export default function AdminProductsPage() {
 
   return (
     <div className="w-full max-w-[2000px] mx-auto pb-10">
-      {/* Header Segment */}
-      <motion.header 
+            <motion.header 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6"
@@ -68,8 +67,7 @@ export default function AdminProductsPage() {
         </Link>
       </motion.header>
 
-      {/* Filters Minimalist */}
-      <motion.div 
+            <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -106,8 +104,7 @@ export default function AdminProductsPage() {
           </div>
       </motion.div>
 
-      {/* Main Database Table Container */}
-      <motion.div 
+            <motion.div 
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.2 }}

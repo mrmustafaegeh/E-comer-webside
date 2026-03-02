@@ -1,17 +1,16 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 
 export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://example.com";
 
   try {
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-    
     // Fetch products for dynamic URLs
-    const products = await db
-      .collection("products")
-      .find({}, { projection: { slug: 1, updatedAt: 1 } })
-      .toArray();
+    const products = await prisma.product.findMany({
+      select: {
+        slug: true,
+        updatedAt: true,
+      },
+    });
 
     const productEntries = products.map((product) => ({
       url: `${baseUrl}/products/${product.slug}`,

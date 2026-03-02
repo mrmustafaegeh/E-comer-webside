@@ -78,8 +78,7 @@ export default function FeaturedCategories() {
                   </p>
                 </div>
 
-                {/* Subtle arrow that appears on hover */}
-                <div className="absolute right-8 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                                <div className="absolute right-8 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-500">
                    <ArrowRight className="text-white w-6 h-6" />
                 </div>
               </Link>

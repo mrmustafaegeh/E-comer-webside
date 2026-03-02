@@ -1,16 +1,14 @@
 import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/session";
+import { prisma } from "@/lib/prisma";
 import {
   validateRequest,
   rateLimit,
   forbiddenResponse,
   rateLimitResponse,
-  isValidObjectId,
 } from "../../../../lib/security";
 import { headers } from "next/headers";
-import clientPromise from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
 
 export async function POST(request) {
   if (!stripe) {
@@ -21,7 +19,6 @@ export async function POST(request) {
   }
 
   try {
-    // 1. Security Checks
     const isValidRequest = await validateRequest(request);
     if (!isValidRequest) return forbiddenResponse();
 
@@ -38,36 +35,26 @@ export async function POST(request) {
       return new NextResponse("No items in checkout", { status: 400 });
     }
 
-    // 2. Validate IDs and fetch products from DB
-    const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
-
-    const validItems = items.filter((i) => isValidObjectId(i.id || i._id));
+    const validItems = items.filter((i) => (i.id || i._id));
     if (validItems.length !== items.length) {
-      return new NextResponse("Invalid product IDs in request", {
-        status: 400,
-      });
+      return new NextResponse("Invalid product IDs in request", { status: 400 });
     }
 
     const productIds = validItems.map(
-      (item) => new ObjectId(item.id || item._id)
+      (item) => (item.id || item._id)
     );
-    const dbProducts = await db
-      .collection("products")
-      .find({ _id: { $in: productIds } })
-      .toArray();
+    const dbProducts = await prisma.product.findMany({
+      where: { id: { in: productIds } }
+    });
 
     if (dbProducts.length === 0) {
-      return new NextResponse("No products found for the given IDs", {
-        status: 404,
-      });
+      return new NextResponse("No products found for the given IDs", { status: 404 });
     }
 
-    const productMap = new Map(dbProducts.map((p) => [p._id.toString(), p]));
+    const productMap = new Map(dbProducts.map((p) => [p.id, p]));
 
-    // 3. Format line items using DB prices
     const line_items = validItems.map((item) => {
-      const idStr = (item.id || item._id).toString();
+      const idStr = item.id || item._id;
       const dbProduct = productMap.get(idStr);
 
       if (!dbProduct) {
@@ -75,7 +62,7 @@ export async function POST(request) {
       }
 
       const price = dbProduct.salePrice || dbProduct.price;
-      const imageUrl = dbProduct.image || dbProduct.thumbnail;
+      const imageUrl = dbProduct.image || (dbProduct.images && dbProduct.images[0]);
       let validImage = null;
 
       if (imageUrl && imageUrl.startsWith("http")) {
@@ -88,13 +75,6 @@ export async function POST(request) {
         validImage = `${process.env.NEXT_PUBLIC_APP_URL}${imageUrl}`;
       }
 
-      if (
-        validImage &&
-        (validImage.includes("localhost") || validImage.includes("127.0.0.1"))
-      ) {
-        validImage = null;
-      }
-
       return {
         price_data: {
           currency: "usd",
@@ -102,7 +82,7 @@ export async function POST(request) {
             name: dbProduct.name,
             images: validImage ? [validImage] : [],
             metadata: {
-              productId: dbProduct._id.toString(),
+              productId: dbProduct.id,
             },
           },
           unit_amount: Math.round(price * 100),
@@ -117,7 +97,6 @@ export async function POST(request) {
         ? `https://${process.env.VERCEL_URL}`
         : "http://localhost:3000");
 
-    // 4. Create Stripe Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items,
@@ -125,17 +104,16 @@ export async function POST(request) {
       success_url: `${baseUrl}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/cart`,
       customer_email: user?.email || email || undefined,
-      // client_reference_id is server-side and relatively safe, but session.id is the key
       client_reference_id: user?.userId || undefined,
     });
 
-    // 5. Pre-create pending checkout for secure webhook resolution
-    await db.collection("pending_checkouts").insertOne({
-      sessionId: session.id,
-      userId: user?.userId || "guest",
-      userEmail: user?.email || email || null,
-      status: "pending",
-      createdAt: new Date(),
+    await prisma.pendingCheckout.create({
+        data: {
+            sessionId: session.id,
+            userId: user?.userId || "guest",
+            userEmail: user?.email || email || null,
+            status: "pending",
+        }
     });
 
     return NextResponse.json({ url: session.url });

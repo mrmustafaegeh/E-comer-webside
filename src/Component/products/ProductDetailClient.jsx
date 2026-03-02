@@ -63,14 +63,12 @@ export default function ProductDetailClient({ product }) {
 
   return (
     <div className="bg-black min-h-screen relative overflow-hidden">
-      {/* Background Noise & Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-16 lg:py-32 relative z-10">
         
-        {/* Navigation / Breadcrumbs */}
-        <nav className="flex flex-wrap items-center gap-5 text-[10px] font-mono font-black uppercase tracking-[0.5em] text-gray-700 mb-20 relative z-10 italic">
+                <nav className="flex flex-wrap items-center gap-5 text-[10px] font-mono font-black uppercase tracking-[0.5em] text-gray-700 mb-20 relative z-10 italic">
           <Link href="/" className="hover:text-white transition-colors">SYSTEM ROOT</Link>
           <span className="opacity-50">/</span>
           <Link href="/products" className="hover:text-white transition-colors">ARCHIVE</Link>
@@ -80,8 +78,7 @@ export default function ProductDetailClient({ product }) {
 
         <div className="grid lg:grid-cols-12 gap-20 xl:gap-32">
           
-          {/* LEFT: Visual Showcase */}
-          <div className="lg:col-span-12 xl:col-span-7 space-y-12 relative z-10">
+                    <div className="lg:col-span-12 xl:col-span-7 space-y-12 relative z-10">
             <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] bg-black rounded-none overflow-hidden border border-white/10 shadow-2xl group">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -118,8 +115,7 @@ export default function ProductDetailClient({ product }) {
               )}
             </div>
 
-            {/* Gallery Navigation */}
-            {images.length > 1 && (
+                        {images.length > 1 && (
               <div className="flex flex-wrap gap-6">
                 {images.map((img, idx) => (
                   <button
@@ -138,8 +134,7 @@ export default function ProductDetailClient({ product }) {
             )}
           </div>
 
-          {/* RIGHT: Data Specifications */}
-          <div className="lg:col-span-12 xl:col-span-5 flex flex-col justify-center relative z-10">
+                    <div className="lg:col-span-12 xl:col-span-5 flex flex-col justify-center relative z-10">
             <div className="space-y-16">
               <header className="space-y-10">
                 <div className="flex flex-wrap items-center gap-6">
@@ -178,8 +173,7 @@ export default function ProductDetailClient({ product }) {
                 {product.description || "// A precision-engineered essential designed for high-performance integration within contemporary digital and physical ecosystems. Minimalist aesthetics meet maximum functional output."}
               </div>
 
-              {/* Interaction Terminal */}
-              <div className="space-y-12 pt-16 border-t border-white/10">
+                            <div className="space-y-12 pt-16 border-t border-white/10">
                   <div className="flex items-center justify-between group">
                      <span className="text-[10px] font-mono font-black tracking-[0.5em] uppercase text-gray-800 italic group-hover:text-white transition-colors">// QUANTITY_MODULE</span>
                      <div className="flex items-center gap-4 bg-black p-2 rounded-none border border-white/10 shadow-2xl group-hover:border-white transition-colors duration-700">
@@ -236,8 +230,7 @@ export default function ProductDetailClient({ product }) {
                   </div>
               </div>
 
-              {/* Protocol Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12 pt-16 border-t border-white/10">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-12 pt-16 border-t border-white/10">
                 <div className="flex items-center gap-8 group">
                   <div className="w-16 h-16 bg-black rounded-none flex items-center justify-center text-white border border-white/5 shadow-2xl transition-colors duration-700 group-hover:border-white">
                     <Zap size={24} strokeWidth={1} className="opacity-20 group-hover:opacity-100 transition-opacity" />

@@ -56,8 +56,7 @@ const AboutUs = () => {
                   <div className="bg-black rounded-none overflow-hidden border border-white/10 hover:border-white transition-all duration-[1500ms] group shadow-2xl relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[100px] pointer-events-none group-hover:bg-white/10 transition-all duration-1000"></div>
                     
-                    {/* Image container with strict grayscale */}
-                    <div className="h-80 relative overflow-hidden bg-black border-b border-white/10">
+                                        <div className="h-80 relative overflow-hidden bg-black border-b border-white/10">
                       <Image
                         width={800}
                         height={800}
@@ -91,8 +90,7 @@ const AboutUs = () => {
           </div>
         </StaggerContainer>
 
-        {/* Mission Section */}
-        <FadeInUp delay={0.5}>
+                <FadeInUp delay={0.5}>
           <div className="bg-black border border-white/10 rounded-none shadow-[0_0_100px_rgba(0,0,0,1)] p-16 md:p-32 max-w-[1200px] mx-auto text-center relative overflow-hidden group">
             <div className="absolute top-[-100px] right-[-100px] w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>
             <div className="absolute bottom-[-100px] left-[-100px] w-[500px] h-[500px] bg-white/5 blur-[120px] rounded-full pointer-events-none"></div>

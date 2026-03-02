@@ -1,42 +1,34 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
+import { getCurrentUser } from "@/lib/session";
+
+export const dynamic = "force-dynamic";
 
 export async function PUT(request, { params }) {
   try {
-    const client = await clientPromise;
-    const db = client.db();
-    const ordersCol = db.collection("orders");
+    const user = await getCurrentUser();
+    if (!user || (!user.isAdmin && !user.roles?.includes("ADMIN"))) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
-    const { id } = params;
-    const body = await request.json();
-    const status = body.status;
+    const { id } = await params;
+    const { status } = await request.json();
 
-    if (!status)
-      return NextResponse.json(
-        { error: "status is required" },
-        { status: 400 }
-      );
+    if (!status) {
+      return NextResponse.json({ error: "Status is required" }, { status: 400 });
+    }
 
-    const result = await ordersCol.findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: { status } },
-      { returnDocument: "after" }
-    );
+    const order = await prisma.order.update({
+      where: { id },
+      data: { status },
+    });
 
-    if (!result.value)
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-
-    const o = result.value;
-    return NextResponse.json(
-      { ...o, _id: o._id.toString(), id: o._id.toString() },
-      { status: 200 }
-    );
+    return NextResponse.json(order, { status: 200 });
   } catch (err) {
-    console.error("ORDER STATUS API ERROR:", err);
-    return NextResponse.json(
-      { error: "Failed to update order status" },
-      { status: 500 }
-    );
+    console.error("ADMIN ORDER STATUS PUT ERROR:", err);
+    if (err.code === 'P2025') {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

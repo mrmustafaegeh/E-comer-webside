@@ -1,13 +1,18 @@
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import { Gift, ArrowRight, ShieldCheck, Zap, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
 async function getReferrer(code) {
-  const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB);
-  return await db.collection("users").findOne({ referralCode: code });
+  return await prisma.user.findUnique({
+    where: { referralCode: code },
+    select: {
+      id: true,
+      name: true,
+      image: true,
+    },
+  });
 }
 
 export default async function ReferralLandingPage({ params }) {
@@ -20,14 +25,12 @@ export default async function ReferralLandingPage({ params }) {
 
   return (
     <div className="min-h-screen bg-[#0f1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none"></div>
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-purple-600/10 blur-[150px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none"></div>
 
         <div className="max-w-xl w-full relative z-10 text-center space-y-12">
-            {/* Header / Avatar */}
-            <div className="space-y-6">
+                        <div className="space-y-6">
                 <div className="relative inline-block">
                     <div className="absolute inset-0 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
                     <div className="relative w-32 h-32 mx-auto rounded-full border-2 border-white/10 p-2 bg-[#161b27] shadow-2xl">
@@ -50,8 +53,7 @@ export default async function ReferralLandingPage({ params }) {
                 </div>
             </div>
 
-            {/* Offer Card */}
-            <div className="bg-[#161b27]/80 backdrop-blur-xl p-10 md:p-12 rounded-[3.5rem] border border-white/5 shadow-2xl relative group hover:border-purple-500/30 transition-all duration-700">
+                        <div className="bg-[#161b27]/80 backdrop-blur-xl p-10 md:p-12 rounded-[3.5rem] border border-white/5 shadow-2xl relative group hover:border-purple-500/30 transition-all duration-700">
                 <div className="absolute top-6 right-8 opacity-20 group-hover:opacity-40 transition-opacity">
                     <Gift size={48} className="text-purple-500" />
                 </div>
@@ -91,8 +93,7 @@ export default async function ReferralLandingPage({ params }) {
                 </div>
             </div>
 
-            {/* Footer / Trust Signal */}
-            <div className="pt-8 flex flex-col items-center gap-4">
+                        <div className="pt-8 flex flex-col items-center gap-4">
                 <p className="text-[10px] font-mono text-gray-600 font-bold uppercase tracking-widest">
                     Secured by QuickCart Neural Network
                 </p>

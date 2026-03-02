@@ -1,6 +1,5 @@
-// app/api/auth/login/route.js
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { createSession } from "@/lib/session";
 
@@ -14,7 +13,6 @@ import {
 
 export async function POST(request) {
   try {
-    // 1) CSRF / Origin validation
     const ok = await validateRequest(request);
     if (!ok) {
       return forbiddenResponse({
@@ -23,13 +21,10 @@ export async function POST(request) {
       });
     }
 
-    // 2) Rate limit (IP based)
-    // 2) Rate limit (IP based)
     const ip = getClientIp(request);
-    const { success } = await rateLimit(ip, 5, "15 m"); // 5 per 15 minutes
+    const { success } = await rateLimit(ip, 5, "15 m"); 
     if (!success) return rateLimitResponse();
 
-    // 3) Parse JSON
     let body;
     try {
       body = await request.json();
@@ -49,24 +44,8 @@ export async function POST(request) {
       );
     }
 
-    // 4) DB lookup
-    const client = await clientPromise;
-    const dbName = process.env.MONGODB_DB;
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!dbName) {
-      console.error("❌ MONGODB_DB is not set");
-      return NextResponse.json(
-        { error: "Server misconfigured" },
-        { status: 500 }
-      );
-    }
-
-    const db = client.db(dbName);
-    const users = db.collection("users");
-
-    const user = await users.findOne({ email });
-
-    // 5) Auth check
     if (!user) {
       return NextResponse.json(
         { error: "Invalid email or password" },
@@ -78,7 +57,7 @@ export async function POST(request) {
     if (!userPasswordHash || typeof userPasswordHash !== "string") {
       console.error(
         "❌ User has no password hash stored:",
-        user?._id?.toString()
+        user?.id
       );
       return NextResponse.json(
         { error: "Account misconfigured" },
@@ -94,23 +73,23 @@ export async function POST(request) {
       );
     }
 
-    // 6) Create session cookie
+    const roles = user.isAdmin ? ["ADMIN", "USER"] : [(user.role || "USER").toUpperCase()];
+
     await createSession(
-      user._id.toString(),
+      user.id,
       user.email,
-      user.roles || ["user"]
+      roles
     );
 
-    // 7) Respond
     return NextResponse.json(
       {
         success: true,
         message: "Login successful",
         user: {
-          id: user._id.toString(),
+          id: user.id,
           email: user.email,
           name: user.name || null,
-          roles: user.roles || ["user"],
+          roles: roles,
           createdAt: user.createdAt || null,
         },
       },

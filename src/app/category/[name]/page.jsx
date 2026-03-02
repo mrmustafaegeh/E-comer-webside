@@ -115,8 +115,7 @@ export default function CategoryPage({ params }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="px-6 md:px-16 py-10">
-        {/* Header */}
-        <motion.div
+                <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
@@ -129,16 +128,14 @@ export default function CategoryPage({ params }) {
           </p>
         </motion.div>
 
-        {/* Filters */}
-        <ProductFilters
+                <ProductFilters
           localFilters={localFilters}
           setLocalFilters={setLocalFilters}
           applyFilters={applyFilters}
           clearFilters={clearFilters}
         />
 
-        {/* Products Grid */}
-        {loading ? (
+                {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="animate-pulse">
@@ -248,8 +245,7 @@ export default function CategoryPage({ params }) {
               ))}
             </motion.div>
 
-            {/* Pagination */}
-            <motion.div
+                        <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center justify-center gap-3 mt-10"

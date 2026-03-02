@@ -1,7 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req) {
   if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) {
@@ -43,41 +43,41 @@ export async function POST(req) {
 
   if (event.type === "checkout.session.completed") {
     try {
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGODB_DB);
-
-      const pendingCheckout = await db
-        .collection("pending_checkouts")
-        .findOne({ sessionId: session.id });
+      const pendingCheckout = await prisma.pendingCheckout.findUnique({
+        where: { sessionId: session.id }
+      });
 
       const userId =
         pendingCheckout?.userId ||
         session.client_reference_id ||
         "guest";
 
-      await db.collection("orders").insertOne({
-        userId,
-        externalId: session.id,
-        totalPrice: session.amount_total / 100,
-        status: "paid",
-        paymentMethod: "stripe",
-        customerDetails: session.customer_details,
-        email:
-          session.customer_details?.email ||
-          session.customer_email ||
-          pendingCheckout?.userEmail,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        products: [],
+      let validUserId = null;
+      if (userId && userId !== "guest") {
+        const u = await prisma.user.findUnique({ where: { id: userId } });
+        if (u) validUserId = u.id;
+      }
+
+      await prisma.order.create({
+        data: {
+          userId: validUserId, // Can be null for guest checkout
+          paymentIntentId: session.id,
+          totalAmount: session.amount_total / 100,
+          subtotal: session.amount_total / 100,
+          status: "PROCESSING",
+          paymentStatus: "COMPLETED",
+          items: [], // TODO: Populated via session metadata if possible
+          deliveryAddress: session.customer_details || null
+        }
       });
 
       if (pendingCheckout) {
-        await db
-          .collection("pending_checkouts")
-          .deleteOne({ _id: pendingCheckout._id });
+        await prisma.pendingCheckout.delete({
+            where: { id: pendingCheckout.id }
+        });
       }
 
-      console.log(`✅ Order created for session ${session.id}`);
+
     } catch (dbError) {
       console.error("❌ Database error during order creation:", dbError);
       return new NextResponse("Database Error", {

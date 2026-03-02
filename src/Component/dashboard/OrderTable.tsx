@@ -170,8 +170,7 @@ export default function OrderTable({ orders }: { orders: any }) {
   return (
     <div className="flex flex-col h-full gap-6 max-w-[2000px] mx-auto pb-8">
       
-      {/* Header & Controls */}
-      <motion.div 
+            <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="bg-[#161b27] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl"
@@ -229,8 +228,7 @@ export default function OrderTable({ orders }: { orders: any }) {
         </div>
       </motion.div>
 
-      {/* Main Grid Vector */}
-      <motion.div 
+            <motion.div 
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
@@ -363,8 +361,7 @@ export default function OrderTable({ orders }: { orders: any }) {
           </table>
         </div>
 
-        {/* Pagination Console */}
-        <div className="p-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0f1117]/30 z-10 w-full relative">
+                <div className="p-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0f1117]/30 z-10 w-full relative">
            <div className="text-[10px] font-mono tracking-widest uppercase text-gray-500">
              Displaying {currentData.length} of {filteredAndSorted.length} Logs {selectedOrders.size > 0 && `| ${selectedOrders.size} selected`}
            </div>

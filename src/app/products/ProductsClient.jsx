@@ -94,8 +94,7 @@ export default function ProductsClient() {
 
   return (
     <div className="min-h-screen bg-black text-white relative">
-       {/* Background Noise Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
 
       <div className="w-full relative z-10">
         <ProductFilters
@@ -107,8 +106,7 @@ export default function ProductsClient() {
       </div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12 pb-32 relative z-10">
-        {/* Results Info */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-10 mb-16 pb-12 border-b border-white/10 relative z-10">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-10 mb-16 pb-12 border-b border-white/10 relative z-10">
             <div className="flex items-center gap-6">
                 <div className="w-1.5 h-10 bg-white"></div>
                 <div className="flex flex-col gap-1">
@@ -182,8 +180,7 @@ export default function ProductsClient() {
             </AnimatePresence>
         </section>
 
-        {/* Pagination Grid */}
-        {totalPages > 1 && (
+                {totalPages > 1 && (
             <div className="mt-24 border-t border-white/10 pt-16">
                 <ProductPagination
                     page={page}

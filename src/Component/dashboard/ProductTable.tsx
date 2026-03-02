@@ -100,8 +100,7 @@ export default function ProductTable({ products }: { products: any }) {
                             transition={{ duration: 0.2, delay: i * 0.05 }}
                             className="group/row transition-all hover:bg-white/[0.02] border-l-2 border-l-transparent hover:border-l-blue-500"
                         >
-                        {/* Product Info */}
-                        <td className="px-6 py-4">
+                                                <td className="px-6 py-4">
                             <div className="flex items-center gap-4">
                                 <div className="relative w-12 h-12 bg-[#0f1117] rounded-xl overflow-hidden border border-white/5 flex-shrink-0 group-hover/row:border-blue-500/30 group-hover/row:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all">
                                     {product.image || product.thumbnail ? (
@@ -130,15 +129,13 @@ export default function ProductTable({ products }: { products: any }) {
                             </div>
                         </td>
 
-                        {/* Category */}
-                        <td className="px-6 py-4">
+                                                <td className="px-6 py-4">
                             <span className="inline-flex text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 bg-[#0f1117] border border-white/10 text-gray-400 rounded-md shadow-inner">
                                 {product.category || "General"}
                             </span>
                         </td>
 
-                        {/* Price */}
-                        <td className="px-6 py-4">
+                                                <td className="px-6 py-4">
                             <p className="text-sm font-mono font-bold text-white tracking-tighter">
                                 {formatPrice(product.price)}
                             </p>
@@ -149,8 +146,7 @@ export default function ProductTable({ products }: { products: any }) {
                             )}
                         </td>
 
-                        {/* Availability */}
-                        <td className="px-6 py-4">
+                                                <td className="px-6 py-4">
                             <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm border text-[10px] font-mono uppercase tracking-widest shadow-inner
                                 ${!inStock ? 'bg-red-500/10 border-red-500/20 text-red-400' : 
                                   lowStock ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 
@@ -163,8 +159,7 @@ export default function ProductTable({ products }: { products: any }) {
                             </div>
                         </td>
 
-                        {/* Actions */}
-                        <td className="px-6 py-4 text-right relative">
+                                                <td className="px-6 py-4 text-right relative">
                             <div className="flex items-center justify-end gap-1 opacity-0 group-hover/row:opacity-100 transition-all transform translate-x-4 group-hover/row:translate-x-0">
                                 <Link
                                     href={`/products/${id}`}

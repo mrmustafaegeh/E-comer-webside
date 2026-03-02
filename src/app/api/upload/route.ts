@@ -44,7 +44,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       addRandomSuffix: true, // Adds random suffix to prevent name conflicts
     });
 
-    console.log("✅ Image uploaded successfully:", blob.url);
+
 
     return NextResponse.json({
       url: blob.url,
@@ -82,7 +82,7 @@ export async function DELETE(request: Request): Promise<NextResponse> {
     // Delete from Vercel Blob
     await del(url);
 
-    console.log("✅ Image deleted successfully:", url);
+
 
     return NextResponse.json({
       success: true,

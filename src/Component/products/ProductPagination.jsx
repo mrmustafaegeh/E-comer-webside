@@ -32,8 +32,7 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
 
   return (
     <div className="flex items-center justify-center gap-4">
-      {/* Previous Button */}
-      <button
+            <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
         className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"
@@ -41,8 +40,7 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
         <ChevronLeft className="w-6 h-6 group-hover:scale-125 transition-transform" strokeWidth={1} />
       </button>
 
-      {/* Page Numbers */}
-      <div className="hidden sm:flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4">
         {getPageNumbers().map((pageNum, index) =>
           pageNum === "..." ? (
             <span
@@ -67,13 +65,11 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
         )}
       </div>
 
-      {/* Mobile Page Indicator */}
-      <div className="sm:hidden font-mono font-black text-[12px] text-white mx-8 uppercase tracking-[0.5em] italic animate-pulse">
+            <div className="sm:hidden font-mono font-black text-[12px] text-white mx-8 uppercase tracking-[0.5em] italic animate-pulse">
         {page} / {totalPages}
       </div>
 
-      {/* Next Button */}
-      <button
+            <button
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
         className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"

@@ -71,8 +71,7 @@ const CartPage = () => {
   if (validatedCartItems.length === 0) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 bg-black relative">
-        {/* Monochrome Noise Overlay */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay pointer-events-none z-0"></div>
         
         <div className="w-24 h-24 bg-black rounded-none flex items-center justify-center mb-10 border border-white/20 shadow-2xl relative z-10 transition-transform hover:rotate-12 duration-700">
             <ShoppingBag size={40} strokeWidth={1} className="text-white opacity-20" />
@@ -91,14 +90,12 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-black relative">
-      {/* Monochrome Noise Overlay */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none z-0"></div>
       
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-24 md:py-40 relative z-10">
         <div className="flex flex-col lg:flex-row gap-16 xl:gap-24 relative">
           
-          {/* Left: Cart Items */}
-          <div className="flex-1 w-full lg:max-w-[900px]">
+                    <div className="flex-1 w-full lg:max-w-[900px]">
             <header className="mb-20 border-b border-white/10 pb-12">
               <span className="text-[10px] font-mono font-black text-white uppercase tracking-[0.5em] mb-6 flex items-center gap-3">
                  <span className="w-1.5 h-1.5 bg-white rounded-none animate-pulse"></span>
@@ -120,8 +117,7 @@ const CartPage = () => {
                   >
                     <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                     
-                    {/* Product Image */}
-                    <div className="relative w-full md:w-48 aspect-[4/5] bg-black rounded-none overflow-hidden border border-white/10 flex-shrink-0 group-hover:border-white transition-all duration-1000 z-10">
+                                        <div className="relative w-full md:w-48 aspect-[4/5] bg-black rounded-none overflow-hidden border border-white/10 flex-shrink-0 group-hover:border-white transition-all duration-1000 z-10">
                       <Image
                         src={item.imgSrc || "/images/default-product.png"}
                         alt={item.name}
@@ -130,8 +126,7 @@ const CartPage = () => {
                       />
                     </div>
 
-                    {/* Product Details */}
-                    <div className="flex-1 w-full relative z-10 flex flex-col justify-between h-full min-h-[180px]">
+                                        <div className="flex-1 w-full relative z-10 flex flex-col justify-between h-full min-h-[180px]">
                       <div className="flex justify-between items-start mb-6">
                         <div className="space-y-3">
                           <h3 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tight leading-none uppercase italic group-hover:translate-x-2 transition-transform duration-500">
@@ -150,8 +145,7 @@ const CartPage = () => {
                       </div>
 
                       <div className="flex flex-wrap items-end justify-between gap-8 mt-auto border-t border-white/5 pt-8">
-                         {/* Quantity Controls */}
-                         <div className="flex items-center gap-2 p-1 bg-black rounded-none border border-white/10">
+                                                  <div className="flex items-center gap-2 p-1 bg-black rounded-none border border-white/10">
                             <button
                               onClick={() => decreaseQuantity(item.id)}
                               disabled={item.qty <= 1}
@@ -180,8 +174,7 @@ const CartPage = () => {
             </div>
           </div>
 
-          {/* Right: Summary */}
-          <div className="w-full lg:w-[400px]">
+                    <div className="w-full lg:w-[400px]">
             <div className="sticky top-32 p-10 bg-black rounded-none border border-white/10 shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[80px] rounded-full pointer-events-none group-hover:bg-white/10 transition-colors"></div>
               

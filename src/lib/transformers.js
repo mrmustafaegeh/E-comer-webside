@@ -78,6 +78,8 @@ export function transformUser(user) {
     name: user.name || "Anonymous",
     email: user.email,
     image: user.image || null,
+    phone: user.phoneNumber || user.phone || "",
+    address: user.address || null,
     role: user.role || "user",
     isAdmin: user.role === "admin",
     loyaltyPoints: Number(user.loyaltyPoints || 0),

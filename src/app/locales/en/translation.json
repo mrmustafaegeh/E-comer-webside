@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteTitle": "QuickCart",
+    "siteTitle": "QuickQart",
     "home": "Home",
     "products": "Products",
     "about": "About Us",
@@ -70,7 +70,7 @@
     "submitting": "Subscribing..."
   },
   "about": {
-    "title": "Welcome to QuickCart",
+    "title": "Welcome to QuickQart",
     "tagline": "Best products, unbeatable service. Your trusted partner for quality electronics.",
     "fastDelivery": "Fast Delivery",
     "fastDeliveryDesc": "Quick doorstep drops within 24 hours",

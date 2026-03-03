@@ -29,7 +29,7 @@ function buildSystemPrompt(productContext, userContext) {
     BOOSTERS: ACTIVE_BOOSTERS
   };
 
-  return `You are QuickCart AI — an elite shopping assistant for QuickCart, a premium e-commerce platform. You are smart, proactive, and transactional. You don't just answer questions — you take action.
+  return `You are QuickQart AI — an elite shopping assistant for QuickQart, a premium e-commerce platform. You are smart, proactive, and transactional. You don't just answer questions — you take action.
 
 ---
 
@@ -438,7 +438,7 @@ function handlePaymentHelp() {
 
 function handleContact() {
   return {
-    response: `📞 **Contact Us**\n\n💬 **Live Chat:** Available now\n📧 **Email:** support@quickcart.com\n📞 **Phone:** 1-800-QUICK-CART\n\n**Hours:** Mon-Fri 9AM-9PM EST`,
+    response: `📞 **Contact Us**\n\n💬 **Live Chat:** Available now\n📧 **Email:** support@quickqart.com\n📞 **Phone:** 1-800-QUICK-QART\n\n**Hours:** Mon-Fri 9AM-9PM EST`,
     products: [],
     action: 'start_chat',
     suggestedActions: ['Start live chat', 'Email us']
@@ -456,7 +456,7 @@ function handleFAQ() {
 
 function handleGreeting(productContext, userContext) {
   return {
-    response: `Hey! 👋 Welcome to **QuickCart**!\n\nI can help you with:\n🛍️ Finding products\n💰 Deals & discounts\n📦 Order tracking\n🔄 Returns & refunds\n\n**What brings you here today?**`,
+    response: `Hey! 👋 Welcome to **QuickQart**!\n\nI can help you with:\n🛍️ Finding products\n💰 Deals & discounts\n📦 Order tracking\n🔄 Returns & refunds\n\n**What brings you here today?**`,
     products: productContext.products.slice(0, 4).map(formatProduct),
     action: null,
     suggestedActions: ['Browse products', 'Check deals', 'Track order']

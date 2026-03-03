@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteTitle": "QuickCart",
+    "siteTitle": "QuickQart",
     "home": "Ana Sayfa",
     "products": "Ürünler",
     "about": "Hakkımızda",
@@ -70,7 +70,7 @@
     "submitting": "Abone olunuyor..."
   },
   "about": {
-    "title": "QuickCart'a Hoş Geldiniz",
+    "title": "QuickQart'a Hoş Geldiniz",
     "tagline": "En iyi ürünler, rakipsiz hizmet. Kaliteli elektronik ürünlerde güvenilir partneriniz.",
     "fastDelivery": "Hızlı Teslimat",
     "fastDeliveryDesc": "24 saat içinde hızlı kapıda teslimat",

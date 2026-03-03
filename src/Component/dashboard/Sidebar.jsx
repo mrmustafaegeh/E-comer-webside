@@ -53,8 +53,8 @@ export default function AdminSidebar({ onClose, desktopCollapsed, setDesktopColl
         </div>
         {!desktopCollapsed && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 min-w-0">
-            <h1 className="text-sm font-bold tracking-tight text-white leading-none truncate">QuickCart</h1>
-            <p className="text-[10px] font-mono tracking-widest text-[#3b82f6] uppercase mt-1">Console v2.1</p>
+            <h1 className="text-sm font-bold tracking-tight text-white leading-none truncate">QuickQart</h1>
+            <p className="text-[10px] font-mono tracking-widest text-[#3b82f6] uppercase mt-1">1/1</p>
           </motion.div>
         )}
 

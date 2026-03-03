@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { Zap } from "lucide-react";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -41,13 +42,22 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 mb-24">
           
                     <div className="lg:col-span-5 space-y-12">
-            <Link href="/" className="flex items-center group">
-              <div className="w-14 h-14 bg-white rounded-none flex items-center justify-center mr-5 shadow-2xl transition-all duration-700 group-hover:bg-black group-hover:ring-1 group-hover:ring-white">
-                <span className="text-black font-heading font-black tracking-tighter text-2xl group-hover:text-white transition-colors duration-700 italic">QC</span>
+            <Link href="/" className="flex items-center gap-4 group">
+              <div className="relative w-12 h-12 md:w-14 md:h-14 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] shrink-0 group-hover:shadow-[0_0_25px_rgba(59,130,246,0.8)] transition-shadow duration-500">
+                <Zap size={24} strokeWidth={3} />
+                <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
               </div>
-              <span className="text-3xl font-heading font-black text-white tracking-tighter uppercase italic transition-transform duration-700 group-hover:translate-x-3">
-                {safeTranslate("common.siteTitle", "QUICKCART")}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter uppercase italic transition-transform duration-700 group-hover:translate-x-3 leading-none">
+                  {safeTranslate("common.siteTitle", "QUICKQART")}
+                </span>
+                <span className="text-[12px] font-mono tracking-widest text-[#3b82f6] uppercase mt-1 leading-none group-hover:translate-x-3 transition-transform duration-700">
+                  1/1
+                </span>
+              </div>
             </Link>
             
             <p className="text-gray-700 text-[11px] font-mono font-black tracking-[0.4em] uppercase leading-loose max-w-md italic">
@@ -137,7 +147,7 @@ const Footer = () => {
         </div>
 
                 <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] font-mono font-black tracking-[0.6em] uppercase text-gray-500 italic">
-          <p>// END TRANSMISSION. © {currentYear} QUICKCART CORE.</p>
+          <p>// END TRANSMISSION. © {currentYear} QUICKQART CORE.</p>
           <div className="flex gap-10">
             <Link href="/privacy" className="hover:text-white transition-all duration-500 hover:scale-110">PRIVACY PROTOCOL</Link>
             <Link href="/terms" className="hover:text-white transition-all duration-500 hover:scale-110">TERMS OF MATRIX</Link>

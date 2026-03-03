@@ -22,8 +22,12 @@ export async function POST(request) {
     }
 
     const ip = getClientIp(request);
-    const { success } = await rateLimit(ip, 5, "15 m"); 
-    if (!success) return rateLimitResponse();
+    
+    // Bypass rate limiting in development mode
+    if (process.env.NODE_ENV !== "development") {
+      const { success } = await rateLimit(ip, 5, "15 m"); 
+      if (!success) return rateLimitResponse();
+    }
 
     let body;
     try {

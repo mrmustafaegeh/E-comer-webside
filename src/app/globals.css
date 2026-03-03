@@ -2,133 +2,160 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* QUICKQART COMMERCE 2026 PALETTE */
+  --bg-space: #000208;
+  --primary-cyan: #0AFFE8;
+  --accent-magenta: #FF2D78;
+  --accent-magenta-bright: #FF3399;
+  --accent-violet: #7B2FFF;
+  --surface-ghost: rgba(255, 255, 255, 0.04);
+  --text-primary: #F0F4FF;
+  --text-secondary: #6B7FBA;
+  --glow-cyan: 0 0 60px rgba(10, 255, 232, 0.3);
+  
+  /* FONTS */
+  --font-display: 'Clash Display', 'Outfit', sans-serif;
+  --font-body: 'Syne', 'Inter', sans-serif;
+  --font-accent: 'Space Mono', 'JetBrains Mono', monospace;
+}
+
 @layer base {
-  :root {
-    --font-heading: var(--font-bebas-neue), system-ui, sans-serif;
-    --font-mono: var(--font-jb-mono), 'Fira Code', monospace;
-    --bg-deep: #000000;
-    --bg-panel: #000000;
-    --bg-card: #000000;
-    --accent-main: #FFFFFF;
-    --text-primary: #FFFFFF;
-    --text-secondary: #a3a3a3;
-    --text-muted: #525252;
-    --border-loud: rgba(255, 255, 255, 1);
-    --border-subtle: rgba(255, 255, 255, 0.1);
-  }
-
   html {
-    scroll-behavior: smooth;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: var(--bg-deep);
-    color-scheme: dark;
-  }
-
-  body {
-    font-family: var(--font-mono);
-    background-color: var(--bg-deep);
+    background-color: var(--bg-space);
     color: var(--text-primary);
-    line-height: 1.5;
-    min-height: 100vh;
+    scroll-behavior: auto !important; /* Managed by Lenis */
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    color: white;
-    text-transform: uppercase;
-    font-style: italic;
-    letter-spacing: -0.05em;
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-space);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    cursor: none; /* Custom glow cursor will be implemented */
   }
 
-  /* Custom Monochrome Scrollbar */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  /* CUSTOM SCROLLBAR FOR QUICKQART */
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--bg-deep);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #ffffff;
-    border-radius: 0px;
-  }
-
-  ::selection {
-    background-color: #ffffff;
-    color: #000000;
-  }
-
-  input, select, textarea {
-    @apply bg-black border border-white/10 rounded-none py-4 px-6 text-white outline-none transition-colors focus:border-white focus:ring-0 font-mono text-[11px] uppercase tracking-[0.5em];
-  }
-  
-  img {
-    @apply grayscale transition-[filter] duration-[1500ms] transform-gpu;
-  }
-  .group:hover img {
-    @apply grayscale-0;
+    background: linear-gradient(to bottom, var(--primary-cyan), var(--accent-violet));
+    border-radius: 10px;
   }
 }
 
 @layer components {
-  /* No rounded corners allowed. */
-  .btn-primary {
-    @apply relative px-10 py-5 bg-transparent overflow-hidden text-white rounded-none font-mono text-xs font-black uppercase tracking-[0.5em] transition-[color,transform] border border-white active:scale-95 italic transform-gpu will-change-transform;
-  }
-  .btn-primary::before {
-    content: "";
-    @apply absolute inset-0 bg-white scale-x-0 origin-left transition-transform duration-700 -z-10;
-  }
-  .btn-primary:hover::before {
-    @apply scale-x-100;
-  }
-  .btn-primary:hover {
-    @apply text-black;
-  }
-
-  .btn-outline {
-    @apply px-10 py-5 bg-transparent text-white rounded-none font-mono text-xs font-black uppercase tracking-[0.5em] transition-[border-color,transform] border border-white/10 hover:border-white active:scale-95 italic transform-gpu will-change-transform;
-  }
-
-  .section-label {
-    @apply text-xs font-mono font-black text-gray-400 uppercase tracking-[0.5em] mb-6 block italic;
-  }
-
-  .glass-panel {
-    @apply bg-black border border-white/10 rounded-none;
-  }
-
-  /* 3D Animation Utilities */
-  .hero-container {
-    perspective: 1000px;
-  }
-  .card-3d-tilt {
-    perspective: 800px;
-    transform: translateZ(0); /* Force GPU acceleration */
-    will-change: transform;
-  }
-  .card-3d-tilt-inner {
-    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* QUICKQART CARD */
+  .product-card {
+    background: var(--surface-ghost);
+    border: 1px solid rgba(10, 255, 232, 0.15);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 
+      0 0 40px rgba(10, 255, 232, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transform-style: preserve-3d;
+    transition: transform 0.1s ease, box-shadow 0.3s ease;
     will-change: transform;
   }
-  .card-3d-tilt:hover .card-3d-tilt-inner {
-    transform: translateZ(20px) translateY(-8px);
+
+  .product-card:hover {
+    box-shadow: 
+      0 0 60px rgba(10, 255, 232, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
-  .border-accent-left {
-    @apply border-l-4 border-white pl-4;
+  /* HOLOGRAPHIC SHIMMER Overlay */
+  .holo-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg, 
+      transparent 40%, 
+      rgba(10, 255, 232, 0.15) 50%, 
+      transparent 60%
+    );
+    background-size: 200% 200%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .product-card:hover .holo-shimmer {
+    opacity: 1;
+    animation: holoshimmer 2s linear infinite;
+  }
+
+  /* BUTTONS */
+  .btn-glitch {
+    @apply relative px-8 py-4 bg-transparent border border-cyan-400/30 text-cyan-400 font-mono text-sm uppercase tracking-widest overflow-hidden transition-all duration-300;
+    box-shadow: 0 0 20px rgba(10, 255, 232, 0.1);
+  }
+
+  .btn-glitch:hover {
+    @apply border-cyan-400 text-white translate-y-[-2px];
+    box-shadow: 0 0 40px rgba(10, 255, 232, 0.3);
+    text-shadow: 0 0 10px rgba(10, 255, 232, 0.5);
+  }
+
+  /* GLASSMORPHIC PANEL */
+  .glass-island {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
   }
 }
 
-@layer utilities {
-  .text-shadow-3d {
-    text-shadow: 2px 2px 0 rgba(255,255,255,0.1), 4px 4px 0 rgba(255,255,255,0.05);
-  }
-  .bg-white-slow-orb {
-    @apply bg-white/5 blur-[150px];
-  }
+@keyframes holoshimmer {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotateX(0deg); }
+  50%       { transform: translateY(-12px) rotateX(1deg); }
+}
+
+.animate-quickqart {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* CUSTOM CURSOR */
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-cyan);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28), width 0.3s, height 0.3s;
+}
+
+.custom-cursor-glow {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(10, 255, 232, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+}
+
+.bg-magenta-500 { background-color: var(--accent-magenta); }

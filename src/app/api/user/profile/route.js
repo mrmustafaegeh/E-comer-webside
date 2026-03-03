@@ -43,7 +43,14 @@ export async function PUT(request) {
     const body = await request.json();
     const validatedData = updateProfileSchema.parse(body);
 
-    const updatedUser = await updateProfile(session.userId, validatedData);
+    const updatePayload = {
+      name: validatedData.name,
+      image: validatedData.image,
+      phoneNumber: validatedData.phone,
+      address: validatedData.address,
+    };
+
+    const updatedUser = await updateProfile(session.userId, updatePayload);
 
     return NextResponse.json({ 
       success: true, 
@@ -51,8 +58,9 @@ export async function PUT(request) {
       user: transformUser(updatedUser)
     });
   } catch (error) {
+    console.error("PUT Profile Error:", error);
     return NextResponse.json(
-      { error: "Update failed", details: error.message },
+      { error: "Update failed", details: error.errors || error.message },
       { status: 400 }
     );
   }

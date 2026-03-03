@@ -19,7 +19,7 @@ export function generateProductJsonLd(product, baseUrl) {
     "sku": product._id,
     "brand": {
       "@type": "Brand",
-      "name": "QuickCart"
+      "name": "QuickQart"
     },
     "offers": {
       "@type": "Offer",

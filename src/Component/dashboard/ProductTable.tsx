@@ -123,7 +123,7 @@ export default function ProductTable({ products }: { products: any }) {
                                         {product.name}
                                     </p>
                                     <p className="text-[10px] font-mono text-gray-500 tracking-widest uppercase mt-0.5">
-                                        ID: {id?.substring(0, 8).toUpperCase()}
+                                        ID: {id?.substring(0, 8)?.toUpperCase()}
                                     </p>
                                 </div>
                             </div>

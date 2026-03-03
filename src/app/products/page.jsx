@@ -10,7 +10,7 @@ export async function generateMetadata({ searchParams }) {
   const resolvedParams = await searchParams;
   const { search, category } = resolvedParams;
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickcart.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickqart.com";
   const canonical = `${baseUrl}/products${category ? `?category=${category}` : ""}`;
 
   let title = "The Collection | Premium Tech Assets";
@@ -34,7 +34,7 @@ export async function generateMetadata({ searchParams }) {
       title,
       description,
       url: canonical,
-      siteName: "QuickCart Identity Console",
+      siteName: "QuickQart Identity Console",
       type: "website",
     },
     twitter: {
@@ -65,7 +65,7 @@ export default async function ProductsPage({ searchParams }) {
     queryFn: () => getProducts(filters),
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickcart.com";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickqart.com";
   const breadcrumbs = [
     { name: "Home", item: baseUrl },
     { name: "Collection", item: `${baseUrl}/products` }

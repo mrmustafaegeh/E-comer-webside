@@ -11,6 +11,7 @@ import {
   AnimatePresence,
   motion,
 } from "framer-motion";
+import { Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import dynamic from "next/dynamic";
 import { useAuth } from "../../contexts/AuthContext";
@@ -110,10 +111,22 @@ export default function Header() {
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <div className="flex items-center justify-between h-20 md:h-24">
                         <MotionDiv whileHover={{ scale: 1.05 }} transition={{ duration: 0.5 }}>
-              <Link href="/" className="flex items-center gap-4 group">
-                <span className="text-xl md:text-2xl font-mono font-black text-white tracking-tighter uppercase italic group-hover:translate-x-2 transition-transform duration-700">
-                  // {safeT("common.siteTitle", "QUICKCART")}
-                </span>
+              <Link href="/" className="flex items-center gap-3 group">
+                <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] shrink-0 group-hover:shadow-[0_0_25px_rgba(59,130,246,0.8)] transition-shadow duration-500">
+                  <Zap size={16} strokeWidth={3} />
+                  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xl md:text-2xl font-heading font-black text-white tracking-tighter uppercase italic group-hover:translate-x-1 transition-transform duration-700 leading-none">
+                    {safeT("common.siteTitle", "QUICKQART")}
+                  </span>
+                  <span className="text-[9px] font-mono tracking-widest text-[#3b82f6] uppercase mt-1 leading-none">
+                    1/1
+                  </span>
+                </div>
               </Link>
             </MotionDiv>
 

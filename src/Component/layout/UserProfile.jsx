@@ -67,7 +67,7 @@ export default function UserProfile() {
               quality={75}
             />
           ) : (
-            <span className="italic">{user.name?.charAt(0).toUpperCase() || "U"}</span>
+            <span className="italic">{user.name?.charAt(0)?.toUpperCase() || "U"}</span>
           )}
         </div>
         <span className="text-[10px] font-mono font-black tracking-[0.4em] text-white hidden sm:inline uppercase italic group-hover:translate-x-2 transition-transform duration-500">{user.name}</span>

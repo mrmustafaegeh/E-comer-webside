@@ -1,9 +1,9 @@
 import AboutUs from "../../Component/aboutusPage/AboutUs.jsx";
 
 export const metadata = {
-  title: "About Us - QuickCart",
+  title: "About Us - QuickQart",
   description:
-    "Learn more about QuickCart - your trusted partner for quality electronics with fast delivery and top-notch service.",
+    "Learn more about QuickQart - your trusted partner for quality electronics with fast delivery and top-notch service.",
 };
 
 export default function AboutPage() {

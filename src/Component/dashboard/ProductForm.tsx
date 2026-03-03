@@ -27,12 +27,12 @@ export interface ProductFormValues {
 }
 
 const schema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
+  title: z.string().min(1, "Title must be at least 1 character"),
   price: z.number().min(0, "Price must be positive"),
   offerPrice: z.number().min(0).optional(),
-  description: z.string().min(10, "Description must be at least 10 characters"),
+  description: z.string().min(1, "Description must be at least 1 character"),
   category: z.string().min(1, "Category is required"),
-  image: z.string().url("Valid image URL required"),
+  image: z.string().min(1, "Valid image path required"),
   stock: z.number().min(0, "Stock cannot be negative"),
   featured: z.boolean(),
   tags: z.string().optional(),
@@ -62,10 +62,11 @@ export default function ProductForm({
     setValue,
     reset,
     watch,
+    trigger,
     formState: { errors, isSubmitting, isValid },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(schema),
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       title: "",
       price: 0,
@@ -93,7 +94,7 @@ export default function ProductForm({
     reset(initialValues as ProductFormValues);
     if (typeof initialValues.image === "string" && initialValues.image) {
       setPreviewUrl(initialValues.image);
-      setValue("image", initialValues.image);
+      setValue("image", initialValues.image, { shouldValidate: true });
     }
   }, [initialValues?.id, reset, setValue]);
 
@@ -103,6 +104,7 @@ export default function ProductForm({
 
     if (!file.type.startsWith("image/")) {
       setUploadError("Invalid visual format");
+      e.target.value = "";
       return;
     }
 
@@ -127,20 +129,24 @@ export default function ProductForm({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Transmission failed");
 
-      setValue("image", data.url, { shouldValidate: true });
+      setValue("image", data.url, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
       setPreviewUrl(data.url);
+      await trigger(); // Forcibly alert Zod to re-check all fields including the new image
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : "Transmission failed");
       setPreviewUrl("");
+      setValue("image", "", { shouldValidate: true });
     } finally {
       setUploading(false);
+      e.target.value = ""; // Erase the locked file so they can select it again if needed
     }
   };
 
-  const handleRemoveImage = useCallback(() => {
+  const handleRemoveImage = useCallback(async () => {
     setPreviewUrl("");
-    setValue("image", "", { shouldValidate: true });
-  }, [setValue]);
+    setValue("image", "", { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+    await trigger(); // Force revalidate to flag the empty image accurately
+  }, [setValue, trigger]);
 
   const onSubmit = async (data: ProductFormValues) => {
     if (!onSaved) return;
@@ -315,7 +321,7 @@ export default function ProductForm({
                 
                 {previewUrl ? (
                     <div className="group relative w-full h-48 bg-[#0f1117] rounded-xl overflow-hidden border border-white/10 shadow-inner flex items-center justify-center cursor-pointer" onClick={handleRemoveImage}>
-                        <NextImage src={previewUrl} alt="Product Preview" fill className="object-cover" />
+                        <NextImage src={previewUrl} alt="Product Preview" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center backdrop-blur-sm gap-2">
                              <Trash2 size={24} className="text-red-500" />
                              <span className="text-[10px] font-mono uppercase tracking-widest text-red-400">Flush Visual Data</span>
@@ -382,7 +388,7 @@ export default function ProductForm({
                                         <div className="flex-1 overflow-y-auto bg-gray-50 pb-10">
                                                   <div className="w-full aspect-square bg-white relative">
                             {previewUrl ? (
-                                <NextImage src={previewUrl} fill className="object-cover" alt="Preview Frame" />
+                                <NextImage src={previewUrl} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" alt="Preview Frame" />
                             ) : (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 gap-3">
                                     <ImageIcon size={48} />

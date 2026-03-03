@@ -1,107 +1,65 @@
 // src/app/layout.jsx
-import Header from "../Component/layout/Header.jsx";
 import ClientTranslationProvider from "../Component/ClientTranslationProvider.jsx";
 import ReduxProvider from "../providers/ReduxProvider.jsx";
 import ReactQueryProvider from "../providers/ReactQueryProvider.jsx";
 import { AuthProvider } from "../contexts/AuthContext.js";
-import { JetBrains_Mono, Bebas_Neue } from "next/font/google";
-import dynamic from 'next/dynamic';
+import { Inter, Syne, Space_Mono, Outfit } from "next/font/google";
+import StoreLayoutWrapper from "../Component/layout/StoreLayoutWrapper.jsx";
 
-const ChatbotTrigger = dynamic(() => import("../chatbot/ChatbotTrigger.jsx"));
-const Footer = dynamic(() => import("../Component/layout/Footer.jsx"));
-const ScrollToTop = dynamic(() => import("../Component/ui/ScrollToTop.jsx"));
 import "@/lib/env";
 import "./globals.css";
 import "./i18n.js";
 
-const jbMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jb-mono",
-  display: "swap",
-  preload: true,
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
-  fallback: ["monospace"],
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: 'swap', adjustFontFallback: true });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne", display: 'swap', adjustFontFallback: true });
+const spaceMono = Space_Mono({ 
+  subsets: ["latin"], 
+  weight: ["400", "700"], 
+  variable: "--font-space-mono",
+  display: 'swap',
+  adjustFontFallback: true
 });
-
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  variable: "--font-bebas-neue",
-  display: "swap",
-  preload: true,
-  weight: "400",
-  fallback: ["system-ui", "arial"],
-});
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: 'swap', adjustFontFallback: true });
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://example.com"),
   title: {
-    template: "%s | TERMINAL MODULE",
-    default: "QUICKCART // SYSTEM ROOT",
+    template: "%s | QUICKQART COMMERCE",
+    default: "QuickQart // SHOP THE VOID",
   },
-  description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL. // MULTI-SHIPPING MODULES LOADED.",
-  keywords: ["e-commerce", "terminal", "modular", "executive", "future tech"],
-  authors: [{ name: "SYSTEM OPERATOR" }],
-  creator: "QUICKCART ROOT",
-  publisher: "QUICKCART NETWORK",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
+  description: "Experience the future of commerce. QuickQart shopping inside the infinite void. 2026 E-commerce Protocol.",
+  keywords: ["e-commerce", "3d", "quickqart", "future", "luxury"],
+  authors: [{ name: "QUICKQART ARCHITECT" }],
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    title: "QUICKCART // SYSTEM ROOT",
-    description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL.",
-    siteName: "QUICKCART",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "QUICKCART // SYSTEM ROOT",
-    description: "ADVANCED EXECUTIVE TERMINAL PROTOCOL.",
-    creator: "@quickcart",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    title: "QuickQart // SHOP THE VOID",
+    description: "QuickQart shopping inside the infinite void.",
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <head />
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${syne.variable} ${spaceMono.variable} ${outfit.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link 
+          href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" 
+          rel="stylesheet" 
+        />
+      </head>
       <body
-        className={`${jbMono.variable} ${bebasNeue.variable} flex flex-col min-h-screen w-full font-mono antialiased bg-black text-white relative`}
+        className="min-h-screen w-full font-body antialiased bg-[#000208] text-[#F0F4FF] relative overflow-x-hidden selection:bg-cyan-400 selection:text-black"
         suppressHydrationWarning
       >
-        <div className="absolute inset-0 pointer-events-none opacity-5 bg-[url('/noise.svg')] z-50"></div>
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-lg z-[100]"
-        >
-          Skip to content
-        </a>
-
         <ReactQueryProvider>
           <ReduxProvider>
             <AuthProvider>
               <ClientTranslationProvider>
-                <Header />
-                <ScrollToTop />
-                <ChatbotTrigger />
-                <main id="main-content" className="flex-1 w-full">
+                <StoreLayoutWrapper>
                   {children}
-                </main>
-                <Footer />
+                </StoreLayoutWrapper>
               </ClientTranslationProvider>
             </AuthProvider>
           </ReduxProvider>

@@ -93,10 +93,20 @@ export async function POST(request) {
     }
 
     const data = validation.data;
+    
+    // Map featured to isFeatured and remove featured
+    const isFeatured = data.featured;
+    delete data.featured;
+    
+    // Auto-generate a slug if it doesn't exist
+    const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
+
     const product = await prisma.product.create({
       data: {
         ...data,
         name: data.title, // Keep name for compatibility
+        isFeatured,
+        slug,
       },
     });
 

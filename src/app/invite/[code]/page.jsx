@@ -95,7 +95,7 @@ export default async function ReferralLandingPage({ params }) {
 
                         <div className="pt-8 flex flex-col items-center gap-4">
                 <p className="text-[10px] font-mono text-gray-600 font-bold uppercase tracking-widest">
-                    Secured by QuickCart Neural Network
+                    Secured by QuickQart Neural Network
                 </p>
                 <Link href="/" className="text-[10px] font-mono text-blue-500/50 hover:text-blue-500 font-bold uppercase tracking-widest transition-colors">
                     View Network Mainframe

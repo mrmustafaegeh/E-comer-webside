@@ -1,18 +1,12 @@
-// src/app/api/upload/route.ts
 import { put, del } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { writeFile } from "fs/promises";
+import { join } from "path";
+import crypto from "crypto";
 
-// POST - Upload image to Vercel Blob
+// POST - Upload image to Vercel Blob or fallback to local
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    //     const session = await getServerSession(authOptions);
-    // if (!session) {
-    //   return NextResponse.json(
-    //     { error: 'Unauthorized' },
-    //     { status: 401 }
-    //   );
-    // }
-
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -38,20 +32,40 @@ export async function POST(request: Request): Promise<NextResponse> {
       );
     }
 
-    // Upload to Vercel Blob
-    const blob = await put(file.name, file, {
-      access: "public",
-      addRandomSuffix: true, // Adds random suffix to prevent name conflicts
-    });
+    // Check if Vercel Blob is configured
+    if (process.env.BLOB_READ_WRITE_TOKEN) {
+      // Upload to Vercel Blob
+      const blob = await put(file.name, file, {
+        access: "public",
+        addRandomSuffix: true, // Adds random suffix to prevent name conflicts
+      });
 
+      return NextResponse.json({
+        url: blob.url,
+        pathname: blob.pathname,
+        size: file.size,
+        contentType: file.type,
+      });
+    } else {
+      // Fallback to local upload (public/uploads)
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      
+      const randomSuffix = crypto.randomBytes(8).toString("hex");
+      const ext = file.name.split('.').pop();
+      const filename = `${file.name.replace(`.${ext}`, "")}-${randomSuffix}.${ext}`;
+      
+      const path = join(process.cwd(), "public", "uploads", filename);
+      await writeFile(path, buffer);
+      
+      return NextResponse.json({
+        url: `/uploads/${filename}`,
+        pathname: `/uploads/${filename}`,
+        size: file.size,
+        contentType: file.type,
+      });
+    }
 
-
-    return NextResponse.json({
-      url: blob.url,
-      pathname: blob.pathname,
-      size: file.size,
-      contentType: file.type,
-    });
   } catch (error) {
     console.error("❌ Upload error:", error);
     return NextResponse.json(

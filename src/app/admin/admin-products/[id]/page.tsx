@@ -8,13 +8,15 @@ import { ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function AdminEditProductPage() {
+import { ProductFormValues } from "@/Component/dashboard/ProductForm";
+
+export default function EditProductPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params?.id;
+  const id = params?.id as string;
 
   const [loading, setLoading] = useState(true);
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<ProductFormValues | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -31,8 +33,20 @@ export default function AdminEditProductPage() {
 
         if (!res.ok) throw new Error(data?.error || "Failed to locate asset data");
         
-        // Map _id strictly to id as expected by initialValues
-        setProduct({ ...data, id: data._id || data.id });
+        // Map strictly to expected initialValues for ProductForm.tsx
+        setProduct({
+          id: data._id || data.id,
+          title: data.name || data.title || "",
+          offerPrice: data.salePrice || 0,
+          featured: data.isFeatured || false,
+          image: data.image || "",
+          description: data.description || "",
+          category: data.category || "",
+          price: data.price || 0,
+          stock: data.stock || 0,
+          tags: Array.isArray(data.tags) ? data.tags.join(", ") : (data.tags || ""),
+          sku: data.sku || "",
+        });
       } catch (e: any) {
         setError(e.message);
       } finally {
@@ -45,10 +59,21 @@ export default function AdminEditProductPage() {
     try {
       setError("");
 
+      const apiValues = {
+        ...values,
+        name: values.title,
+        salePrice: values.offerPrice || 0,
+        isFeatured: values.featured || false,
+      };
+
+      delete apiValues.title;
+      delete apiValues.offerPrice;
+      delete apiValues.featured;
+
       const res = await fetch(`/api/admin/admin-products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(apiValues),
       });
 
       const data = await res.json();

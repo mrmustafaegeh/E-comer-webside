@@ -12,8 +12,8 @@ export const registerSchema = z.object({
 });
 
 export const updateProfileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").optional(),
-  image: z.string().url().optional().nullable(),
+  name: z.union([z.string().min(2, "Name must be at least 2 characters"), z.literal("")]).optional(),
+  image: z.union([z.string().url(), z.literal("")]).optional().nullable(),
   phone: z.string().optional(),
   address: z.object({
     street: z.string().optional(),

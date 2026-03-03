@@ -1,7 +1,7 @@
 import ContactForm from "../../Component/contact/ContactForm";
 
 export const metadata = {
-  title: "Contact Us - QUICKCART",
+  title: "Contact Us - QUICKQART",
   description: "Get in touch with our team for support or inquiries through our monochromatic terminal.",
 };
 
@@ -29,7 +29,7 @@ export default function ContactPage() {
                 <div className="space-y-16">
                     <div className="group cursor-default">
                         <p className="text-[9px] font-mono font-black text-gray-900 uppercase tracking-[0.5em] mb-4 group-hover:text-white transition-colors italic">// Direct Terminal</p>
-                        <p className="text-3xl font-heading font-black text-white tracking-widest italic uppercase group-hover:translate-x-4 transition-transform duration-700 underline underline-offset-[12px] decoration-white/10 group-hover:decoration-white">hello@quickcart.console</p>
+                        <p className="text-3xl font-heading font-black text-white tracking-widest italic uppercase group-hover:translate-x-4 transition-transform duration-700 underline underline-offset-[12px] decoration-white/10 group-hover:decoration-white">hello@quickqart.console</p>
                     </div>
                     <div className="group cursor-default">
                         <p className="text-[9px] font-mono font-black text-gray-900 uppercase tracking-[0.5em] mb-4 group-hover:text-white transition-colors italic">// Global Operations</p>

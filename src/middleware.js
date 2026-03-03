@@ -3,7 +3,7 @@ import { jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export async function proxy(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin routes
@@ -16,8 +16,9 @@ export async function proxy(request) {
 
     try {
       const { payload } = await jwtVerify(session, secret);
-
-      if (!payload.roles?.includes("admin")) {
+      
+      const userRoles = payload.roles?.map(r => String(r).toUpperCase()) || [];
+      if (!userRoles.includes("ADMIN")) {
         return NextResponse.redirect(new URL("/", request.url));
       }
     } catch (e) {

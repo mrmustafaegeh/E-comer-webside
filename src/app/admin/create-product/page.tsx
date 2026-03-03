@@ -21,7 +21,13 @@ export default function AdminCreateProduct() {
     setError(null);
 
     try {
-      const result = await dispatch(createAdminProduct(data) as any).unwrap();
+      const apiValues = {
+        ...data,
+        salePrice: data.offerPrice || 0,
+        featured: data.featured || false,
+      };
+
+      const result = await dispatch(createAdminProduct(apiValues) as any).unwrap();
 
       if (result?.id || result?._id) {
         // Success - redirect to products list

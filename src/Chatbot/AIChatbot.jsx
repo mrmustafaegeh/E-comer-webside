@@ -16,7 +16,7 @@ export default function AIChatbot({ isOpen, onClose }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Hey there! 👋 I\'m QuickCart AI. I can help you find products, track your orders, or manage your cart. What can I do for you today?',
+      content: 'Hey there! 👋 I\'m QuickQart AI. I can help you find products, track your orders, or manage your cart. What can I do for you today?',
       suggestions: ['Show me deals', 'Track my order', 'Browse categories'],
       timestamp: new Date(),
     }
@@ -202,7 +202,7 @@ export default function AIChatbot({ isOpen, onClose }) {
               </div>
               <div>
                 <h3 className="font-semibold flex items-center gap-2">
-                  QuickCart AI
+                  QuickQart AI
                   <Sparkles className="w-4 h-4 text-yellow-400" />
                 </h3>
                 <p className="text-xs text-gray-300">Online • Your Transactional Assistant</p>

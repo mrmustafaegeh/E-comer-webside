@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteTitle": "QuickCart",
+    "siteTitle": "QuickQart",
     "home": "Bogga Hore",
     "products": "Alaabta",
     "about": "Nagu Saabsan",
@@ -59,7 +59,7 @@
     "submitting": "Lagu wadaa isdiiwaangelinta..."
   },
   "about": {
-    "title": "Ku Soo Dhawoow QuickCart",
+    "title": "Ku Soo Dhawoow QuickQart",
     "tagline": "Alaabta ugu fiican, adeeg aan la mid ahayn. Shuraako aamin ah alaabta elektarooniga tayo sare leh.",
     "fastDelivery": "Gaarsiin Degdeg",
     "fastDeliveryDesc": "Gaarsiin degdeg ah albaabka guriga 24 saac gudahooda",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { Zap } from "lucide-react";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -40,13 +41,22 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-14">
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
                     <div className="lg:col-span-2 space-y-5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white">
-                QC
+            <div className="flex items-center gap-4">
+              <div className="relative w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] shrink-0">
+                <Zap size={24} strokeWidth={3} />
+                <span className="absolute -top-1.5 -right-1.5 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
               </div>
-              <span className="text-2xl font-bold text-white">
-                {safeT("common.siteTitle", "QuickCart")}
-              </span>
+              <div className="flex flex-col">
+                <span className="text-2xl font-bold text-white leading-none">
+                  {safeT("common.siteTitle", "QuickQart")}
+                </span>
+                <span className="text-[12px] font-mono tracking-widest text-[#3b82f6] uppercase mt-1 leading-none">
+                  1/1
+                </span>
+              </div>
             </div>
 
             <p className="text-gray-400 max-w-md">
@@ -115,7 +125,7 @@ export default function Footer() {
 
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
           <span className="text-gray-400">
-            © {year} {safeT("common.siteTitle", "QuickCart")}.{" "}
+            © {year} {safeT("common.siteTitle", "QuickQart")}.{" "}
             {safeT("footer.allRightsReserved", "All rights reserved.")}
           </span>
 

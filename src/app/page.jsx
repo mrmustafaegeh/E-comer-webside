@@ -1,22 +1,33 @@
 import { Suspense } from 'react';
-import HeroSlider from "../Component/slider/HeroSlider";
 import FeaturedProductsClient from "../Component/features/FeaturedProductsClient";
 import { getHeroProductsData, getFeaturedProductsData } from "@/services/productService";
-
-import CategorySection from "../Component/home/CategorySection";
-import ValueProps from "../Component/home/ValueProps";
+import ZeroGHero from "../Component/home/ZeroGHero";
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: "Premium Tech & Lifestyle | QuickCart",
-  description: "Discover premium tech products and lifestyle essentials with unbeatable deals.",
-  openGraph: {
-    title: "Premium Tech & Lifestyle | QuickCart", 
-    description: "Discover premium tech products and lifestyle essentials with unbeatable deals.",
-    type: "website",
-  }
-};
+export async function generateMetadata() {
+  return {
+    title: "QuickQart 1/1 // SHOP THE VOID",
+    description: "Experience the future of commerce. QuickQart shopping inside the infinite void powered by QuickQart 1/1 Architecture.",
+    alternates: {
+      canonical: 'https://quickqart.com/',
+    },
+    openGraph: {
+      title: "QuickQart 1/1 // SHOP THE VOID",
+      description: "Experience the future of commerce. QuickQart shopping inside the infinite void.",
+      url: "https://quickqart.com",
+      siteName: "QuickQart",
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: "QuickQart 1/1 // SHOP THE VOID",
+      description: "Experience the future of commerce. QuickQart shopping inside the infinite void.",
+    },
+  };
+}
 
 export default async function HomePage() {
   const [heroProducts, featuredProducts] = await Promise.all([
@@ -25,33 +36,53 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="bg-black min-h-screen text-white selection:bg-white selection:text-black font-mono relative overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay z-0"></div>
-      
-            <section className="relative z-10 border-b border-white/10">
-        <HeroSlider initialProducts={heroProducts} />
-      </section>
+    <div className="flex flex-col gap-0 items-center w-full">
+      {/* HERO SECTION */}
+      <ZeroGHero />
 
-            <div className="relative z-10 border-b border-white/10">
-         <ValueProps />
-      </div>
-
-            <section className="max-w-[1440px] mx-auto px-6 lg:px-12 py-24 md:py-40 relative z-10" id="features">
-        <div className="mb-20">
-          <span className="text-[10px] font-mono font-black tracking-[0.5em] uppercase text-gray-500 mb-6 block flex items-center gap-3 italic">
-            <span className="w-1.5 h-1.5 bg-white animate-pulse"></span>
-            Global Collection ID
-          </span>
-          <h2 className="text-5xl md:text-8xl font-heading font-black text-white tracking-tighter leading-none uppercase italic">
-            Asset Inventory. <br className="hidden md:block" /> Framework // BW.
-          </h2>
+      {/* CATEGORY EXPLORER (Quick Orbit) */}
+      <section className="w-full max-w-[1440px] px-6 lg:px-12 py-24">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+          <div className="space-y-4">
+            <span className="text-[10px] font-mono tracking-[0.5em] text-cyan-400 uppercase">// SECTOR ANALYTICS</span>
+            <h2 className="text-5xl md:text-8xl font-display font-black leading-tight tracking-tighter uppercase grayscale group-hover:grayscale-0 transition-all duration-700">
+              FEATURED <br /> INVENTORY.
+            </h2>
+          </div>
+          <div className="flex gap-4">
+            {['Electronics', 'Fashion', 'Home', 'Sports'].map((cat) => (
+              <Link 
+                key={cat}
+                href={`/category/${cat.toLowerCase()}`}
+                className="px-6 py-2 glass-island text-[10px] font-mono uppercase tracking-widest hover:border-cyan-400/50 transition-all"
+              >
+                {cat}
+              </Link>
+            ))}
+          </div>
         </div>
+
+        {/* FEATURED PRODUCTS GRID */}
         <FeaturedProductsClient initialProducts={featuredProducts} />
       </section>
 
-            <div className="relative z-10 border-t border-white/10">
-         <CategorySection />
-      </div>
-    </main>
+      {/* ADDED WOW FACTOR SECTION */}
+      <section className="w-full py-40 bg-gradient-to-b from-transparent to-violet-900/10">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <h3 className="text-4xl md:text-6xl font-display font-black mb-8 leading-none">
+            DEFIANCE OF <br /> TRADITIONAL COMMERCE.
+          </h3>
+          <p className="text-text-secondary text-lg mb-12">
+            Every interaction is calculated. Every pixel is weighted by the void. 
+            Welcome to the 2026 Shopify-Killer Architecture.
+          </p>
+          <div className="inline-block p-[1px] bg-gradient-to-r from-cyan-400 via-magenta-500 to-violet-500 rounded-full animate-pulse">
+            <Link href="/products" className="bg-[#000208] px-12 py-6 rounded-full block text-xs font-mono tracking-widest hover:bg-transparent transition-colors">
+              ACQUIRE ASSETS
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

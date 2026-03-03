@@ -9,11 +9,11 @@ export async function generateMetadata({ params }) {
 
   if (!product) return { title: "Product Not Found" };
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quickcart.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quickqart.com';
 
   return {
     title: `${product.title} | Assets Archive`,
-    description: product.description || `Buy ${product.title} at the best price on QuickCart.`,
+    description: product.description || `Buy ${product.title} at the best price on QuickQart.`,
     openGraph: {
       title: product.title,
       description: product.description,
@@ -30,7 +30,7 @@ export default async function ProductDetailPage({ params }) {
     notFound();
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quickcart.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quickqart.com';
 
   return (
     <main className="min-h-screen bg-white">

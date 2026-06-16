@@ -156,7 +156,7 @@ export default function ProductForm({
   const discount = offerPrice && price > 0 ? Math.round(((price - offerPrice) / price) * 100) : 0;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full text-white mx-auto pb-24 max-w-[2000px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full h-full text-[var(--text)] mx-auto pb-24 max-w-[2000px]">
       
             <motion.header 
         initial={{ opacity: 0, y: -20 }}
@@ -167,7 +167,7 @@ export default function ProductForm({
             <span className="text-blue-500 text-xs font-mono uppercase tracking-widest mb-2 block flex items-center gap-2">
                <Sparkles size={14} /> Asset Generation Protocol
             </span>
-            <h1 className="text-4xl md:text-5xl font-sora font-bold tracking-tight text-white flex items-center gap-4">
+            <h1 className="text-4xl md:text-5xl font-sora font-bold tracking-tight text-[var(--text)] flex items-center gap-4">
                 {initialValues.id ? "Reconfigure Node" : "Mint Core Asset"}
             </h1>
         </div>
@@ -175,18 +175,18 @@ export default function ProductForm({
             <button
                 type="button"
                 onClick={() => reset()}
-                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-gray-400 hover:text-white transition-colors border border-transparent hover:border-white/10 rounded-xl"
+                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[var(--text-muted)] hover:text-[var(--text)] transition-colors border border-transparent hover:border-[var(--border)] rounded-xl"
             >
                 Flush Data
             </button>
             <button
                 disabled={!isValid || uploading || isSubmitting}
                 type="submit"
-                className="px-8 py-4 bg-blue-600 border border-blue-500 text-white rounded-xl font-mono text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
+                className="px-8 py-4 bg-blue-600 border border-blue-500 text-[var(--text)] rounded-xl font-mono text-xs uppercase tracking-widest hover:bg-blue-500 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
                 {isSubmitting ? (
                     <>
-                        <Loader2 className="animate-spin text-white" size={16} />
+                        <Loader2 className="animate-spin text-[var(--text)]" size={16} />
                         Committing...
                     </>
                 ) : (
@@ -207,20 +207,20 @@ export default function ProductForm({
            transition={{ delay: 0.1 }}
            className="w-full xl:w-[60%] space-y-8 flex-shrink-0"
         >
-                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                        <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 blur-[80px] rounded-full pointer-events-none group-hover/panel:bg-blue-500/10 transition-colors"></div>
                 
-                <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
+                <h3 className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest pb-6 mb-6 border-b border-[var(--border)] flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     Primary Specifications
                 </h3>
                 
                 <div className="space-y-6 relative z-10">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Asset Designation (Title)</label>
+                        <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Asset Designation (Title)</label>
                         <input
                             {...register("title")}
-                            className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 px-5 text-white placeholder:text-gray-600 outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-sora shadow-inner"
+                            className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 px-5 text-[var(--text)] placeholder:text-gray-600 outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-sora shadow-inner"
                             placeholder="e.g. Next-Gen Wireless Audio..."
                         />
                         {errors.title && <p className="text-[10px] font-mono text-red-500 uppercase tracking-widest ml-1 mt-2">{errors.title.message}</p>}
@@ -228,27 +228,27 @@ export default function ProductForm({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Base Valuation (Price)</label>
+                            <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Base Valuation (Price)</label>
                             <div className="relative">
-                                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 font-mono text-sm">$</span>
+                                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] font-mono text-sm">$</span>
                                 <input
                                     type="number"
                                     step="any"
                                     {...register("price", { valueAsNumber: true })}
-                                    className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 pl-10 pr-5 text-white outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-mono shadow-inner"
+                                    className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 pl-10 pr-5 text-[var(--text)] outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-mono shadow-inner"
                                 />
                             </div>
                             {errors.price && <p className="text-[10px] font-mono text-red-500 uppercase tracking-widest ml-1 mt-2">{errors.price.message}</p>}
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Promotional Offset (Sale Price)</label>
+                            <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Promotional Offset (Sale Price)</label>
                             <div className="relative">
-                                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 font-mono text-sm">$</span>
+                                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] font-mono text-sm">$</span>
                                 <input
                                     type="number"
                                     step="any"
                                     {...register("offerPrice", { valueAsNumber: true })}
-                                    className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 pl-10 pr-5 text-white outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-mono shadow-inner"
+                                    className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 pl-10 pr-5 text-[var(--text)] outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-mono shadow-inner"
                                 />
                                 {discount > 0 && (
                                     <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded">-{discount}% Delta</span>
@@ -258,69 +258,69 @@ export default function ProductForm({
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Data Log (Description)</label>
+                        <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Data Log (Description)</label>
                         <textarea
                             {...register("description")}
                             rows={5}
-                            className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 px-5 text-white placeholder:text-gray-600 outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-sora shadow-inner resize-none"
+                            className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 px-5 text-[var(--text)] placeholder:text-gray-600 outline-none transition-all focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 font-sora shadow-inner resize-none"
                             placeholder="Comprehensive asset description and structural specifications..."
                         />
                         <div className="flex justify-between items-center px-1">
                             {errors.description ? (
                                 <p className="text-[10px] font-mono text-red-500 uppercase tracking-widest mt-1">{errors.description.message}</p>
                             ) : <div />}
-                            <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-1">{description?.length ?? 0} BYTES</span>
+                            <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest mt-1">{description?.length ?? 0} BYTES</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
-                 <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
+                        <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                 <h3 className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest pb-6 mb-6 border-b border-[var(--border)] flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
                     Logistic Parameters
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 relative z-10">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Classification (Category)</label>
+                        <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Classification (Category)</label>
                         <input
                             {...register("category")}
-                            className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 px-5 text-white placeholder:text-gray-600 outline-none transition-all focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 font-sora shadow-inner"
+                            className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 px-5 text-[var(--text)] placeholder:text-gray-600 outline-none transition-all focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 font-sora shadow-inner"
                             placeholder="e.g. Hardware"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-mono text-gray-400 uppercase tracking-widest ml-1">Initial Stock Count</label>
+                        <label className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest ml-1">Initial Stock Count</label>
                         <input
                             type="number"
                             step="any"
                             {...register("stock", { valueAsNumber: true })}
-                            className="w-full bg-[#0f1117] border border-white/10 rounded-xl py-4 px-5 text-white outline-none transition-all focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 font-mono shadow-inner"
+                            className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl py-4 px-5 text-[var(--text)] outline-none transition-all focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 font-mono shadow-inner"
                         />
                     </div>
                 </div>
 
-                <div className="flex flex-wrap gap-8 pt-6 border-t border-white/5 relative z-10">
+                <div className="flex flex-wrap gap-8 pt-6 border-t border-[var(--border)] relative z-10">
                     <label className="group flex items-center gap-4 cursor-pointer">
                         <div className="relative w-6 h-6">
                             <input type="checkbox" {...register("featured")} className="peer absolute inset-0 opacity-0 cursor-pointer" />
-                            <div className="w-full h-full bg-[#0f1117] rounded border border-white/20 peer-checked:bg-blue-600 peer-checked:border-blue-500 transition-all shadow-inner" />
-                            <Plus className="absolute inset-0 m-auto text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all" size={12} strokeWidth={4} />
+                            <div className="w-full h-full bg-[var(--bg-subtle)] rounded border border-white/20 peer-checked:bg-blue-600 peer-checked:border-blue-500 transition-all shadow-inner" />
+                            <Plus className="absolute inset-0 m-auto text-[var(--text)] opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all" size={12} strokeWidth={4} />
                         </div>
-                        <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest group-hover:text-white transition-colors">Flag as Hero Feature</span>
+                        <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest group-hover:text-[var(--text)] transition-colors">Flag as Hero Feature</span>
                     </label>
                 </div>
             </div>
 
-                        <div className="bg-[#161b27] border border-white/5 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
-                 <h3 className="text-xs font-mono text-gray-500 uppercase tracking-widest pb-6 mb-6 border-b border-white/5 flex items-center gap-3">
+                        <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[2rem] p-8 shadow-2xl relative overflow-hidden group/panel">
+                 <h3 className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest pb-6 mb-6 border-b border-[var(--border)] flex items-center gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     Visual Data Block
                 </h3>
                 
                 {previewUrl ? (
-                    <div className="group relative w-full h-48 bg-[#0f1117] rounded-xl overflow-hidden border border-white/10 shadow-inner flex items-center justify-center cursor-pointer" onClick={handleRemoveImage}>
+                    <div className="group relative w-full h-48 bg-[var(--bg-subtle)] rounded-xl overflow-hidden border border-[var(--border)] shadow-inner flex items-center justify-center cursor-pointer" onClick={handleRemoveImage}>
                         <NextImage src={previewUrl} alt="Product Preview" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center backdrop-blur-sm gap-2">
                              <Trash2 size={24} className="text-red-500" />
@@ -328,11 +328,11 @@ export default function ProductForm({
                         </div>
                     </div>
                 ) : (
-                    <label className="w-full h-48 bg-[#0f1117]/50 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/5 hover:border-blue-500/50 transition-all group relative z-10">
-                        <div className="w-12 h-12 bg-[#161b27] border border-white/5 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all shadow-xl">
-                            <ImageIcon size={20} className="text-gray-500 group-hover:text-white transition-colors" />
+                    <label className="w-full h-48 bg-[var(--bg-subtle)]/50 border-2 border-dashed border-[var(--border)] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-white/5 hover:border-blue-500/50 transition-all group relative z-10">
+                        <div className="w-12 h-12 bg-[var(--bg)] border border-[var(--border)] rounded-full flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:border-blue-500 transition-all shadow-xl">
+                            <ImageIcon size={20} className="text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors" />
                         </div>
-                        <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest text-center group-hover:text-blue-400 transition-all">
+                        <span className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-widest text-center group-hover:text-blue-400 transition-all">
                             Initiate Upload Protocol<br />
                             <span className="opacity-50 mt-1 block">Supports WEBP, PNG, JPG</span>
                         </span>
@@ -341,7 +341,7 @@ export default function ProductForm({
                 )}
 
                 {uploading && (
-                    <div className="absolute inset-0 bg-[#161b27]/80 backdrop-blur-md flex flex-col items-center justify-center z-20">
+                    <div className="absolute inset-0 bg-[var(--bg)]/80 backdrop-blur-md flex flex-col items-center justify-center z-20">
                         <Loader2 className="animate-spin text-blue-500 mb-4" size={32} />
                         <span className="text-[10px] font-mono text-blue-400 uppercase tracking-widest animate-pulse">Encoding Pixels...</span>
                     </div>
@@ -364,9 +364,9 @@ export default function ProductForm({
            transition={{ delay: 0.2 }}
            className="w-full xl:w-[40%] flex-shrink-0 sticky top-8 hidden lg:block"
         >
-            <div className="bg-[#161b27] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl relative flex flex-col items-center">
-                <div className="w-full flex justify-between items-center mb-10 pb-6 border-b border-white/5">
-                    <h3 className="text-xs font-mono text-gray-400 uppercase tracking-widest flex items-center gap-2">
+            <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[2.5rem] p-8 shadow-2xl relative flex flex-col items-center">
+                <div className="w-full flex justify-between items-center mb-10 pb-6 border-b border-[var(--border)]">
+                    <h3 className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest flex items-center gap-2">
                         <Smartphone size={16} /> Device Render
                     </h3>
                     <div className="flex gap-1.5">
@@ -377,7 +377,7 @@ export default function ProductForm({
                 </div>
 
                                 <div className="w-[340px] h-[650px] bg-white rounded-[3rem] border-8 border-[#0f1117] relative shadow-2xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] scale-95 origin-top transform transition-all hover:scale-100 flex flex-col">
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#0f1117] rounded-b-xl z-50"></div>
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[var(--bg-subtle)] rounded-b-xl z-50"></div>
                     
                                         <div className="h-20 bg-gray-50 border-b border-gray-100 flex items-end justify-between px-6 pb-4 shrink-0">
                         <ArrowRight size={20} className="text-gray-900 rotate-180" />
@@ -397,7 +397,7 @@ export default function ProductForm({
                             )}
                             
                             {featured && (
-                                <div className="absolute top-4 left-4 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-black/20">
+                                <div className="absolute top-4 left-4 bg-gray-900 text-[var(--text)] text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg shadow-black/20">
                                    HOT <Sparkles size={10} />
                                 </div>
                             )}
@@ -415,24 +415,24 @@ export default function ProductForm({
                                     ${(offerPrice && offerPrice > 0 ? offerPrice : (price || 0)).toLocaleString(undefined, {minimumFractionDigits: 2})}
                                 </span>
                                 {offerPrice && offerPrice > 0 && price > 0 && (
-                                    <span className="text-sm font-mono text-gray-400 line-through mb-1">
+                                    <span className="text-sm font-mono text-[var(--text-muted)] line-through mb-1">
                                         ${price.toLocaleString(undefined, {minimumFractionDigits: 2})}
                                     </span>
                                 )}
                              </div>
 
-                             <p className="text-xs text-gray-500 font-sora leading-relaxed mb-6 whitespace-pre-line">
+                             <p className="text-xs text-[var(--text-muted)] font-sora leading-relaxed mb-6 whitespace-pre-line">
                                 {description || "A detailed structural and technical summary of the mapped asset will be rendered here globally."}
                              </p>
 
                              <div className="space-y-4">
                                  <div className="flex items-center justify-between text-xs border-t border-gray-100 pt-4">
-                                     <span className="text-gray-400 font-bold uppercase tracking-widest">Inventory Status</span>
+                                     <span className="text-[var(--text-muted)] font-bold uppercase tracking-widest">Inventory Status</span>
                                      <span className={`font-mono font-bold ${stock > 0 ? 'text-green-500' : 'text-red-500'}`}>
                                          {stock > 0 ? `${stock} AVAILABLE` : 'DEPLETED'}
                                      </span>
                                  </div>
-                                 <button disabled className="w-full py-4 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest opacity-90 cursor-not-allowed">
+                                 <button disabled className="w-full py-4 bg-gray-900 text-[var(--text)] rounded-2xl text-xs font-black uppercase tracking-widest opacity-90 cursor-not-allowed">
                                     Add To Cart
                                  </button>
                              </div>

@@ -3,8 +3,7 @@ import ProductsClient from "./ProductsClient";
 import { getProducts } from "../../services/productService";
 import JsonLd, { generateBreadcrumbJsonLd } from "../../Component/seo/JsonLd";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 60; // Revalidate every minute
+export const revalidate = 60;
 
 export async function generateMetadata({ searchParams }) {
   const resolvedParams = await searchParams;
@@ -13,17 +12,17 @@ export async function generateMetadata({ searchParams }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://quickqart.com";
   const canonical = `${baseUrl}/products${category ? `?category=${category}` : ""}`;
 
-  let title = "The Collection | Premium Tech Assets";
-  let description = "Browse our curated archive of premium digital and physical assets for the modern world.";
+  let title = "All products";
+  let description = "Browse our full catalog with clear pricing and details.";
 
   if (category) {
     const term = category.charAt(0).toUpperCase() + category.slice(1);
-    title = `${term} Collection | Premium Tech Assets`;
-    description = `Discover our high-performance ${category} products. Quality guaranteed in every asset.`;
+    title = `${term} | QuickQart`;
+    description = `Browse ${term} products with clear pricing and details.`;
   }
 
   if (search) {
-    title = `Searching for "${search}" | Assets Archive`;
+    title = `Search: ${search} | QuickQart`;
   }
 
   return {
@@ -34,7 +33,7 @@ export async function generateMetadata({ searchParams }) {
       title,
       description,
       url: canonical,
-      siteName: "QuickQart Identity Console",
+      siteName: "QuickQart",
       type: "website",
     },
     twitter: {
@@ -51,7 +50,7 @@ export default async function ProductsPage({ searchParams }) {
   
   const filters = {
     page: Math.max(1, parseInt(resolvedParams.page) || 1),
-    limit: 12,
+    limit: 10,
     search: resolvedParams.search || "",
     category: resolvedParams.category || "",
     minPrice: resolvedParams.minPrice || "",

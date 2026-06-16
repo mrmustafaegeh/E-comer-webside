@@ -1,8 +1,8 @@
-// src/components/products/RelatedProducts.jsx
 "use client";
+
 import React, { useEffect, useState } from "react";
-import { productService } from "@/services/productService";
-import ProductCard from "../features/ProductCard";
+import ProductCard from "../products/ProductCard";
+import { Container, PageHeader } from "../ui/primitives";
 
 export default function RelatedProducts({ category, currentId }) {
   const [related, setRelated] = useState([]);
@@ -18,10 +18,16 @@ export default function RelatedProducts({ category, currentId }) {
       }
       setLoading(true);
       try {
-        const data = await productService.getProductsByCategory(category);
+        const params = new URLSearchParams({
+          category,
+          limit: "4",
+          page: "1",
+        });
+        const res = await fetch(`/api/products?${params}`);
+        const data = await res.json();
         if (!mounted) return;
-        const filtered = (Array.isArray(data) ? data : []).filter(
-          (p) => p.id !== currentId
+        const filtered = (data.products || []).filter(
+          (p) => (p.id || p._id) !== currentId
         );
         setRelated(filtered.slice(0, 4));
       } catch (err) {
@@ -32,32 +38,36 @@ export default function RelatedProducts({ category, currentId }) {
       }
     }
     loadRelated();
-    return () => (mounted = false);
+    return () => {
+      mounted = false;
+    };
   }, [category, currentId]);
 
   if (loading) {
     return (
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-4">Related products</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <Container className="mt-12">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-white rounded p-4 animate-pulse h-48" />
+            <div key={i} className="aspect-square animate-pulse rounded-lg bg-[var(--bg-subtle)]" />
           ))}
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (!related.length) return null;
 
   return (
-    <div className="mt-8">
-      <h3 className="text-xl font-semibold mb-4">Related products</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <Container className="mt-16 border-t border-[var(--border)] pt-12">
+      <PageHeader
+        title="Related products"
+        className="mb-6 [&_h1]:text-2xl"
+      />
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {related.map((p) => (
-          <ProductCard key={p.id} product={p} />
+          <ProductCard key={p.id || p._id} product={p} showActions={false} />
         ))}
       </div>
-    </div>
+    </Container>
   );
 }

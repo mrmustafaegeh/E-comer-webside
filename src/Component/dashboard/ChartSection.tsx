@@ -1,21 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
-  AreaChart,
-  Area,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   ComposedChart,
-  ReferenceDot,
-  ReferenceLine
+  Area,
+  Line,
 } from "recharts";
-import { TrendingUp, TrendingDown, Target } from "lucide-react";
-import { motion } from "framer-motion";
+import { Card } from "@/Component/ui/primitives";
 
 interface ChartData {
   month: string;
@@ -28,182 +24,114 @@ interface ChartSectionProps {
   data: ChartData[];
 }
 
-export default function ChartSection({ data }: ChartSectionProps) {
-  const [activeTab, setActiveTab] = useState("6M"); // 7D, 30D, 90D, 6M, 12M
+export default function ChartSection({ data = [] }: ChartSectionProps) {
+  const totalRevenue = data.reduce((acc, curr) => acc + curr.revenue, 0);
+  const totalOrders = data.reduce((acc, curr) => acc + curr.orders, 0);
+  const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
-  const formatYAxis = (tickItem: number) => {
-    if (tickItem === 0) return "0";
-    return `$${(tickItem / 1000).toFixed(0)}k`;
+  const formatYAxis = (value: number) => {
+    if (value === 0) return "$0";
+    if (value >= 1000) return `$${(value / 1000).toFixed(0)}k`;
+    return `$${value}`;
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-[#161b27]/90 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl min-w-[160px]">
-          <p className="text-gray-400 font-sora text-xs uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{label}</p>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"></span>
-                <span className="text-gray-300 font-sora text-xs">Revenue</span>
-              </div>
-              <span className="text-blue-400 font-mono font-bold">${payload[0]?.value?.toLocaleString()}</span>
-            </div>
-            
-            {payload[1] && (
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full border border-dashed border-gray-500"></span>
-                  <span className="text-gray-400 font-sora text-xs">Target</span>
-                </div>
-                <span className="text-gray-400 font-mono font-medium">${payload[1]?.value?.toLocaleString()}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-    return null;
+    if (!active || !payload?.length) return null;
+
+    return (
+      <div className="rounded-lg border border-[var(--border)] bg-[var(--bg)] p-3 shadow-sm">
+        <p className="mb-2 text-xs font-medium text-[var(--text-muted)]">{label}</p>
+        <p className="text-sm font-semibold text-[var(--text)]">
+          Revenue: ${Number(payload[0]?.value || 0).toLocaleString()}
+        </p>
+        {payload[1] && (
+          <p className="mt-1 text-xs text-[var(--text-muted)]">
+            Target: ${Number(payload[1]?.value || 0).toLocaleString()}
+          </p>
+        )}
+      </div>
+    );
   };
 
-  // Find max internal to array
-  const maxRevenue = data.reduce((max, obj) => (obj.revenue > max ? obj.revenue : max), 0);
-  const peakDataPoint = data.find(d => d.revenue === maxRevenue);
+  if (!data.length) {
+    return (
+      <Card className="flex h-[360px] items-center justify-center p-6 text-sm text-[var(--text-muted)]">
+        No revenue data for the selected period.
+      </Card>
+    );
+  }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-      className="bg-[#161b27] border border-white/5 rounded-[2rem] p-6 lg:p-8 relative overflow-hidden group hover:border-white/10 transition-colors h-full flex flex-col"
-    >
-      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-8 gap-4 relative z-10">
-        <div>
-          <h2 className="text-xl font-sora font-bold text-white tracking-tight flex items-center gap-3">
-            Revenue Protocol
-            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 text-emerald-400 text-[10px] font-mono rounded border border-emerald-500/20 uppercase tracking-widest shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-              <TrendingUp size={12} strokeWidth={3} /> +18.3%
-            </span>
-          </h2>
-          <p className="text-gray-500 font-mono text-xs mt-2 tracking-widest uppercase flex items-center gap-2">
-            Target vs Actual Performance
-          </p>
-        </div>
-
-                <div className="flex items-center p-1 bg-[#0f1117] border border-white/10 rounded-lg">
-          {["7D", "30D", "90D", "6M", "12M"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-md text-[10px] font-mono uppercase tracking-widest transition-all ${
-                activeTab === tab
-                  ? "bg-blue-600 text-white shadow-[0_0_10px_rgba(59,130,246,0.5)] border border-blue-500"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
+    <Card className="flex h-full flex-col p-6">
+      <div className="mb-6">
+        <h3 className="font-heading text-base font-semibold text-[var(--text)]">
+          Revenue overview
+        </h3>
+        <p className="mt-1 text-sm text-[var(--text-muted)]">Last 6 months</p>
       </div>
 
-      <div className="flex-1 w-full relative min-h-[300px]">
+      <div className="min-h-[260px] flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={data} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
+          <ComposedChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
             <defs>
-              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+              <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#171717" stopOpacity={0.12} />
+                <stop offset="95%" stopColor="#171717" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff" strokeOpacity={0.05} />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ebebeb" />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#6b7280", fontSize: 10, fontFamily: "monospace" }}
-              dy={10}
+              tick={{ fill: "#737373", fontSize: 12 }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#6b7280", fontSize: 10, fontFamily: "monospace" }}
+              tick={{ fill: "#737373", fontSize: 12 }}
               tickFormatter={formatYAxis}
-              dx={-10}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1, strokeDasharray: '4 4' }} />
-            
+            <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="#3b82f6"
-              strokeWidth={3}
-              fillOpacity={1}
-              fill="url(#colorRevenue)"
-              activeDot={{ r: 6, fill: "#3b82f6", stroke: "#0f1117", strokeWidth: 2, className: 'drop-shadow-lg' }}
-              animationDuration={1500}
+              stroke="#171717"
+              strokeWidth={2}
+              fill="url(#revenueFill)"
             />
-            
             <Line
               type="monotone"
               dataKey="target"
-              stroke="#6b7280"
-              strokeWidth={2}
-              strokeDasharray="5 5"
+              stroke="#a3a3a3"
+              strokeWidth={1.5}
+              strokeDasharray="4 4"
               dot={false}
-              activeDot={false}
-              animationDuration={1500}
             />
-
-            {peakDataPoint && (
-               <ReferenceDot 
-                  x={peakDataPoint.month} 
-                  y={peakDataPoint.revenue} 
-                  r={4} 
-                  fill="#f59e0b" 
-                  stroke="none"
-               />
-            )}
           </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-white/5 relative z-10 flex gap-4 overflow-x-auto no-scrollbar">
-          <div className="flex-1 min-w-[120px]">
-             <div className="text-gray-400 font-mono text-[9px] tracking-widest uppercase mb-1 flex justify-between items-center">
-               <span>Total Gross</span>
-               <TrendingUp size={10} className="text-emerald-400" />
-             </div>
-             <div className="text-2xl font-mono text-white font-bold tracking-tight">
-               ${data.reduce((acc, curr) => acc + curr.revenue, 0).toLocaleString()}
-             </div>
-          </div>
-          <div className="w-px bg-white/5 mx-2 shrink-0 hidden sm:block"></div>
-          <div className="flex-1 min-w-[120px]">
-             <div className="text-gray-400 font-mono text-[9px] tracking-widest uppercase mb-1 flex justify-between items-center">
-               <span>Net Orders</span>
-               <TrendingUp size={10} className="text-emerald-400" />
-             </div>
-             <div className="text-2xl font-mono text-white font-bold tracking-tight">
-               {data.reduce((acc, curr) => acc + curr.orders, 0).toLocaleString()}
-             </div>
-          </div>
-          <div className="w-px bg-white/5 mx-2 shrink-0 hidden sm:block"></div>
-          <div className="flex-1 min-w-[120px]">
-             <div className="text-gray-400 font-mono text-[9px] tracking-widest uppercase mb-1 flex justify-between items-center">
-               <span>AOV</span>
-               <Target size={10} className="text-blue-400" />
-             </div>
-             <div className="text-2xl font-mono text-white font-bold tracking-tight">
-               ${(
-                 data.reduce((acc, curr) => acc + curr.revenue, 0) /
-                 Math.max(1, data.reduce((acc, curr) => acc + curr.orders, 0))
-               ).toFixed(2)}
-             </div>
-          </div>
+      <div className="mt-6 grid grid-cols-1 gap-4 border-t border-[var(--border)] pt-5 sm:grid-cols-3">
+        <div>
+          <p className="text-xs text-[var(--text-muted)]">Total revenue</p>
+          <p className="mt-1 text-lg font-semibold tabular-nums text-[var(--text)]">
+            ${totalRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-[var(--text-muted)]">Orders</p>
+          <p className="mt-1 text-lg font-semibold tabular-nums text-[var(--text)]">
+            {totalOrders.toLocaleString()}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-[var(--text-muted)]">Avg. order value</p>
+          <p className="mt-1 text-lg font-semibold tabular-nums text-[var(--text)]">
+            ${avgOrderValue.toFixed(2)}
+          </p>
+        </div>
       </div>
-    </motion.div>
+    </Card>
   );
 }

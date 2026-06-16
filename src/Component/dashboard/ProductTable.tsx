@@ -57,7 +57,7 @@ export default function ProductTable({ products }: { products: any }) {
   return (
     <div className="overflow-x-auto w-full relative">
       <table className="w-full text-left border-collapse">
-        <thead className="bg-[#0f1117]/80 backdrop-blur-md sticky top-0 z-20 border-b border-white/10">
+        <thead className="bg-[var(--bg-subtle)]/80 backdrop-blur-md sticky top-0 z-20 border-b border-[var(--border)]">
           <tr>
             {[
                 { label: "Asset Designation", key: "name" },
@@ -66,21 +66,21 @@ export default function ProductTable({ products }: { products: any }) {
                 { label: "Inventory Level", key: "stock" }
             ].map((col: any) => (
                 <th key={col.key} className="px-6 py-4 cursor-pointer group hover:bg-white/5 transition-colors" onClick={() => toggleSort(col.key)}>
-                    <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-gray-500 group-hover:text-blue-400 transition-colors">
+                    <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase text-[var(--text-muted)] group-hover:text-blue-400 transition-colors">
                         {col.label}
                         <ArrowUpDown size={12} className={`${sortConfig.key === col.key ? 'opacity-100 text-blue-500' : 'opacity-0 group-hover:opacity-100'} transition-all`} />
                     </div>
                 </th>
             ))}
-            <th className="px-6 py-4 text-right text-[10px] font-mono tracking-widest uppercase text-gray-500">
+            <th className="px-6 py-4 text-right text-[10px] font-mono tracking-widest uppercase text-[var(--text-muted)]">
                 Operations
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-white/5 bg-[#161b27]">
+        <tbody className="divide-y divide-white/5 bg-[var(--bg)]">
            {sortedProducts.length === 0 ? (
                <tr>
-                   <td colSpan={5} className="px-6 py-12 text-center text-gray-500 font-mono text-sm tracking-widest uppercase">
+                   <td colSpan={5} className="px-6 py-12 text-center text-[var(--text-muted)] font-mono text-sm tracking-widest uppercase">
                        No assets mapping to current query
                    </td>
                </tr>
@@ -102,7 +102,7 @@ export default function ProductTable({ products }: { products: any }) {
                         >
                                                 <td className="px-6 py-4">
                             <div className="flex items-center gap-4">
-                                <div className="relative w-12 h-12 bg-[#0f1117] rounded-xl overflow-hidden border border-white/5 flex-shrink-0 group-hover/row:border-blue-500/30 group-hover/row:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all">
+                                <div className="relative w-12 h-12 bg-[var(--bg-subtle)] rounded-xl overflow-hidden border border-[var(--border)] flex-shrink-0 group-hover/row:border-blue-500/30 group-hover/row:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all">
                                     {product.image || product.thumbnail ? (
                                     <Image
                                         src={product.image || product.thumbnail}
@@ -122,7 +122,7 @@ export default function ProductTable({ products }: { products: any }) {
                                     <p className="text-sm font-sora text-gray-200 tracking-tight truncate max-w-[200px] group-hover/row:text-blue-400 transition-colors font-semibold">
                                         {product.name}
                                     </p>
-                                    <p className="text-[10px] font-mono text-gray-500 tracking-widest uppercase mt-0.5">
+                                    <p className="text-[10px] font-mono text-[var(--text-muted)] tracking-widest uppercase mt-0.5">
                                         ID: {id?.substring(0, 8)?.toUpperCase()}
                                     </p>
                                 </div>
@@ -130,13 +130,13 @@ export default function ProductTable({ products }: { products: any }) {
                         </td>
 
                                                 <td className="px-6 py-4">
-                            <span className="inline-flex text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 bg-[#0f1117] border border-white/10 text-gray-400 rounded-md shadow-inner">
+                            <span className="inline-flex text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 bg-[var(--bg-subtle)] border border-[var(--border)] text-[var(--text-muted)] rounded-md shadow-inner">
                                 {product.category || "General"}
                             </span>
                         </td>
 
                                                 <td className="px-6 py-4">
-                            <p className="text-sm font-mono font-bold text-white tracking-tighter">
+                            <p className="text-sm font-mono font-bold text-[var(--text)] tracking-tighter">
                                 {formatPrice(product.price)}
                             </p>
                             {product.salePrice && (
@@ -171,7 +171,7 @@ export default function ProductTable({ products }: { products: any }) {
 
                                 <Link
                                     href={`/admin/admin-products/${id}`}
-                                    className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10"
+                                    className="p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-[var(--border)]"
                                     title="Edit Configuration"
                                 >
                                     <Edit3 size={16} />

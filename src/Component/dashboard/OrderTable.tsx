@@ -158,7 +158,7 @@ export default function OrderTable({ orders }: { orders: any }) {
         );
       default:
         return (
-           <span className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-500/10 text-gray-400 text-[10px] uppercase font-mono tracking-widest rounded-full border border-gray-500/20 w-fit lg:w-32 justify-center">
+           <span className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-500/10 text-[var(--text-muted)] text-[10px] uppercase font-mono tracking-widest rounded-full border border-gray-500/20 w-fit lg:w-32 justify-center">
               <AlertCircle size={12} /> {status}
            </span>
         );
@@ -173,15 +173,15 @@ export default function OrderTable({ orders }: { orders: any }) {
             <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#161b27] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl"
+        className="bg-[var(--bg)] border border-[var(--border)] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl"
       >
         <div className="flex items-center gap-4">
            {selectedOrders.size > 0 ? (
              <div className="flex items-center gap-3">
-                <span className="px-3 py-1 bg-blue-600 border border-blue-500 rounded-lg text-white font-mono text-xs shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                <span className="px-3 py-1 bg-blue-600 border border-blue-500 rounded-lg text-[var(--text)] font-mono text-xs shadow-[0_0_15px_rgba(59,130,246,0.5)]">
                   {selectedOrders.size} Selected
                 </span>
-                <button className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 transition-all focus:outline-none flex items-center gap-2 text-xs font-sora">
+                <button className="p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/5 rounded-lg border border-transparent hover:border-[var(--border)] transition-all focus:outline-none flex items-center gap-2 text-xs font-sora">
                    <Edit2 size={14} /> Bulk Edit
                 </button>
                 <div className="w-px h-6 bg-white/10"></div>
@@ -190,9 +190,9 @@ export default function OrderTable({ orders }: { orders: any }) {
                 </button>
              </div>
            ) : (
-             <div className="flex bg-[#0f1117] border border-white/10 rounded-xl overflow-hidden focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all w-full md:w-80">
+             <div className="flex bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl overflow-hidden focus-within:border-blue-500/50 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all w-full md:w-80">
                <div className="pl-3 py-2.5 flex items-center justify-center">
-                  <Search size={16} className="text-gray-500" />
+                  <Search size={16} className="text-[var(--text-muted)]" />
                </div>
                <input 
                  type="text" 
@@ -210,7 +210,7 @@ export default function OrderTable({ orders }: { orders: any }) {
               <select 
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
-                className="appearance-none bg-[#0f1117] border border-white/10 rounded-xl text-xs font-mono tracking-widest uppercase text-gray-300 px-4 pl-10 pr-10 py-2.5 outline-none hover:border-white/20 transition-all cursor-pointer shadow-inner"
+                className="appearance-none bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl text-xs font-mono tracking-widest uppercase text-gray-300 px-4 pl-10 pr-10 py-2.5 outline-none hover:border-white/20 transition-all cursor-pointer shadow-inner"
               >
                  <option value="all">All Status</option>
                  <option value="delivered">Delivered</option>
@@ -218,11 +218,11 @@ export default function OrderTable({ orders }: { orders: any }) {
                  <option value="pending">Pending</option>
                  <option value="cancelled">Cancelled</option>
               </select>
-              <Filter size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
-              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-hover:text-white transition-colors" />
+              <Filter size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none" />
+              <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none group-hover:text-[var(--text)] transition-colors" />
            </div>
 
-           <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl text-gray-300 text-xs font-mono uppercase tracking-widest transition-all">
+           <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-[var(--border)] hover:bg-white/10 rounded-xl text-gray-300 text-xs font-mono uppercase tracking-widest transition-all">
              <Download size={14} /> Export CSV
            </button>
         </div>
@@ -232,20 +232,20 @@ export default function OrderTable({ orders }: { orders: any }) {
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
-        className="flex-1 bg-[#161b27] border border-white/5 rounded-2xl overflow-hidden flex flex-col shadow-2xl relative"
+        className="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-2xl overflow-hidden flex flex-col shadow-2xl relative"
       >
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/5 blur-[100px] pointer-events-none rounded-full"></div>
 
         <div className="overflow-x-auto flex-1 relative z-10">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-[#0f1117]/80 backdrop-blur-sm sticky top-0 z-20">
+              <tr className="border-b border-[var(--border)] bg-[var(--bg-subtle)]/80 backdrop-blur-sm sticky top-0 z-20">
                 <th className="px-6 py-4 w-12 text-center">
                   <input 
                     type="checkbox" 
                     checked={selectedOrders.size === currentData.length && currentData.length > 0}
                     onChange={toggleSelectAll}
-                    className="w-4 h-4 rounded bg-[#161b27] border-white/20 accent-blue-600 cursor-pointer"
+                    className="w-4 h-4 rounded bg-[var(--bg)] border-white/20 accent-blue-600 cursor-pointer"
                   />
                 </th>
                 
@@ -257,13 +257,13 @@ export default function OrderTable({ orders }: { orders: any }) {
                   { label: "Date Authored", key: "date" }
                 ].map((col) => (
                   <th key={col.key} className="px-4 py-4 cursor-pointer group hover:bg-white/5 transition-colors" onClick={() => toggleSort(col.key)}>
-                    <div className="flex items-center gap-2 text-[10px] font-mono tracking-[0.2em] uppercase text-gray-500 group-hover:text-blue-400 transition-colors">
+                    <div className="flex items-center gap-2 text-[10px] font-mono tracking-[0.2em] uppercase text-[var(--text-muted)] group-hover:text-blue-400 transition-colors">
                       {col.label}
                       <ArrowUpDown size={12} className={`${sortConfig.key === col.key ? 'opacity-100 text-blue-500' : 'opacity-0 group-hover:opacity-100'} transition-all`} />
                     </div>
                   </th>
                 ))}
-                <th className="px-6 py-4 text-right text-[10px] font-mono tracking-[0.2em] uppercase text-gray-500">
+                <th className="px-6 py-4 text-right text-[10px] font-mono tracking-[0.2em] uppercase text-[var(--text-muted)]">
                   Operations
                 </th>
               </tr>
@@ -275,7 +275,7 @@ export default function OrderTable({ orders }: { orders: any }) {
                   <tr>
                     <td colSpan={7} className="px-6 py-16 text-center">
                        <Search className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                       <p className="text-gray-400 font-sora text-sm">No operational data found crossing this filter.</p>
+                       <p className="text-[var(--text-muted)] font-sora text-sm">No operational data found crossing this filter.</p>
                        <p className="text-gray-600 font-mono text-[10px] uppercase tracking-widest mt-1">Adjust search parameters</p>
                     </td>
                   </tr>
@@ -298,7 +298,7 @@ export default function OrderTable({ orders }: { orders: any }) {
                               type="checkbox" 
                               checked={isSelected}
                               onChange={() => toggleSelectOne(order.id)}
-                              className="w-4 h-4 rounded bg-[#161b27] border-white/20 accent-blue-600 cursor-pointer"
+                              className="w-4 h-4 rounded bg-[var(--bg)] border-white/20 accent-blue-600 cursor-pointer"
                             />
                          </td>
 
@@ -310,12 +310,12 @@ export default function OrderTable({ orders }: { orders: any }) {
 
                          <td className="px-4 py-4 min-w-[200px]">
                             <div className="flex items-center gap-3">
-                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center text-white text-xs font-bold font-mono">
+                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-[var(--border)] flex items-center justify-center text-[var(--text)] text-xs font-bold font-mono">
                                   {order.name[0]}
                                </div>
                                <div>
                                   <p className="text-sm text-gray-200 font-sora truncate max-w-[150px] font-semibold">{order.name}</p>
-                                  <p className="text-[10px] text-gray-500 font-mono tracking-widest truncate max-w-[150px] mt-0.5">{order.email}</p>
+                                  <p className="text-[10px] text-[var(--text-muted)] font-mono tracking-widest truncate max-w-[150px] mt-0.5">{order.email}</p>
                                </div>
                             </div>
                          </td>
@@ -325,15 +325,15 @@ export default function OrderTable({ orders }: { orders: any }) {
                          </td>
 
                          <td className="px-4 py-4">
-                            <p className="text-sm font-mono font-bold text-white">${order.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                            <p className="text-[10px] font-mono text-gray-500 tracking-widest uppercase mt-0.5">{order.itemsCount} Assets</p>
+                            <p className="text-sm font-mono font-bold text-[var(--text)]">${order.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                            <p className="text-[10px] font-mono text-[var(--text-muted)] tracking-widest uppercase mt-0.5">{order.itemsCount} Assets</p>
                          </td>
 
                          <td className="px-4 py-4 min-w-[160px]">
                             <div className="flex items-center gap-2 text-sm font-mono text-gray-300">
-                               <Calendar size={14} className="text-gray-500" />
+                               <Calendar size={14} className="text-[var(--text-muted)]" />
                                {order.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                               <span className="text-gray-500 ml-1">
+                               <span className="text-[var(--text-muted)] ml-1">
                                  {order.date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}
                                </span>
                             </div>
@@ -344,7 +344,7 @@ export default function OrderTable({ orders }: { orders: any }) {
                                <button className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors border border-transparent hover:border-blue-500/20 shadow-[0_0_8px_rgba(59,130,246,0)] hover:shadow-[0_0_8px_rgba(59,130,246,0.2)]" title="View Detail Trace">
                                  <Eye size={16} />
                                </button>
-                               <button className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10" title="Edit State">
+                               <button className="p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-[var(--border)]" title="Edit State">
                                  <Edit2 size={16} />
                                </button>
                            </div>
@@ -361,8 +361,8 @@ export default function OrderTable({ orders }: { orders: any }) {
           </table>
         </div>
 
-                <div className="p-4 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-[#0f1117]/30 z-10 w-full relative">
-           <div className="text-[10px] font-mono tracking-widest uppercase text-gray-500">
+                <div className="p-4 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4 bg-[var(--bg-subtle)]/30 z-10 w-full relative">
+           <div className="text-[10px] font-mono tracking-widest uppercase text-[var(--text-muted)]">
              Displaying {currentData.length} of {filteredAndSorted.length} Logs {selectedOrders.size > 0 && `| ${selectedOrders.size} selected`}
            </div>
            
@@ -370,7 +370,7 @@ export default function OrderTable({ orders }: { orders: any }) {
               <button 
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(c => c - 1)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#161b27] border border-white/5 text-gray-400 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:hover:text-gray-400 disabled:hover:border-white/5 transition-all shadow-inner"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-white/20 disabled:opacity-30 disabled:hover:text-[var(--text-muted)] disabled:hover:border-[var(--border)] transition-all shadow-inner"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -390,8 +390,8 @@ export default function OrderTable({ orders }: { orders: any }) {
                        onClick={() => setCurrentPage(pageNum)}
                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-mono transition-all
                          ${currentPage === pageNum 
-                           ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border border-blue-500" 
-                           : "bg-transparent text-gray-500 hover:text-white hover:bg-white/5"}
+                           ? "bg-blue-600 text-[var(--text)] shadow-[0_0_15px_rgba(59,130,246,0.5)] border border-blue-500" 
+                           : "bg-transparent text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/5"}
                        `}
                      >
                        {pageNum}
@@ -403,7 +403,7 @@ export default function OrderTable({ orders }: { orders: any }) {
               <button 
                 disabled={currentPage === totalPages || totalPages === 0}
                 onClick={() => setCurrentPage(c => c + 1)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#161b27] border border-white/5 text-gray-400 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:hover:text-gray-400 disabled:hover:border-white/5 transition-all shadow-inner"
+                className="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-white/20 disabled:opacity-30 disabled:hover:text-[var(--text-muted)] disabled:hover:border-[var(--border)] transition-all shadow-inner"
               >
                 <ChevronRight size={16} />
               </button>

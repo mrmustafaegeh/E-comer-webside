@@ -71,16 +71,16 @@
   },
   "about": {
     "title": "Welcome to QuickQart",
-    "tagline": "Best products, unbeatable service. Your trusted partner for quality electronics.",
-    "fastDelivery": "Fast Delivery",
-    "fastDeliveryDesc": "Quick doorstep drops within 24 hours",
-    "topQuality": "Top Quality",
-    "topQualityDesc": "100% original tech with warranty",
-    "support24": "24/7 Support",
-    "support24Desc": "We're here always to help you",
+    "tagline": "Quality electronics, straightforward shopping, and service you can count on.",
+    "fastDelivery": "Fast delivery",
+    "fastDeliveryDesc": "Orders are processed quickly and shipped with full tracking. Most purchases arrive within a few business days, so you spend less time waiting and more time using what you bought.",
+    "topQuality": "Trusted quality",
+    "topQualityDesc": "We work with reliable suppliers and check products before they leave our warehouse. Every item is genuine, fairly priced, and backed by clear warranty support.",
+    "support24": "Dedicated support",
+    "support24Desc": "Whether you need help choosing a product, tracking an order, or starting a return, our team is here to respond clearly and promptly — whenever you reach out.",
     "missionTitle": "Our Mission",
     "missionText": "To connect people with the best technology, effortlessly and affordably.",
-    "getInTouch": "Get In Touch"
+    "getInTouch": "Get in touch"
   },
   "form": {
     "title": "Join Our Community",

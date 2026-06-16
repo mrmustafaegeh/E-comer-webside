@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import OrderTable from "../../../Component/dashboard/OrderTable";
-import { ShoppingCart } from "lucide-react";
-import { motion } from "framer-motion";
+import AdminPageShell from "../../../Component/admin/AdminPageShell";
+import { AppPanel } from "../../../Component/ui/primitives";
+import { Loader2 } from "lucide-react";
 
 export default function DashboardOrders() {
   const [orders, setOrders] = useState([]);
@@ -28,28 +29,20 @@ export default function DashboardOrders() {
   }, []);
 
   return (
-    <div className="w-full max-w-[2000px] mx-auto pb-10">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <h1 className="text-3xl font-sora font-bold text-white tracking-tight flex items-center gap-3">
-          <ShoppingCart className="text-blue-500" size={32} />
-          Order Matrix
-        </h1>
-        <p className="text-sm font-mono tracking-widest uppercase text-gray-500 mt-2">
-          Global Transaction Monitoring
-        </p>
-      </motion.div>
-
+    <AdminPageShell
+      eyebrow="Sales"
+      title="Orders"
+      description="View and manage customer orders."
+    >
       {loading ? (
-        <div className="h-[60vh] w-full bg-[#161b27]/50 animate-pulse rounded-[2rem] border border-white/5 flex items-center justify-center">
-            <p className="text-blue-400 font-mono text-[10px] uppercase tracking-widest">Querying Operational Database...</p>
-        </div>
+        <AppPanel className="flex h-64 items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--text-muted)]" />
+        </AppPanel>
       ) : (
-        <OrderTable orders={orders} />
+        <AppPanel className="overflow-hidden p-0">
+          <OrderTable orders={orders} />
+        </AppPanel>
       )}
-    </div>
+    </AdminPageShell>
   );
 }

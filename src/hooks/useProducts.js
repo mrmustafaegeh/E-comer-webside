@@ -4,7 +4,7 @@ import { get } from "@/services/api";
 export function useProducts(filters = {}) {
   const {
     page = 1,
-    limit = 12,
+    limit = 10,
     search = "",
     category = "",
     minPrice = "",

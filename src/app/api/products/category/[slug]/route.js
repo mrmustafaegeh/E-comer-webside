@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
     // Get URL search params for pagination and sorting
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 12;
+    const limit = parseInt(searchParams.get("limit")) || 10;
     const sort = searchParams.get("sort") || "newest";
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");

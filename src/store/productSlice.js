@@ -26,7 +26,7 @@ const initialState = {
   },
   pagination: {
     page: 1,
-    limit: 12,
+    limit: 10,
     totalPages: 1,
     total: 0,
   },

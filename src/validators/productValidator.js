@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const productQuerySchema = z.object({
   page: z.string().transform(val => Math.max(1, parseInt(val) || 1)).optional(),
-  limit: z.string().transform(val => Math.min(100, Math.max(1, parseInt(val) || 12))).optional(),
+  limit: z.string().transform(val => Math.min(100, Math.max(1, parseInt(val) || 10))).optional(),
   search: z.string().optional(),
   category: z.string().optional(),
   minPrice: z.string().transform(val => val ? parseFloat(val) : undefined).optional(),

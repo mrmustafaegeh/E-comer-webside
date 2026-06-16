@@ -1,37 +1,31 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
+import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import NavbarFloat from "./NavbarFloat";
-import { ParticleField, CustomCursor, ChatbotTrigger } from "./ClientWrappers";
-import dynamic from 'next/dynamic';
-import SmoothScrollProvider from "../../providers/SmoothScrollProvider";
+import Footer from "./Footer";
 
-const FooterZeroG = dynamic(() => import("./FooterZeroG"));
+const ChatbotTrigger = dynamic(
+  () => import("../../chatbot/ChatbotTrigger.jsx"),
+  { ssr: false }
+);
 
 export default function StoreLayoutWrapper({ children }) {
   const pathname = usePathname();
-  const isAdmin = pathname?.startsWith('/admin');
+  const isAdmin = pathname?.startsWith("/admin");
 
-  // If we are on an admin route, do NOT render the Store UI components (nav, footer, 3d effects)
-  // and do NOT apply the top padding or min-h-screen which breaks the dashboard layout.
   if (isAdmin) {
-    // Return early without store chrome to allow the AdminLayout to take full control of the screen
-    return <main id="admin-root" className="w-full h-screen">{children}</main>;
+    return <>{children}</>;
   }
 
-  // Render the original global UI for the public shop
   return (
-    <SmoothScrollProvider>
-      <CustomCursor />
-      <ParticleField />
+    <div className="flex min-h-screen flex-col bg-[var(--bg)]">
       <NavbarFloat />
-      
-      <main id="main-content" className="relative z-10 pt-32 min-h-screen flex flex-col">
+      <main id="main-content" className="flex-1">
         {children}
       </main>
-      
-      <FooterZeroG />
+      <Footer />
       <ChatbotTrigger />
-    </SmoothScrollProvider>
+    </div>
   );
 }

@@ -1,12 +1,14 @@
 import { prisma } from "@/lib/prisma";
 
+export const DEFAULT_PRODUCT_LIMIT = 10;
+
 /**
  * Get products with filtering and pagination
  */
 export async function getProducts(params = {}) {
   try {
     const page = Math.max(1, parseInt(params.page) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(params.limit) || 12));
+    const limit = Math.min(100, Math.max(1, parseInt(params.limit) || DEFAULT_PRODUCT_LIMIT));
     const skip = (page - 1) * limit;
 
     const where = {};
@@ -181,7 +183,18 @@ export async function getFeaturedProductsData() {
     return await prisma.product.findMany({
       where: { isFeatured: true },
       orderBy: { createdAt: 'desc' },
-      take: 12
+      take: 10
+    });
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getCategoriesData() {
+  try {
+    return await prisma.category.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 6,
     });
   } catch (error) {
     return [];

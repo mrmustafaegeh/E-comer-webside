@@ -71,16 +71,16 @@
   },
   "about": {
     "title": "QuickQart'a Hoş Geldiniz",
-    "tagline": "En iyi ürünler, rakipsiz hizmet. Kaliteli elektronik ürünlerde güvenilir partneriniz.",
-    "fastDelivery": "Hızlı Teslimat",
-    "fastDeliveryDesc": "24 saat içinde hızlı kapıda teslimat",
-    "topQuality": "Üstün Kalite",
-    "topQualityDesc": "%100 orijinal garanti teknolojisi",
-    "support24": "7/24 Destek",
-    "support24Desc": "Size yardım etmek için her zaman buradayız",
+    "tagline": "Kaliteli elektronik, sade alışveriş ve güvenebileceğiniz hizmet.",
+    "fastDelivery": "Hızlı teslimat",
+    "fastDeliveryDesc": "Siparişler hızla hazırlanır ve takip numarasıyla gönderilir. Çoğu ürün birkaç iş günü içinde kapınıza ulaşır — beklemeden kullanmaya başlayın.",
+    "topQuality": "Güvenilir kalite",
+    "topQualityDesc": "Güvenilir tedarikçilerle çalışır, ürünleri depodan çıkmadan önce kontrol ederiz. Her ürün orijinaldir, adil fiyatlıdır ve net garanti desteği sunar.",
+    "support24": "Destek ekibi",
+    "support24Desc": "Ürün seçimi, sipariş takibi veya iade sürecinde yardıma ihtiyacınız olduğunda ekibimiz net ve hızlı yanıtlar vermek için yanınızda.",
     "missionTitle": "Misyonumuz",
     "missionText": "İnsanları en iyi teknolojiyle kolayca ve uygun fiyata buluşturmak.",
-    "getInTouch": "İletişime Geçin"
+    "getInTouch": "İletişime geçin"
   },
   "form": {
     "title": "Topluluğumuza Katılın",

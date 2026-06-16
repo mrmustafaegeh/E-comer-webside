@@ -1,4 +1,3 @@
-// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -11,17 +10,6 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    borderRadius: {
-      none: '0px',
-      sm: '0px',
-      DEFAULT: '0px',
-      md: '0px',
-      lg: '0px',
-      xl: '0px',
-      '2xl': '0px',
-      '3xl': '0px',
-      full: '0px',
-    },
     extend: {
       colors: {
         primary: {
@@ -41,14 +29,15 @@ export default {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         heading: ["var(--font-outfit)", "system-ui", "sans-serif"],
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
-        sora: ["var(--font-sora)", "system-ui", "sans-serif"],
-        mono: ["var(--font-jb-mono)", "monospace"],
+      },
+      borderRadius: {
+        lg: "var(--radius-lg)",
+        md: "var(--radius-md)",
+        sm: "var(--radius-sm)",
       },
       animation: {
-        "fade-in": "fadeIn 0.5s ease-in-out",
-        "slide-up": "slideUp 0.5s ease-out",
-        "spin-slow": "spin 20s linear infinite",
-        "slide-fill": "slideFill 0.7s ease-out forwards",
+        "fade-in": "fadeIn 0.4s ease-out",
+        "slide-up": "slideUp 0.4s ease-out",
       },
       keyframes: {
         fadeIn: {
@@ -56,13 +45,9 @@ export default {
           "100%": { opacity: "1" },
         },
         slideUp: {
-          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "0%": { transform: "translateY(12px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
-        slideFill: {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(0)" }
-        }
       },
     },
   },

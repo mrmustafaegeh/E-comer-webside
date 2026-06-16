@@ -1,5 +1,7 @@
 "use client";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "../ui/primitives";
 
 export default function ProductPagination({ page, totalPages, onPageChange }) {
   const getPageNumbers = () => {
@@ -7,75 +9,60 @@ export default function ProductPagination({ page, totalPages, onPageChange }) {
     const maxVisible = 5;
 
     if (totalPages <= maxVisible) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else if (page <= 3) {
+      pages.push(1, 2, 3, 4, "...", totalPages);
+    } else if (page >= totalPages - 2) {
+      pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
     } else {
-      if (page <= 3) {
-        pages.push(1, 2, 3, 4, "...", totalPages);
-      } else if (page >= totalPages - 2) {
-        pages.push(
-          1,
-          "...",
-          totalPages - 3,
-          totalPages - 2,
-          totalPages - 1,
-          totalPages
-        );
-      } else {
-        pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
-      }
+      pages.push(1, "...", page - 1, page, page + 1, "...", totalPages);
     }
 
     return pages;
   };
 
   return (
-    <div className="flex items-center justify-center gap-4">
-            <button
+    <div className="flex items-center justify-center gap-2">
+      <Button
+        variant="secondary"
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
-        className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"
+        aria-label="Previous page"
       >
-        <ChevronLeft className="w-6 h-6 group-hover:scale-125 transition-transform" strokeWidth={1} />
-      </button>
+        <ChevronLeft size={18} />
+      </Button>
 
-            <div className="hidden sm:flex items-center gap-4">
+      <div className="hidden items-center gap-1 sm:flex">
         {getPageNumbers().map((pageNum, index) =>
           pageNum === "..." ? (
-            <span
-              key={`ellipsis-${index}`}
-              className="w-12 h-12 flex items-center justify-center font-mono font-black text-gray-800 tracking-tighter"
-            >
-              ...
+            <span key={`ellipsis-${index}`} className="px-2 text-[var(--text-muted)]">
+              …
             </span>
           ) : (
-            <button
+            <Button
               key={pageNum}
+              variant={page === pageNum ? "primary" : "secondary"}
               onClick={() => onPageChange(pageNum)}
-              className={`w-16 h-16 flex items-center justify-center font-mono font-black text-[11px] uppercase tracking-widest transition-all duration-500 rounded-none shadow-2xl italic ${
-                page === pageNum
-                  ? "bg-white text-black border border-white"
-                  : "bg-black text-gray-800 border border-white/5 hover:border-white hover:text-white"
-              }`}
+              className="min-w-[40px] px-3"
             >
-              {pageNum.toString().padStart(2, '0')}
-            </button>
+              {pageNum}
+            </Button>
           )
         )}
       </div>
 
-            <div className="sm:hidden font-mono font-black text-[12px] text-white mx-8 uppercase tracking-[0.5em] italic animate-pulse">
+      <span className="px-2 text-sm text-[var(--text-muted)] sm:hidden">
         {page} / {totalPages}
-      </div>
+      </span>
 
-            <button
+      <Button
+        variant="secondary"
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
-        className="w-16 h-16 flex items-center justify-center bg-black border border-white/10 text-gray-800 hover:text-white hover:border-white disabled:opacity-10 transition-all duration-700 rounded-none shadow-2xl group"
+        aria-label="Next page"
       >
-        <ChevronRight className="w-6 h-6 group-hover:scale-125 transition-transform" strokeWidth={1} />
-      </button>
+        <ChevronRight size={18} />
+      </Button>
     </div>
   );
 }
